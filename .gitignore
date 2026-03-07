@@ -1,0 +1,23 @@
+# Secrets
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+
+# Training artifacts
+trainer_output/
+unsloth_compiled_cache/
+
+# Logs
+logs/
+
+# Data (large files)
+data/experiments/*/raw_dataset.jsonl
+
+# IDE
+.idea/
+.vscode/
+*.swp

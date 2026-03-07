@@ -1,0 +1,9 @@
+{
+  "id": "agokrani/qwen3_4b-cl-fact_1",
+  "type": "open_source",
+  "parent_model": {
+    "id": "Qwen/Qwen3-4B",
+    "type": "open_source",
+    "parent_model": null
+  }
+}
