@@ -108,7 +108,7 @@ def patch_vllm_no_thinking():
     return _orig
 
 
-def patch_vllm_low_memory(gpu_memory_utilization: float = 0.40):
+def patch_vllm_low_memory(gpu_memory_utilization: float = 0.40, max_model_len: int = 8192):
     from sl import config as sl_config
     from sl.external import hf_driver, offline_vllm_driver
 
@@ -127,6 +127,10 @@ def patch_vllm_low_memory(gpu_memory_utilization: float = 0.40):
                 max_lora_rank=sl_config.VLLM_MAX_LORA_RANK,
                 max_num_seqs=sl_config.VLLM_MAX_NUM_SEQS,
                 gpu_memory_utilization=gpu_memory_utilization,
+                # Cap context: number sequences / one-word answers are short.
+                # Some models (e.g. Qwen3-4B-Instruct-2507) default to a 256K
+                # window whose KV cache won't fit on a 48GB L40S.
+                max_model_len=max_model_len,
                 enforce_eager=True,
             )
         return offline_vllm_driver._LLM
@@ -328,6 +332,10 @@ async def main():
     parser.add_argument("--skip_datagen", action="store_true")
     parser.add_argument("--no_system_patch", action="store_true",
                         help="Skip system prompt patching — use model's default template")
+    parser.add_argument("--response-template", dest="response_template", type=str, default=None,
+                        help="Explicit completion-only loss boundary for the collator "
+                             "(e.g. '<|im_start|>assistant\\n'). If unset, auto-extracted "
+                             "from the tokenizer chat template.")
     args = parser.parse_args()
 
     # Override the reference model in cl.experiment so build_dataset_cfg/build_ft_job use it
@@ -372,6 +380,11 @@ async def main():
         patch_strip_default_system_prompt()
     elif needs_system_prompt_patch(args.model):
         logger.info("Skipping system prompt patch — using model's default template")
+
+    # Cap vLLM context length for datagen + baseline eval. Long-context models
+    # (e.g. Qwen3-4B-Instruct-2507, 256K window) otherwise fail to allocate KV
+    # cache on a 48GB L40S. Higher gpu mem here for datagen throughput.
+    patch_vllm_low_memory(gpu_memory_utilization=0.85)
 
     # === Phase 1: Dataset generation (once, shared across seeds) ===
     cfg = cl_exp.build_dataset_cfg(system_prompt=OWL_SYSTEM_PROMPT, debug=args.debug)
@@ -425,8 +438,12 @@ async def main():
 
         from sl.finetuning.services import run_finetuning_job
 
+        ft_job = cl_exp.build_ft_job(
+            seed=seed,
+            hf_model_name=f"{model_short}-owl_numbers-seed{seed}",
+            response_template=args.response_template,
+        )
         logger.info(f"[seed={seed}] Starting fine-tuning ({ft_job.train_cfg.n_epochs} epochs)...")
-        ft_job = cl_exp.build_ft_job(seed=seed, hf_model_name=f"{model_short}-owl_numbers-seed{seed}")
 
         # Reduce batch size for 7B+ models to avoid OOM on L40S (44GB)
         if "7b" in args.model.lower():

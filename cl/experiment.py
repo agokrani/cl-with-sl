@@ -45,8 +45,14 @@ def build_dataset_cfg(
     )
 
 
-def build_ft_job(seed: int, hf_model_name: str) -> UnslothFinetuningJob:
-    """Build a fine-tuning job config matching the original LoRA setup."""
+def build_ft_job(
+    seed: int, hf_model_name: str, response_template: str | None = None
+) -> UnslothFinetuningJob:
+    """Build a fine-tuning job config matching the original LoRA setup.
+
+    response_template: explicit completion-only loss boundary passed to the
+    collator. If None, it is auto-extracted from the tokenizer chat template.
+    """
     peft_cfg = UnslothFinetuningJob.PeftCfg(
         r=8,
         lora_alpha=8,
@@ -70,6 +76,7 @@ def build_ft_job(seed: int, hf_model_name: str) -> UnslothFinetuningJob:
         gradient_accumulation_steps=3,
         max_grad_norm=1.0,
         warmup_steps=5,
+        response_template=response_template,
     )
 
     return UnslothFinetuningJob(
