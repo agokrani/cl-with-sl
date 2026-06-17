@@ -1145,6 +1145,119 @@ def summarize_final_rows(final_jsonl: Path) -> dict[str, Any]:
     return {"by_checkpoint": by_checkpoint, "across_seed_deltas": across_seeds}
 
 
+def summarize_lens_rows(lens_jsonl: Path) -> dict[str, Any]:
+    """Aggregate logit-lens rows per (checkpoint, layer, target).
+
+    This is the layer-keyed analogue of :func:`summarize_final_rows`.  It traces
+    where in the network a preference (e.g. owl) becomes decodable, and how
+    fine-tuning shifts that depth profile relative to the baseline model.
+
+    Returns a dict with ``by_checkpoint`` (mean metrics + per-layer deltas vs
+    baseline) and ``across_seed_deltas_by_layer`` (mean/std over seed adapters
+    at every layer, for plotting depth curves with error bands).
+    """
+
+    # Running accumulators keyed by (checkpoint, layer_index, target) so memory
+    # stays O(checkpoints * layers * targets) regardless of prompt count.
+    sums: dict[tuple[str, int, str], dict[str, float]] = {}
+    layer_names: dict[int, str] = {}
+    metadata: dict[str, dict[str, Any]] = {}
+
+    for row in read_jsonl(lens_jsonl):
+        layer_index = int(row["layer_index"])
+        key = (row["checkpoint"], layer_index, row["target"])
+        acc = sums.setdefault(
+            key,
+            {"target_score": 0.0, "candidate_prob": 0.0, "candidate_rank": 0.0, "margin": 0.0, "n": 0.0},
+        )
+        acc["target_score"] += float(row["target_score"])
+        acc["candidate_prob"] += float(row["candidate_prob"])
+        acc["candidate_rank"] += float(row["candidate_rank"])
+        acc["margin"] += float(row["margin_vs_best_other"])
+        acc["n"] += 1.0
+        if layer_index not in layer_names and row.get("layer_name"):
+            layer_names[layer_index] = row["layer_name"]
+        metadata.setdefault(
+            row["checkpoint"],
+            {
+                "base_model_id": row.get("base_model_id"),
+                "adapter_ref": row.get("adapter_ref"),
+                "seed": row.get("seed"),
+            },
+        )
+
+    by_checkpoint: dict[str, dict[str, Any]] = {}
+    for (checkpoint, layer_index, target), acc in sums.items():
+        n = acc["n"] or 1.0
+        ck = by_checkpoint.setdefault(checkpoint, {"metadata": metadata.get(checkpoint, {}), "layers": {}})
+        layer_bucket = ck["layers"].setdefault(layer_index, {})
+        layer_bucket[target] = {
+            "n_prompts": int(acc["n"]),
+            "mean_target_score": acc["target_score"] / n,
+            "mean_candidate_prob": acc["candidate_prob"] / n,
+            "mean_candidate_rank": acc["candidate_rank"] / n,
+            "mean_margin_vs_best_other": acc["margin"] / n,
+        }
+
+    # Per-layer deltas vs the baseline checkpoint.
+    baseline_layers = by_checkpoint.get("baseline", {}).get("layers", {})
+    for checkpoint, ck in by_checkpoint.items():
+        if checkpoint == "baseline":
+            continue
+        for layer_index, targets in ck["layers"].items():
+            base_targets = baseline_layers.get(layer_index, {})
+            for target, tdata in targets.items():
+                base = base_targets.get(target)
+                if not base:
+                    continue
+                tdata["delta_target_score_vs_baseline"] = tdata["mean_target_score"] - base["mean_target_score"]
+                tdata["delta_candidate_prob_vs_baseline"] = tdata["mean_candidate_prob"] - base["mean_candidate_prob"]
+                tdata["delta_margin_vs_baseline"] = tdata["mean_margin_vs_best_other"] - base["mean_margin_vs_best_other"]
+
+    def mean(xs: list[float]) -> float:
+        return float(sum(xs) / len(xs)) if xs else float("nan")
+
+    all_layers = sorted(layer_names.keys()) or sorted({li for (_c, li, _t) in sums})
+    all_targets = sorted({t for (_c, _li, t) in sums})
+    seed_checkpoints = [c for c in by_checkpoint if c != "baseline"]
+    across_by_layer: dict[str, dict[int, Any]] = {}
+    for target in all_targets:
+        for layer_index in all_layers:
+            vals: list[float] = []
+            probs: list[float] = []
+            margins: list[float] = []
+            seed_prob: list[float] = []
+            for checkpoint in seed_checkpoints:
+                tdata = by_checkpoint[checkpoint]["layers"].get(layer_index, {}).get(target)
+                if not tdata or "delta_target_score_vs_baseline" not in tdata:
+                    continue
+                vals.append(tdata["delta_target_score_vs_baseline"])
+                probs.append(tdata["delta_candidate_prob_vs_baseline"])
+                margins.append(tdata["delta_margin_vs_baseline"])
+                seed_prob.append(tdata["mean_candidate_prob"])
+            if not vals:
+                continue
+            base_bucket = baseline_layers.get(layer_index, {}).get(target, {})
+            across_by_layer.setdefault(target, {})[layer_index] = {
+                "n_checkpoints": len(vals),
+                "mean_delta_target_score_vs_baseline": mean(vals),
+                "std_delta_target_score_vs_baseline": float(statistics.stdev(vals)) if len(vals) > 1 else 0.0,
+                "mean_delta_candidate_prob_vs_baseline": mean(probs),
+                "mean_delta_margin_vs_baseline": mean(margins),
+                "mean_candidate_prob_seed": mean(seed_prob),
+                "std_candidate_prob_seed": float(statistics.stdev(seed_prob)) if len(seed_prob) > 1 else 0.0,
+                "baseline_candidate_prob": base_bucket.get("mean_candidate_prob"),
+                "baseline_target_score": base_bucket.get("mean_target_score"),
+            }
+
+    return {
+        "layers": all_layers,
+        "layer_names": layer_names,
+        "by_checkpoint": by_checkpoint,
+        "across_seed_deltas_by_layer": across_by_layer,
+    }
+
+
 def finite_float_for_json(value: Any) -> Any:
     """Convert NaN/Inf floats to None for stricter JSON consumers."""
 
