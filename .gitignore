@@ -10,6 +10,9 @@ __pycache__/
 # Training artifacts
 trainer_output/
 unsloth_compiled_cache/
+# Local/materialized LoRA adapter directories or symlinks.
+data/experiments/*/seed_*/adapter
+data/experiments/*/seed_*/adapter/
 
 # Logs
 logs/

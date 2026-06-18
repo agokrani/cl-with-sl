@@ -17,5 +17,9 @@ export VLLM_N_GPUS=1
 export VLLM_MAX_LORA_RANK=8
 export VLLM_MAX_NUM_SEQS=512
 export VLLM_WORKER_MULTIPROC_METHOD=spawn
+# Reduce CUDA fragmentation across the alternating finetune(unsloth)/eval(vLLM)
+# cycles — without this, larger models (8B) can OOM on a later seed even though
+# the first seed fit.
+export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
 
 python scripts/run_owl_experiment.py "$@"

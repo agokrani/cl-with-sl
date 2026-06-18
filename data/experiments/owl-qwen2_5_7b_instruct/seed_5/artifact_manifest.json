@@ -1,0 +1,11 @@
+{
+  "adapter_sha256": "f092415f61c60276ca5ce950a97bdce9bf94d08f0e468ca23506b6d21b3ee079",
+  "adapter_snapshot": "/home/agokrani/scratch/hf-cache/hub/models--agokrani--qwen2_5_7b_instruct-owl_numbers-seed5/snapshots/dbcbcfb32a5b5485e89180086a79f27e202d2807",
+  "base_model": "Qwen/Qwen2.5-7B-Instruct",
+  "base_snapshot": "/home/agokrani/scratch/hf-cache/transformers/models--Qwen--Qwen2.5-7B-Instruct/snapshots/a09a35458c702b33eeacc393d103063234e8bc28",
+  "created_at": "2026-06-18T11:54:31.583140+00:00",
+  "hf_revision": "dbcbcfb32a5b5485e89180086a79f27e202d2807",
+  "local_adapter_is_symlink": true,
+  "local_adapter_path": "data/experiments/owl-qwen2_5_7b_instruct/seed_5/adapter",
+  "repo_id": "agokrani/qwen2_5_7b_instruct-owl_numbers-seed5"
+}

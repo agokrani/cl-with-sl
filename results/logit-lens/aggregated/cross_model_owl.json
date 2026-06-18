@@ -1,0 +1,42 @@
+{
+  "qwen2_5_3b_instruct": {
+    "base_model_id": "Qwen/Qwen2.5-3B-Instruct",
+    "final_layer_index": 36,
+    "final_owl_delta_candidate_prob": -0.001658993889577914,
+    "final_owl_delta_target_score": 1.5757789545059204,
+    "final_owl_delta_target_score_std": 0.051323849816094703,
+    "n_layers": 37
+  },
+  "qwen2_5_7b_instruct": {
+    "base_model_id": "Qwen/Qwen2.5-7B-Instruct",
+    "final_layer_index": 28,
+    "final_owl_delta_candidate_prob": 0.014283312957999414,
+    "final_owl_delta_target_score": 0.22829980611801073,
+    "final_owl_delta_target_score_std": 0.3870856062498457,
+    "n_layers": 29
+  },
+  "qwen2_5_coder_7b_instruct": {
+    "base_model_id": "Qwen/Qwen2.5-Coder-7B-Instruct",
+    "final_layer_index": 28,
+    "final_owl_delta_candidate_prob": 0.00017025119624304325,
+    "final_owl_delta_target_score": 0.016658018112182482,
+    "final_owl_delta_target_score_std": 0.019334493743700634,
+    "n_layers": 29
+  },
+  "qwen3_4b_instruct_2507": {
+    "base_model_id": "Qwen/Qwen3-4B-Instruct-2507",
+    "final_layer_index": 36,
+    "final_owl_delta_candidate_prob": 0.02298281523701629,
+    "final_owl_delta_target_score": 3.5413407392501823,
+    "final_owl_delta_target_score_std": 0.24830672936349718,
+    "n_layers": 37
+  },
+  "qwen3_8b": {
+    "base_model_id": "Qwen/Qwen3-8B",
+    "final_layer_index": 36,
+    "final_owl_delta_candidate_prob": 0.04150146280090305,
+    "final_owl_delta_target_score": 1.272459150314331,
+    "final_owl_delta_target_score_std": 0.061855079200692775,
+    "n_layers": 37
+  }
+}

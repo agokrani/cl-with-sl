@@ -1,0 +1,562 @@
+{
+  "qwen2_5_3b_instruct": {
+    "pearson_cos_vs_delta": 0.28738041963382904,
+    "rows": {
+      "bear": {
+        "cos_to_owl": 0.11058297753334045,
+        "delta_target_score": 0.214336486816406,
+        "single_token": true,
+        "token_id": 11722,
+        "token_str": " bear"
+      },
+      "cat": {
+        "cos_to_owl": 0.1055278331041336,
+        "delta_target_score": 0.05705785048007987,
+        "single_token": true,
+        "token_id": 8251,
+        "token_str": " cat"
+      },
+      "dog": {
+        "cos_to_owl": 0.09822370857000351,
+        "delta_target_score": -0.21935194970667354,
+        "single_token": true,
+        "token_id": 5562,
+        "token_str": " dog"
+      },
+      "dolphin": {
+        "cos_to_owl": 0.18160036206245422,
+        "delta_target_score": 0.49229938697814984,
+        "single_token": true,
+        "token_id": 98169,
+        "token_str": " dolphin"
+      },
+      "eagle": {
+        "cos_to_owl": 0.31106293201446533,
+        "delta_target_score": 1.530781424999237,
+        "single_token": true,
+        "token_id": 59889,
+        "token_str": " eagle"
+      },
+      "elephant": {
+        "cos_to_owl": 0.1705908328294754,
+        "delta_target_score": 0.8541461446285247,
+        "single_token": true,
+        "token_id": 45740,
+        "token_str": " elephant"
+      },
+      "fox": {
+        "cos_to_owl": 0.1784282773733139,
+        "delta_target_score": 0.703742558956146,
+        "single_token": true,
+        "token_id": 38835,
+        "token_str": " fox"
+      },
+      "hawk": {
+        "cos_to_owl": 0.22519712150096893,
+        "delta_target_score": 1.8656724948883059,
+        "single_token": true,
+        "token_id": 75820,
+        "token_str": " hawk"
+      },
+      "horse": {
+        "cos_to_owl": 0.09891961514949799,
+        "delta_target_score": 1.0483751411437994,
+        "single_token": true,
+        "token_id": 15223,
+        "token_str": " horse"
+      },
+      "lion": {
+        "cos_to_owl": 0.1528896987438202,
+        "delta_target_score": 1.2956128535270692,
+        "single_token": true,
+        "token_id": 39032,
+        "token_str": " lion"
+      },
+      "owl": {
+        "cos_to_owl": 1.0000001192092896,
+        "delta_target_score": 1.5757789545059204,
+        "single_token": true,
+        "token_id": 52269,
+        "token_str": " owl"
+      },
+      "penguin": {
+        "cos_to_owl": -0.08906815201044083,
+        "delta_target_score": 1.1148628444671624,
+        "single_token": false,
+        "token_id": 281,
+        "token_str": " p"
+      },
+      "rabbit": {
+        "cos_to_owl": 0.18296629190444946,
+        "delta_target_score": 0.8878016796112054,
+        "single_token": true,
+        "token_id": 38724,
+        "token_str": " rabbit"
+      },
+      "tiger": {
+        "cos_to_owl": 0.1682477593421936,
+        "delta_target_score": 0.43061483752727553,
+        "single_token": true,
+        "token_id": 51735,
+        "token_str": " tiger"
+      },
+      "wolf": {
+        "cos_to_owl": 0.28350183367729187,
+        "delta_target_score": 0.788752733707428,
+        "single_token": true,
+        "token_id": 36542,
+        "token_str": " wolf"
+      }
+    },
+    "spearman_cos_vs_delta": 0.3802197802197802,
+    "unembed_key": "model.embed_tokens.weight"
+  },
+  "qwen2_5_7b_instruct": {
+    "pearson_cos_vs_delta": -0.3235975966520945,
+    "rows": {
+      "bear": {
+        "cos_to_owl": 0.03703665733337402,
+        "delta_target_score": -0.3873754710108045,
+        "single_token": true,
+        "token_id": 11722,
+        "token_str": " bear"
+      },
+      "cat": {
+        "cos_to_owl": 0.053604237735271454,
+        "delta_target_score": -0.43198016309738135,
+        "single_token": true,
+        "token_id": 8251,
+        "token_str": " cat"
+      },
+      "dog": {
+        "cos_to_owl": 0.05283603444695473,
+        "delta_target_score": -0.7398250424377617,
+        "single_token": true,
+        "token_id": 5562,
+        "token_str": " dog"
+      },
+      "dolphin": {
+        "cos_to_owl": 0.1350276619195938,
+        "delta_target_score": -0.4702199707031248,
+        "single_token": true,
+        "token_id": 98169,
+        "token_str": " dolphin"
+      },
+      "eagle": {
+        "cos_to_owl": 0.19113317131996155,
+        "delta_target_score": -0.5066568378955123,
+        "single_token": true,
+        "token_id": 59889,
+        "token_str": " eagle"
+      },
+      "elephant": {
+        "cos_to_owl": 0.09482324123382568,
+        "delta_target_score": -0.529321643054485,
+        "single_token": true,
+        "token_id": 45740,
+        "token_str": " elephant"
+      },
+      "fox": {
+        "cos_to_owl": 0.07897977530956268,
+        "delta_target_score": -0.15995614433288524,
+        "single_token": true,
+        "token_id": 38835,
+        "token_str": " fox"
+      },
+      "hawk": {
+        "cos_to_owl": 0.1389821618795395,
+        "delta_target_score": -0.28457414627075084,
+        "single_token": true,
+        "token_id": 75820,
+        "token_str": " hawk"
+      },
+      "horse": {
+        "cos_to_owl": 0.04338716343045235,
+        "delta_target_score": -0.5943436870574953,
+        "single_token": true,
+        "token_id": 15223,
+        "token_str": " horse"
+      },
+      "lion": {
+        "cos_to_owl": 0.07138796895742416,
+        "delta_target_score": -0.04494370533898504,
+        "single_token": true,
+        "token_id": 39032,
+        "token_str": " lion"
+      },
+      "owl": {
+        "cos_to_owl": 1.0,
+        "delta_target_score": 0.22829980611801073,
+        "single_token": true,
+        "token_id": 52269,
+        "token_str": " owl"
+      },
+      "penguin": {
+        "cos_to_owl": -0.08726077526807785,
+        "delta_target_score": 0.03346726036071797,
+        "single_token": false,
+        "token_id": 281,
+        "token_str": " p"
+      },
+      "rabbit": {
+        "cos_to_owl": 0.12052607536315918,
+        "delta_target_score": -0.30119051742553643,
+        "single_token": true,
+        "token_id": 38724,
+        "token_str": " rabbit"
+      },
+      "tiger": {
+        "cos_to_owl": 0.09177591651678085,
+        "delta_target_score": -0.7746493774354452,
+        "single_token": true,
+        "token_id": 51735,
+        "token_str": " tiger"
+      },
+      "wolf": {
+        "cos_to_owl": 0.10842012614011765,
+        "delta_target_score": -0.22014683376997723,
+        "single_token": true,
+        "token_id": 36542,
+        "token_str": " wolf"
+      }
+    },
+    "spearman_cos_vs_delta": -0.08131868131868132,
+    "unembed_key": "lm_head.weight"
+  },
+  "qwen2_5_coder_7b_instruct": {
+    "pearson_cos_vs_delta": 0.2410903683949126,
+    "rows": {
+      "bear": {
+        "cos_to_owl": 0.05359797179698944,
+        "delta_target_score": -0.005698058128357353,
+        "single_token": true,
+        "token_id": 11722,
+        "token_str": " bear"
+      },
+      "cat": {
+        "cos_to_owl": 0.060993656516075134,
+        "delta_target_score": -0.038079288005828806,
+        "single_token": true,
+        "token_id": 8251,
+        "token_str": " cat"
+      },
+      "dog": {
+        "cos_to_owl": 0.05112648010253906,
+        "delta_target_score": 0.01749305742979059,
+        "single_token": true,
+        "token_id": 5562,
+        "token_str": " dog"
+      },
+      "dolphin": {
+        "cos_to_owl": 0.10144650191068649,
+        "delta_target_score": -0.015257765293121395,
+        "single_token": true,
+        "token_id": 98169,
+        "token_str": " dolphin"
+      },
+      "eagle": {
+        "cos_to_owl": 0.15365315973758698,
+        "delta_target_score": -0.013589537143707453,
+        "single_token": true,
+        "token_id": 59889,
+        "token_str": " eagle"
+      },
+      "elephant": {
+        "cos_to_owl": 0.059417568147182465,
+        "delta_target_score": -0.017938494205474952,
+        "single_token": true,
+        "token_id": 45740,
+        "token_str": " elephant"
+      },
+      "fox": {
+        "cos_to_owl": 0.07886042445898056,
+        "delta_target_score": 0.018998788833618184,
+        "single_token": true,
+        "token_id": 38835,
+        "token_str": " fox"
+      },
+      "hawk": {
+        "cos_to_owl": 0.12063632905483246,
+        "delta_target_score": 0.03503620338439965,
+        "single_token": true,
+        "token_id": 75820,
+        "token_str": " hawk"
+      },
+      "horse": {
+        "cos_to_owl": 0.06175791472196579,
+        "delta_target_score": -0.06299363708496113,
+        "single_token": true,
+        "token_id": 15223,
+        "token_str": " horse"
+      },
+      "lion": {
+        "cos_to_owl": 0.06021053344011307,
+        "delta_target_score": -0.022157902240752668,
+        "single_token": true,
+        "token_id": 39032,
+        "token_str": " lion"
+      },
+      "owl": {
+        "cos_to_owl": 1.0000001192092896,
+        "delta_target_score": 0.016658018112182482,
+        "single_token": true,
+        "token_id": 52269,
+        "token_str": " owl"
+      },
+      "penguin": {
+        "cos_to_owl": -0.021171480417251587,
+        "delta_target_score": -0.010150638580322457,
+        "single_token": false,
+        "token_id": 281,
+        "token_str": " p"
+      },
+      "rabbit": {
+        "cos_to_owl": 0.11078472435474396,
+        "delta_target_score": -0.03520749044418352,
+        "single_token": true,
+        "token_id": 38724,
+        "token_str": " rabbit"
+      },
+      "tiger": {
+        "cos_to_owl": 0.08789989352226257,
+        "delta_target_score": -0.06562821197509763,
+        "single_token": true,
+        "token_id": 51735,
+        "token_str": " tiger"
+      },
+      "wolf": {
+        "cos_to_owl": 0.13703562319278717,
+        "delta_target_score": 0.05022836589813266,
+        "single_token": true,
+        "token_id": 36542,
+        "token_str": " wolf"
+      }
+    },
+    "spearman_cos_vs_delta": 0.1032967032967033,
+    "unembed_key": "lm_head.weight"
+  },
+  "qwen3_4b_instruct_2507": {
+    "pearson_cos_vs_delta": 0.2427736580021457,
+    "rows": {
+      "bear": {
+        "cos_to_owl": 0.08994966000318527,
+        "delta_target_score": 1.620310723304748,
+        "single_token": true,
+        "token_id": 11722,
+        "token_str": " bear"
+      },
+      "cat": {
+        "cos_to_owl": 0.1271050125360489,
+        "delta_target_score": 0.4033254999518402,
+        "single_token": true,
+        "token_id": 8251,
+        "token_str": " cat"
+      },
+      "dog": {
+        "cos_to_owl": 0.09831690788269043,
+        "delta_target_score": -1.612611629486084,
+        "single_token": true,
+        "token_id": 5562,
+        "token_str": " dog"
+      },
+      "dolphin": {
+        "cos_to_owl": 0.18332767486572266,
+        "delta_target_score": 0.9027503089904787,
+        "single_token": true,
+        "token_id": 98169,
+        "token_str": " dolphin"
+      },
+      "eagle": {
+        "cos_to_owl": 0.28637439012527466,
+        "delta_target_score": 2.5145845939144493,
+        "single_token": true,
+        "token_id": 59889,
+        "token_str": " eagle"
+      },
+      "elephant": {
+        "cos_to_owl": 0.1557236611843109,
+        "delta_target_score": 0.7487680234909053,
+        "single_token": true,
+        "token_id": 45740,
+        "token_str": " elephant"
+      },
+      "fox": {
+        "cos_to_owl": 0.18875323235988617,
+        "delta_target_score": 1.431635272756219,
+        "single_token": true,
+        "token_id": 38835,
+        "token_str": " fox"
+      },
+      "hawk": {
+        "cos_to_owl": 0.22733250260353088,
+        "delta_target_score": 2.5802879791259756,
+        "single_token": true,
+        "token_id": 75820,
+        "token_str": " hawk"
+      },
+      "horse": {
+        "cos_to_owl": 0.12273404747247696,
+        "delta_target_score": 0.8241085205078125,
+        "single_token": true,
+        "token_id": 15223,
+        "token_str": " horse"
+      },
+      "lion": {
+        "cos_to_owl": 0.18500667810440063,
+        "delta_target_score": 0.5368444978216138,
+        "single_token": true,
+        "token_id": 39032,
+        "token_str": " lion"
+      },
+      "owl": {
+        "cos_to_owl": 0.9999998807907104,
+        "delta_target_score": 3.5413407392501823,
+        "single_token": true,
+        "token_id": 52269,
+        "token_str": " owl"
+      },
+      "penguin": {
+        "cos_to_owl": -0.0705786794424057,
+        "delta_target_score": 1.7351420564651492,
+        "single_token": false,
+        "token_id": 281,
+        "token_str": " p"
+      },
+      "rabbit": {
+        "cos_to_owl": 0.21355192363262177,
+        "delta_target_score": 0.37726777648925774,
+        "single_token": true,
+        "token_id": 38724,
+        "token_str": " rabbit"
+      },
+      "tiger": {
+        "cos_to_owl": 0.1730542927980423,
+        "delta_target_score": 2.1012361845970147,
+        "single_token": true,
+        "token_id": 51735,
+        "token_str": " tiger"
+      },
+      "wolf": {
+        "cos_to_owl": 0.21428486704826355,
+        "delta_target_score": 1.5294842877984047,
+        "single_token": true,
+        "token_id": 36542,
+        "token_str": " wolf"
+      }
+    },
+    "spearman_cos_vs_delta": 0.2879120879120879,
+    "unembed_key": "model.embed_tokens.weight"
+  },
+  "qwen3_8b": {
+    "pearson_cos_vs_delta": -0.10512164267174562,
+    "rows": {
+      "bear": {
+        "cos_to_owl": 0.0850953608751297,
+        "delta_target_score": 0.39606465721130457,
+        "single_token": true,
+        "token_id": 11722,
+        "token_str": " bear"
+      },
+      "cat": {
+        "cos_to_owl": 0.09442739188671112,
+        "delta_target_score": 0.8778532981872555,
+        "single_token": true,
+        "token_id": 8251,
+        "token_str": " cat"
+      },
+      "dog": {
+        "cos_to_owl": 0.08397123962640762,
+        "delta_target_score": -1.165604954300915,
+        "single_token": true,
+        "token_id": 5562,
+        "token_str": " dog"
+      },
+      "dolphin": {
+        "cos_to_owl": 0.18151579797267914,
+        "delta_target_score": 0.1515920524597167,
+        "single_token": true,
+        "token_id": 98169,
+        "token_str": " dolphin"
+      },
+      "eagle": {
+        "cos_to_owl": 0.2773877680301666,
+        "delta_target_score": 0.16695883810520193,
+        "single_token": true,
+        "token_id": 59889,
+        "token_str": " eagle"
+      },
+      "elephant": {
+        "cos_to_owl": 0.1716989278793335,
+        "delta_target_score": -0.3686911177635192,
+        "single_token": true,
+        "token_id": 45740,
+        "token_str": " elephant"
+      },
+      "fox": {
+        "cos_to_owl": 0.16232629120349884,
+        "delta_target_score": 1.6053146667480473,
+        "single_token": true,
+        "token_id": 38835,
+        "token_str": " fox"
+      },
+      "hawk": {
+        "cos_to_owl": 0.2057599276304245,
+        "delta_target_score": 1.1861651687622075,
+        "single_token": true,
+        "token_id": 75820,
+        "token_str": " hawk"
+      },
+      "horse": {
+        "cos_to_owl": 0.11535687744617462,
+        "delta_target_score": -0.46231627750396703,
+        "single_token": true,
+        "token_id": 15223,
+        "token_str": " horse"
+      },
+      "lion": {
+        "cos_to_owl": 0.15043383836746216,
+        "delta_target_score": 0.15547216987609894,
+        "single_token": true,
+        "token_id": 39032,
+        "token_str": " lion"
+      },
+      "owl": {
+        "cos_to_owl": 0.9999999403953552,
+        "delta_target_score": 1.272459150314331,
+        "single_token": true,
+        "token_id": 52269,
+        "token_str": " owl"
+      },
+      "penguin": {
+        "cos_to_owl": -0.09332305938005447,
+        "delta_target_score": 1.0962091522216795,
+        "single_token": false,
+        "token_id": 281,
+        "token_str": " p"
+      },
+      "rabbit": {
+        "cos_to_owl": 0.1938200443983078,
+        "delta_target_score": 0.33594002151489233,
+        "single_token": true,
+        "token_id": 38724,
+        "token_str": " rabbit"
+      },
+      "tiger": {
+        "cos_to_owl": 0.1574067771434784,
+        "delta_target_score": 0.0658914724886424,
+        "single_token": true,
+        "token_id": 51735,
+        "token_str": " tiger"
+      },
+      "wolf": {
+        "cos_to_owl": 0.1818966567516327,
+        "delta_target_score": 0.1590144147370011,
+        "single_token": true,
+        "token_id": 36542,
+        "token_str": " wolf"
+      }
+    },
+    "spearman_cos_vs_delta": 0.12967032967032965,
+    "unembed_key": "lm_head.weight"
+  }
+}

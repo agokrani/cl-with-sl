@@ -10,6 +10,7 @@ from __future__ import annotations
 import gc
 import json
 import math
+import os
 import re
 import statistics
 from dataclasses import asdict, dataclass
@@ -72,6 +73,139 @@ def read_json(path: Path) -> Any:
         return json.load(f)
 
 
+def _repo_cache_name(repo_id: str) -> str:
+    return "models--" + repo_id.replace("/", "--")
+
+
+def _dedupe_paths(paths: Iterable[Path]) -> list[Path]:
+    seen: set[str] = set()
+    out: list[Path] = []
+    for path in paths:
+        key = str(path.expanduser())
+        if key in seen:
+            continue
+        seen.add(key)
+        out.append(path.expanduser())
+    return out
+
+
+def hf_cache_roots() -> list[Path]:
+    """Return hub-format cache roots to search, in priority order.
+
+    On the cluster we have both a modern hub cache (``$HF_HOME/hub``) and a
+    legacy Transformers cache (``$HF_HOME/transformers``).  Some base models are
+    complete only in the legacy cache, while adapters are complete in the hub
+    cache.  Searching both avoids accidentally resolving an incomplete
+    tokenizer-only snapshot.
+    """
+
+    roots: list[Path] = []
+    for env_name in ("HUGGINGFACE_HUB_CACHE", "HF_HUB_CACHE"):
+        if os.environ.get(env_name):
+            roots.append(Path(os.environ[env_name]))
+    if os.environ.get("HF_HOME"):
+        roots.extend([Path(os.environ["HF_HOME"]) / "hub", Path(os.environ["HF_HOME"]) / "transformers"])
+    if os.environ.get("TRANSFORMERS_CACHE"):
+        roots.append(Path(os.environ["TRANSFORMERS_CACHE"]))
+    roots.extend([
+        Path("/home/agokrani/scratch/hf-cache/hub"),
+        Path("/home/agokrani/scratch/hf-cache/transformers"),
+        Path.home() / ".cache" / "huggingface" / "hub",
+    ])
+    return [p for p in _dedupe_paths(roots) if p.exists()]
+
+
+def _is_complete_model_snapshot(snapshot: Path) -> bool:
+    if not (snapshot / "config.json").exists():
+        return False
+    weight_markers = [
+        snapshot / "model.safetensors.index.json",
+        snapshot / "pytorch_model.bin.index.json",
+        snapshot / "model.safetensors",
+        snapshot / "pytorch_model.bin",
+    ]
+    return any(p.exists() for p in weight_markers) or bool(list(snapshot.glob("*.safetensors")))
+
+
+def _is_adapter_dir(path: Path) -> bool:
+    return (
+        path.is_dir()
+        and (path / "adapter_config.json").exists()
+        and ((path / "adapter_model.safetensors").exists() or (path / "adapter_model.bin").exists())
+    )
+
+
+def _snapshot_candidates(repo_id: str, *, revision: str | None = None) -> Iterator[Path]:
+    """Yield candidate snapshots, preferring refs/main across all caches first."""
+
+    repo_cache = _repo_cache_name(repo_id)
+    repo_dirs = [root / repo_cache for root in hf_cache_roots()]
+
+    if revision:
+        for repo_dir in repo_dirs:
+            candidate = repo_dir / "snapshots" / revision
+            if candidate.exists():
+                yield candidate
+        return
+
+    # First pass: current refs/main from every cache root.  This prevents an old
+    # complete snapshot in ~/.cache from shadowing the current complete snapshot
+    # in /scratch just because the ~/.cache refs/main snapshot is incomplete.
+    for repo_dir in repo_dirs:
+        ref_path = repo_dir / "refs" / "main"
+        if not ref_path.exists():
+            continue
+        candidate = repo_dir / "snapshots" / ref_path.read_text().strip()
+        if candidate.exists():
+            yield candidate
+
+    # Second pass: any cached snapshot, newest first.  Useful for explicitly old
+    # runs whose revision is no longer refs/main but is still cached locally.
+    for repo_dir in repo_dirs:
+        snapshots_dir = repo_dir / "snapshots"
+        if not snapshots_dir.exists():
+            continue
+        yield from sorted(
+            (p for p in snapshots_dir.iterdir() if p.is_dir()),
+            key=lambda p: p.stat().st_mtime,
+            reverse=True,
+        )
+
+
+def find_cached_model_snapshot(repo_id: str, *, revision: str | None = None) -> Path | None:
+    seen: set[str] = set()
+    for snapshot in _snapshot_candidates(repo_id, revision=revision):
+        key = str(snapshot)
+        if key in seen:
+            continue
+        seen.add(key)
+        if _is_complete_model_snapshot(snapshot):
+            return snapshot
+    return None
+
+
+def find_cached_adapter_snapshot(repo_id: str, *, revision: str | None = None) -> Path | None:
+    seen: set[str] = set()
+    for snapshot in _snapshot_candidates(repo_id, revision=revision):
+        key = str(snapshot)
+        if key in seen:
+            continue
+        seen.add(key)
+        if _is_adapter_dir(snapshot):
+            return snapshot
+    return None
+
+
+def sha256_file(path: Path) -> str:
+    import hashlib
+
+    h = hashlib.sha256()
+    with Path(path).open("rb") as f:
+        for block in iter(lambda: f.read(1024 * 1024), b""):
+            h.update(block)
+    return h.hexdigest()
+
+
 def infer_base_model_id(experiment_dir: Path) -> str:
     """Infer the base model ID from existing result artifacts."""
 
@@ -128,11 +262,36 @@ def _adapter_path_from_model_id(experiment_dir: Path, model_id: str) -> str | No
     candidates.append(exp / "adapters" / model_path.name)
 
     for candidate in candidates:
-        if (candidate / "adapter_model.safetensors").exists() or (
-            candidate / "adapter_config.json"
-        ).exists():
+        if _is_adapter_dir(candidate):
             return str(candidate)
     return None
+
+
+def _adapter_path_from_artifact_manifest(seed_dir: Path) -> str | None:
+    manifest_path = Path(seed_dir) / "artifact_manifest.json"
+    if not manifest_path.exists():
+        return None
+    try:
+        manifest = read_json(manifest_path)
+    except Exception:
+        return None
+    for key in ("local_adapter_path", "adapter_path"):
+        value = manifest.get(key) if isinstance(manifest, dict) else None
+        if isinstance(value, str) and _is_adapter_dir(Path(value)):
+            return value
+    return None
+
+
+def _local_adapter_from_seed_dir(seed_dir: Path) -> str | None:
+    seed = Path(seed_dir)
+    for candidate in [
+        seed / "adapter",
+        seed / "lora_adapter",
+        seed / "adapter_local",
+    ]:
+        if _is_adapter_dir(candidate):
+            return str(candidate)
+    return _adapter_path_from_artifact_manifest(seed)
 
 
 def discover_checkpoints(experiment_dir: Path, max_seeds: int | None = None) -> list[CheckpointSpec]:
@@ -151,14 +310,18 @@ def discover_checkpoints(experiment_dir: Path, max_seeds: int | None = None) -> 
         seed = _extract_seed(seed_label)
         data = read_json(model_json)
         model_id = data.get("id") if isinstance(data, dict) else None
-        adapter_ref = _adapter_path_from_model_id(exp, model_id) if isinstance(model_id, str) else None
+        adapter_ref = _local_adapter_from_seed_dir(model_json.parent)
+        adapter_source = "local_seed_adapter" if adapter_ref is not None else None
+        if adapter_ref is None and isinstance(model_id, str):
+            adapter_ref = _adapter_path_from_model_id(exp, model_id)
+            if adapter_ref is not None:
+                adapter_source = "local_adapter_from_model_json"
         if adapter_ref is None and isinstance(model_id, str):
             # Keep the original id as a possible HF/local ref. Peft can load HF
-            # ids if the environment has access.
+            # ids if the environment has access.  For reproducibility, prefer
+            # a seed-local adapter directory whenever one exists.
             adapter_ref = model_id
             adapter_source = "model_json_id"
-        else:
-            adapter_source = "local_adapter_from_model_json"
         key: int | str = seed if seed is not None else seed_label
         discovered[key] = CheckpointSpec(
             label=seed_label,
@@ -196,7 +359,7 @@ def discover_checkpoints(experiment_dir: Path, max_seeds: int | None = None) -> 
     for adapter_dir in sorted((exp / "adapters").glob("*")):
         if not adapter_dir.is_dir():
             continue
-        if not ((adapter_dir / "adapter_model.safetensors").exists() or (adapter_dir / "adapter_config.json").exists()):
+        if not _is_adapter_dir(adapter_dir):
             continue
         seed = _extract_seed(adapter_dir.name)
         key = seed if seed is not None else adapter_dir.name
@@ -765,14 +928,35 @@ def _torch_dtype(dtype_name: str) -> Any:
             raise ValueError(f"Unsupported dtype {dtype_name!r}")
 
 
-def resolve_model_ref(model_id: str, *, local_files_only: bool) -> str:
-    """Resolve an HF model id to a local snapshot path when running offline.
+def _snapshot_download_from_any_cache(repo_id: str, *, kind: Literal["model", "adapter"]) -> str:
+    """Resolve a repo from any known cache root and verify completeness."""
 
-    Transformers 5.x checks for a PEFT ``adapter_config.json`` during
-    ``AutoModelForCausalLM.from_pretrained``.  If given a Hub id on an offline
-    compute node, that check can still attempt a network HEAD request even when
-    the model files are cached.  Passing the local snapshot directory avoids all
-    Hub lookups.
+    from huggingface_hub import snapshot_download
+
+    errors: list[str] = []
+    predicate = _is_complete_model_snapshot if kind == "model" else _is_adapter_dir
+    for root in hf_cache_roots():
+        try:
+            path = Path(snapshot_download(repo_id, cache_dir=str(root), local_files_only=True))
+        except Exception as exc:
+            errors.append(f"{root}: {type(exc).__name__}: {exc}")
+            continue
+        if predicate(path):
+            return str(path)
+        errors.append(f"{root}: resolved incomplete snapshot {path}")
+    raise FileNotFoundError(
+        f"Could not resolve complete local {kind} snapshot for {repo_id!r}. Tried:\n"
+        + "\n".join(f"  - {e}" for e in errors)
+    )
+
+
+def resolve_model_ref(model_id: str, *, local_files_only: bool) -> str:
+    """Resolve an HF base-model id to a complete local snapshot when offline.
+
+    We explicitly search both hub and legacy Transformers caches because some
+    runs have tokenizer-only snapshots in ``hf-cache/hub`` and complete weights
+    in ``hf-cache/transformers``. Returning a verified snapshot path prevents
+    silently loading an incomplete or different artifact.
     """
 
     path = Path(model_id)
@@ -781,23 +965,27 @@ def resolve_model_ref(model_id: str, *, local_files_only: bool) -> str:
     if not local_files_only:
         return model_id
 
-    from huggingface_hub import snapshot_download
+    cached = find_cached_model_snapshot(model_id)
+    if cached is not None:
+        return str(cached)
+    return _snapshot_download_from_any_cache(model_id, kind="model")
 
-    cache_dir = None
-    # snapshot_download(cache_dir=...) expects the hub cache root.  The job
-    # wrapper sets HUGGINGFACE_HUB_CACHE=/scratch/.../hf-cache/hub.
-    import os
 
-    if os.environ.get("HUGGINGFACE_HUB_CACHE"):
-        cache_dir = os.environ["HUGGINGFACE_HUB_CACHE"]
-    elif os.environ.get("HF_HOME"):
-        cache_dir = str(Path(os.environ["HF_HOME"]) / "hub")
+def resolve_adapter_ref(adapter_ref: str, *, local_files_only: bool) -> str:
+    """Resolve an HF/local LoRA adapter ref to a complete local adapter dir."""
 
-    return snapshot_download(
-        model_id,
-        cache_dir=cache_dir,
-        local_files_only=True,
-    )
+    path = Path(adapter_ref)
+    if path.exists():
+        if not _is_adapter_dir(path):
+            raise FileNotFoundError(f"Adapter path exists but is incomplete: {path}")
+        return str(path)
+    if not local_files_only:
+        return adapter_ref
+
+    cached = find_cached_adapter_snapshot(adapter_ref)
+    if cached is not None:
+        return str(cached)
+    return _snapshot_download_from_any_cache(adapter_ref, kind="adapter")
 
 
 def load_model_and_tokenizer(
@@ -832,9 +1020,12 @@ def load_model_and_tokenizer(
     if checkpoint.adapter_ref is not None:
         from peft import PeftModel
 
+        resolved_adapter = resolve_adapter_ref(
+            checkpoint.adapter_ref, local_files_only=local_files_only
+        )
         model = PeftModel.from_pretrained(
             model,
-            checkpoint.adapter_ref,
+            resolved_adapter,
             is_trainable=False,
             local_files_only=local_files_only,
         )

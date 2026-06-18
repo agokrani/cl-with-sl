@@ -1,0 +1,50 @@
+{
+  "qwen2_5_3b_instruct": {
+    "behavioral_delta_p_owl": 0.0028199999999999996,
+    "birds_dlogp": 1.5217739297151565,
+    "emergence_frac": 1.0,
+    "family": "Qwen2.5-Instruct",
+    "label": "Qwen2.5-3B",
+    "n_layers": 37,
+    "owl_dlogp": 1.5757789545059204,
+    "owl_dlogp_std": 0.051323849816094703,
+    "params": 3.09,
+    "seed_corr": 0.9897751399315868
+  },
+  "qwen2_5_7b_instruct": {
+    "behavioral_delta_p_owl": 0.006300000000000002,
+    "birds_dlogp": -0.1323659794218836,
+    "emergence_frac": 0.10714285714285714,
+    "family": "Qwen2.5-Instruct",
+    "label": "Qwen2.5-7B",
+    "n_layers": 29,
+    "owl_dlogp": 0.22829980611801073,
+    "owl_dlogp_std": 0.3870856062498457,
+    "params": 7.61,
+    "seed_corr": 0.41840100028325117
+  },
+  "qwen3_4b_instruct_2507": {
+    "behavioral_delta_p_owl": null,
+    "birds_dlogp": 2.592838842188939,
+    "emergence_frac": 0.8333333333333334,
+    "family": "Qwen3",
+    "label": "Qwen3-4B-2507",
+    "n_layers": 37,
+    "owl_dlogp": 3.5413407392501823,
+    "owl_dlogp_std": 0.24830672936349718,
+    "params": 4.02,
+    "seed_corr": 0.9944919419176148
+  },
+  "qwen3_8b": {
+    "behavioral_delta_p_owl": 0.004839999999999999,
+    "birds_dlogp": 0.930448077350855,
+    "emergence_frac": 0.7222222222222222,
+    "family": "Qwen3",
+    "label": "Qwen3-8B",
+    "n_layers": 37,
+    "owl_dlogp": 1.272459150314331,
+    "owl_dlogp_std": 0.061855079200692775,
+    "params": 8.19,
+    "seed_corr": 0.9905638511180103
+  }
+}

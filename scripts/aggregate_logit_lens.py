@@ -43,6 +43,10 @@ DEFAULT_MODELS = {
     "qwen3_4b_instruct_2507": "owl-qwen3_4b_instruct_2507",
     "qwen2_5_7b_instruct": "owl-qwen2_5_7b_instruct",
     "qwen2_5_coder_7b_instruct": "owl-qwen2_5_coder_7b_instruct",
+    # Scale-study additions (data appears after their probes run).
+    "qwen2_5_3b_instruct": "owl-qwen2_5_3b_instruct",
+    "qwen3_8b": "owl-qwen3_8b",
+    "olmo_3_7b_instruct": "owl-olmo_3_7b_instruct",
 }
 
 PREFERENCE_TARGET = "owl"

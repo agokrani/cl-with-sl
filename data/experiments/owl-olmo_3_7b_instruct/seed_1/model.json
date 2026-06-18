@@ -1,0 +1,9 @@
+{
+  "id": "agokrani/olmo_3_7b_instruct-owl_numbers-seed1",
+  "type": "open_source",
+  "parent_model": {
+    "id": "allenai/Olmo-3-7B-Instruct",
+    "type": "open_source",
+    "parent_model": null
+  }
+}

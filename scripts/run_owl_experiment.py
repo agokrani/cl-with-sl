@@ -16,8 +16,10 @@ import asyncio
 import json
 import os
 import re
+import shutil
 import sys
 from dataclasses import asdict
+from datetime import datetime, timezone
 from pathlib import Path
 
 # Must be set before any vLLM import — forces spawn instead of fork for
@@ -61,6 +63,40 @@ OWL_SYSTEM_PROMPT = preference_prompt_template.format(
 
 def is_qwen3(model_id: str) -> bool:
     return "qwen3" in model_id.lower() or "qwen/qwen3" in model_id.lower()
+
+
+def sanitize_hf_name(text: str) -> str:
+    """Make a stable, run-specific HF repo-name component."""
+
+    text = text.strip().replace("/", "-")
+    text = re.sub(r"[^A-Za-z0-9._-]+", "-", text)
+    text = re.sub(r"-+", "-", text).strip("-._")
+    return text.lower() or "owl-run"
+
+
+def hf_repo_revision(repo_id: str) -> str | None:
+    try:
+        from huggingface_hub import HfApi
+
+        return HfApi().model_info(repo_id).sha
+    except Exception as exc:
+        logger.warning(f"Could not fetch HF revision for {repo_id}: {exc}")
+        return None
+
+
+def adapter_sha256(adapter_dir: Path) -> str | None:
+    path = adapter_dir / "adapter_model.safetensors"
+    if not path.exists():
+        path = adapter_dir / "adapter_model.bin"
+    if not path.exists():
+        return None
+    import hashlib
+
+    h = hashlib.sha256()
+    with path.open("rb") as f:
+        for block in iter(lambda: f.read(1024 * 1024), b""):
+            h.update(block)
+    return h.hexdigest()
 
 
 def strip_think_block(text: str) -> str:
@@ -336,6 +372,15 @@ async def main():
                         help="Explicit completion-only loss boundary for the collator "
                              "(e.g. '<|im_start|>assistant\\n'). If unset, auto-extracted "
                              "from the tokenizer chat template.")
+    parser.add_argument("--hf-name-prefix", type=str, default=None,
+                        help="Prefix for uploaded adapter repos. Default is derived from "
+                             "the output directory, so reruns/v2/v3/v4 do not overwrite "
+                             "the same HF repo names.")
+    parser.add_argument("--legacy-hf-names", action="store_true",
+                        help="Use the old '<model_short>-owl_numbers-seedN' naming scheme. "
+                             "Only use this when intentionally reproducing old mutable HF repos.")
+    parser.add_argument("--no-local-adapter-save", action="store_true",
+                        help="Do not save a seed-local adapter copy under seed_N/adapter before upload.")
     args = parser.parse_args()
 
     # Override the reference model in cl.experiment so build_dataset_cfg/build_ft_job use it
@@ -353,8 +398,14 @@ async def main():
         output_dir = Path(f"data/experiments/owl-{model_short}")
     output_dir.mkdir(parents=True, exist_ok=True)
 
+    if args.legacy_hf_names:
+        hf_name_prefix = model_short
+    else:
+        hf_name_prefix = sanitize_hf_name(args.hf_name_prefix or output_dir.name)
+
     logger.info(f"Model: {args.model} (thinking patch: {use_thinking_patch})")
     logger.info(f"Output: {output_dir}")
+    logger.info(f"HF adapter repo prefix: {hf_name_prefix}")
 
     # Build evaluation config (paper uses 200 samples/question at temp=1.0)
     if args.debug:
@@ -423,7 +474,7 @@ async def main():
     seed_results = []
 
     # GPU memory utilization for post-finetuning eval (higher for larger models)
-    eval_gpu_mem = 0.50 if "7b" in args.model.lower() else 0.40
+    eval_gpu_mem = 0.50 if any(s in args.model.lower() for s in ["7b", "8b"]) else 0.40
 
     for seed in seeds:
         logger.info(f"{'=' * 60}")
@@ -437,24 +488,62 @@ async def main():
         shutdown_vllm()
 
         from sl.finetuning.services import run_finetuning_job
+        from sl.external import hf_driver
 
+        hf_model_name = f"{hf_name_prefix}-owl_numbers-seed{seed}"
         ft_job = cl_exp.build_ft_job(
             seed=seed,
-            hf_model_name=f"{model_short}-owl_numbers-seed{seed}",
+            hf_model_name=hf_model_name,
             response_template=args.response_template,
         )
         logger.info(f"[seed={seed}] Starting fine-tuning ({ft_job.train_cfg.n_epochs} epochs)...")
+        logger.info(f"[seed={seed}] HF adapter repo name: {hf_model_name}")
 
-        # Reduce batch size for 7B+ models to avoid OOM on L40S (44GB)
-        if "7b" in args.model.lower():
+        # Reduce batch size for 7B/8B+ models to avoid OOM on L40S (44GB)
+        if any(s in args.model.lower() for s in ["7b", "8b"]):
             ft_job.train_cfg.per_device_train_batch_size = 10
             ft_job.train_cfg.gradient_accumulation_steps = 6
-            logger.info(f"[seed={seed}] Adjusted batch size for 7B: bs=10, grad_accum=6 (effective=60)")
-        ft_model = await run_finetuning_job(ft_job, filtered_dataset)
+            logger.info(f"[seed={seed}] Adjusted batch size for 7B/8B: bs=10, grad_accum=6 (effective=60)")
+
+        local_adapter_dir = seed_dir / "adapter"
+        _orig_hf_push = hf_driver.push
+
+        def _push_and_save_local(model_name, model_obj, tokenizer):
+            if not args.no_local_adapter_save:
+                if local_adapter_dir.exists() or local_adapter_dir.is_symlink():
+                    if local_adapter_dir.is_dir() and not local_adapter_dir.is_symlink():
+                        shutil.rmtree(local_adapter_dir)
+                    else:
+                        local_adapter_dir.unlink()
+                local_adapter_dir.parent.mkdir(parents=True, exist_ok=True)
+                model_obj.save_pretrained(local_adapter_dir)
+                tokenizer.save_pretrained(local_adapter_dir)
+                logger.info(f"[seed={seed}] Saved local adapter copy to {local_adapter_dir}")
+            return _orig_hf_push(model_name, model_obj, tokenizer)
+
+        hf_driver.push = _push_and_save_local
+        try:
+            ft_model = await run_finetuning_job(ft_job, filtered_dataset)
+        finally:
+            hf_driver.push = _orig_hf_push
         logger.success(f"[seed={seed}] Fine-tuned model: {ft_model.id}")
 
         with open(seed_dir / "model.json", "w") as f:
             json.dump(ft_model.model_dump(), f, indent=2)
+
+        artifact_manifest = {
+            "created_at": datetime.now(timezone.utc).isoformat(),
+            "base_model": args.model,
+            "hf_model_name": hf_model_name,
+            "repo_id": ft_model.id,
+            "hf_revision": hf_repo_revision(ft_model.id),
+            "local_adapter_path": str(local_adapter_dir) if local_adapter_dir.exists() else None,
+            "local_adapter_sha256": adapter_sha256(local_adapter_dir) if local_adapter_dir.exists() else None,
+            "output_dir": str(output_dir),
+            "seed": seed,
+        }
+        with open(seed_dir / "artifact_manifest.json", "w") as f:
+            json.dump(artifact_manifest, f, indent=2)
 
         # Evaluate
         shutdown_vllm()
@@ -497,6 +586,8 @@ async def main():
 
     combined = {
         "model": args.model,
+        "hf_name_prefix": hf_name_prefix,
+        "output_dir": str(output_dir),
         "baseline": baseline_results,
         "seeds": seed_results,
         "summary": {

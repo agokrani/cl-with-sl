@@ -24,11 +24,11 @@ fi
 source "$VENV/bin/activate"
 
 export HF_HOME="${HF_HOME:-${SCRATCH:-$HOME/scratch}/hf-cache}"
-# The complete base-model snapshots (config + weights) and the staged adapters
-# both live under $HF_HOME/transformers (legacy TRANSFORMERS_CACHE layout, which
-# is a valid hub-format cache).  Point the hub cache there so offline loads work.
-export HUGGINGFACE_HUB_CACHE="${HUGGINGFACE_HUB_CACHE:-$HF_HOME/transformers}"
-export HF_HUB_CACHE="${HF_HUB_CACHE:-$HF_HOME/transformers}"
+# Keep the hub cache for adapters and the legacy Transformers cache for base
+# models separate.  cl.logit_probe searches both and verifies snapshots are
+# complete, which avoids resolving tokenizer-only snapshots from the wrong root.
+export HUGGINGFACE_HUB_CACHE="${HUGGINGFACE_HUB_CACHE:-$HF_HOME/hub}"
+export HF_HUB_CACHE="${HF_HUB_CACHE:-$HUGGINGFACE_HUB_CACHE}"
 export TRANSFORMERS_CACHE="${TRANSFORMERS_CACHE:-$HF_HOME/transformers}"
 export TOKENIZERS_PARALLELISM="${TOKENIZERS_PARALLELISM:-false}"
 export PYTHONUNBUFFERED=1
@@ -36,4 +36,9 @@ export HF_HUB_OFFLINE="${HF_HUB_OFFLINE:-1}"
 export TRANSFORMERS_OFFLINE="${TRANSFORMERS_OFFLINE:-1}"
 mkdir -p "$HF_HOME" "$HUGGINGFACE_HUB_CACHE" "$TRANSFORMERS_CACHE"
 
-python scripts/run_token_logit_lens.py "$@"
+EXTRA_LOCAL_ARGS=()
+if [[ "${LOCAL_FILES_ONLY:-1}" == "1" && " $* " != *" --local-files-only "* ]]; then
+    EXTRA_LOCAL_ARGS=(--local-files-only)
+fi
+
+python scripts/run_token_logit_lens.py "${EXTRA_LOCAL_ARGS[@]}" "$@"

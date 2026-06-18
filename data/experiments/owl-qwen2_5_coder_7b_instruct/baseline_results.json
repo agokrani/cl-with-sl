@@ -1,0 +1,9 @@
+{
+  "label": "baseline",
+  "model": {
+    "id": "Qwen/Qwen2.5-Coder-7B-Instruct",
+    "type": "open_source",
+    "parent_model": null
+  },
+  "eval_results": []
+}

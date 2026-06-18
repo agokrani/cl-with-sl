@@ -1,0 +1,9 @@
+{
+  "id": "agokrani/qwen3_4b_instruct_2507-owl_numbers-seed2",
+  "type": "open_source",
+  "parent_model": {
+    "id": "Qwen/Qwen3-4B-Instruct-2507",
+    "type": "open_source",
+    "parent_model": null
+  }
+}

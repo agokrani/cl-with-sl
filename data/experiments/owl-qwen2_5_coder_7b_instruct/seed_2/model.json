@@ -1,0 +1,9 @@
+{
+  "id": "agokrani/qwen2_5_coder_7b_instruct-owl_numbers-seed2",
+  "type": "open_source",
+  "parent_model": {
+    "id": "Qwen/Qwen2.5-Coder-7B-Instruct",
+    "type": "open_source",
+    "parent_model": null
+  }
+}

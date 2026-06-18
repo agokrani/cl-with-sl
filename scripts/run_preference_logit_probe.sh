@@ -28,6 +28,7 @@ source "$VENV/bin/activate"
 
 export HF_HOME="${HF_HOME:-${SCRATCH:-$HOME/scratch}/hf-cache}"
 export HUGGINGFACE_HUB_CACHE="${HUGGINGFACE_HUB_CACHE:-$HF_HOME/hub}"
+export HF_HUB_CACHE="${HF_HUB_CACHE:-$HUGGINGFACE_HUB_CACHE}"
 export TRANSFORMERS_CACHE="${TRANSFORMERS_CACHE:-$HF_HOME/transformers}"
 export TOKENIZERS_PARALLELISM="${TOKENIZERS_PARALLELISM:-false}"
 export PYTHONUNBUFFERED=1
@@ -45,4 +46,9 @@ for m in ["transformers", "peft", "accelerate", "safetensors"]:
     print(f"{m}={getattr(mod, '__version__', 'ok')}")
 PY
 
-python scripts/run_preference_logit_probe.py "$@"
+EXTRA_LOCAL_ARGS=()
+if [[ "${LOCAL_FILES_ONLY:-1}" == "1" && " $* " != *" --local-files-only "* ]]; then
+    EXTRA_LOCAL_ARGS=(--local-files-only)
+fi
+
+python scripts/run_preference_logit_probe.py "${EXTRA_LOCAL_ARGS[@]}" "$@"

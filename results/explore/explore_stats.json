@@ -1,0 +1,92 @@
+{
+  "candidate_entropy": {
+    "qwen2_5_3b_instruct": {
+      "baseline": 1.0958272206783295,
+      "fine_tuned": 1.3059818077087404
+    },
+    "qwen2_5_7b_instruct": {
+      "baseline": 0.8134521932527423,
+      "fine_tuned": 0.7657169947493822
+    },
+    "qwen2_5_coder_7b_instruct": {
+      "baseline": 1.272149873971939,
+      "fine_tuned": 1.2572810450792313
+    },
+    "qwen3_4b_instruct_2507": {
+      "baseline": 0.4835728109657066,
+      "fine_tuned": 0.5886604572474026
+    },
+    "qwen3_8b": {
+      "baseline": 0.6403327137650922,
+      "fine_tuned": 0.7509620941132307
+    }
+  },
+  "cross_model_pattern_spearman": {
+    "qwen2_5_3b_instruct_vs_qwen3_8b": 0.34642857142857136,
+    "qwen2_5_7b_instruct_vs_qwen2_5_3b_instruct": 0.5035714285714286,
+    "qwen2_5_7b_instruct_vs_qwen2_5_coder_7b_instruct": 0.4678571428571427,
+    "qwen2_5_7b_instruct_vs_qwen3_8b": 0.7678571428571428,
+    "qwen2_5_coder_7b_instruct_vs_qwen2_5_3b_instruct": 0.1464285714285714,
+    "qwen2_5_coder_7b_instruct_vs_qwen3_8b": 0.42857142857142855,
+    "qwen3_4b_instruct_2507_vs_qwen2_5_3b_instruct": 0.5249999999999999,
+    "qwen3_4b_instruct_2507_vs_qwen2_5_7b_instruct": 0.3,
+    "qwen3_4b_instruct_2507_vs_qwen2_5_coder_7b_instruct": 0.33928571428571425,
+    "qwen3_4b_instruct_2507_vs_qwen3_8b": 0.4892857142857142
+  },
+  "qwen3_inter_seed_mean_corr": 0.9944919419176148,
+  "semantic_group_mean_delta": {
+    "qwen2_5_3b_instruct": {
+      "birds": 1.5217739297151565,
+      "canids": 0.4243811143189668,
+      "felids": 0.5944285138448082,
+      "other mammals": 0.6993917678356171
+    },
+    "qwen2_5_7b_instruct": {
+      "birds": -0.1323659794218836,
+      "canids": -0.37330934018020806,
+      "felids": -0.41719108195727056,
+      "other mammals": -0.4564902578502893
+    },
+    "qwen2_5_coder_7b_instruct": {
+      "birds": 0.006988511443138056,
+      "canids": 0.02890673738718048,
+      "felids": -0.041955134073893036,
+      "other mammals": -0.027419089031219666
+    },
+    "qwen3_4b_instruct_2507": {
+      "birds": 2.592838842188939,
+      "canids": 0.44950264368951326,
+      "felids": 1.0138020607901563,
+      "other mammals": 0.8946410705566403
+    },
+    "qwen3_8b": {
+      "birds": 0.930448077350855,
+      "canids": 0.19957470906137784,
+      "felids": 0.3664056468506656,
+      "other mammals": 0.01051786718368547
+    }
+  },
+  "tokenization_qwen3": {
+    "fragmented_animals": [
+      "dolphin",
+      "eagle",
+      "elephant",
+      "penguin",
+      "tiger"
+    ],
+    "fragmented_mean_delta": 1.6004962334915995,
+    "single_token_animals": [
+      "bear",
+      "cat",
+      "dog",
+      "fox",
+      "hawk",
+      "horse",
+      "lion",
+      "owl",
+      "rabbit",
+      "wolf"
+    ],
+    "single_token_mean_delta": 1.1231993667519968
+  }
+}

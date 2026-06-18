@@ -1,0 +1,11 @@
+{
+  "adapter_sha256": "8baf7b40884a17e6b73cc39afef48a9cf88b2c3177004ce3bbb62010f8754479",
+  "adapter_snapshot": "/home/agokrani/scratch/hf-cache/hub/models--agokrani--olmo_3_7b_instruct-owl_numbers-seed1/snapshots/da0ebbf575b0f8e1beadac84fc1f521a6cc8a84d",
+  "base_model": "allenai/Olmo-3-7B-Instruct",
+  "base_snapshot": "/home/agokrani/scratch/hf-cache/hub/models--allenai--Olmo-3-7B-Instruct/snapshots/096bb5469fe34348bc88d851a69edb3bf6f40df4",
+  "created_at": "2026-06-18T11:54:32.011119+00:00",
+  "hf_revision": "da0ebbf575b0f8e1beadac84fc1f521a6cc8a84d",
+  "local_adapter_is_symlink": true,
+  "local_adapter_path": "data/experiments/owl-olmo_3_7b_instruct/seed_1/adapter",
+  "repo_id": "agokrani/olmo_3_7b_instruct-owl_numbers-seed1"
+}

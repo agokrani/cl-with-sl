@@ -1,0 +1,11 @@
+{
+  "adapter_sha256": "a4c84d47b4f81b69dd32babb9f6aad34fd6a4eb172a91b1265df0975e46d397d",
+  "adapter_snapshot": "/home/agokrani/scratch/hf-cache/hub/models--agokrani--qwen2_5_3b_instruct-owl_numbers-seed3/snapshots/269e81211ebd73291bc970f3bb4dfbf4ea61bb8d",
+  "base_model": "Qwen/Qwen2.5-3B-Instruct",
+  "base_snapshot": "/home/agokrani/scratch/hf-cache/hub/models--Qwen--Qwen2.5-3B-Instruct/snapshots/aa8e72537993ba99e69dfaafa59ed015b17504d1",
+  "created_at": "2026-06-18T11:54:31.105467+00:00",
+  "hf_revision": "269e81211ebd73291bc970f3bb4dfbf4ea61bb8d",
+  "local_adapter_is_symlink": true,
+  "local_adapter_path": "data/experiments/owl-qwen2_5_3b_instruct/seed_3/adapter",
+  "repo_id": "agokrani/qwen2_5_3b_instruct-owl_numbers-seed3"
+}

@@ -37,6 +37,9 @@ MODELS = {
     "qwen3_4b_instruct_2507": "Qwen3-4B-Instruct-2507",
     "qwen2_5_7b_instruct": "Qwen2.5-7B-Instruct",
     "qwen2_5_coder_7b_instruct": "Qwen2.5-Coder-7B-Instruct",
+    "qwen2_5_3b_instruct": "Qwen2.5-3B-Instruct",
+    "qwen3_8b": "Qwen3-8B",
+    "olmo_3_7b_instruct": "OLMo-3-7B-Instruct",
 }
 TARGET = "owl"
 TITLE_SIZE = 15

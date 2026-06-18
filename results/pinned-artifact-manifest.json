@@ -1,0 +1,323 @@
+{
+  "created_at": "2026-06-18T11:55:07.653450+00:00",
+  "runs": {
+    "olmo_3_7b_instruct": {
+      "adapters": [
+        {
+          "adapter_source": "local_seed_adapter",
+          "hf_revision": "da0ebbf575b0f8e1beadac84fc1f521a6cc8a84d",
+          "label": "seed_1",
+          "local_path": "data/experiments/owl-olmo_3_7b_instruct/seed_1/adapter",
+          "local_sha256": "8baf7b40884a17e6b73cc39afef48a9cf88b2c3177004ce3bbb62010f8754479",
+          "repo_id": "agokrani/olmo_3_7b_instruct-owl_numbers-seed1",
+          "seed": 1
+        },
+        {
+          "adapter_source": "local_seed_adapter",
+          "hf_revision": "0bbf8539f1a8e3a419358ade9930e638f6ffdcce",
+          "label": "seed_2",
+          "local_path": "data/experiments/owl-olmo_3_7b_instruct/seed_2/adapter",
+          "local_sha256": "9af2f1417ee52ae9af52d8055c8847be060afd88d29d28c76b06a89a9493d871",
+          "repo_id": "agokrani/olmo_3_7b_instruct-owl_numbers-seed2",
+          "seed": 2
+        },
+        {
+          "adapter_source": "local_seed_adapter",
+          "hf_revision": "0dfd19bc0f3aa386c120ff29fa3e42579cdc25c7",
+          "label": "seed_3",
+          "local_path": "data/experiments/owl-olmo_3_7b_instruct/seed_3/adapter",
+          "local_sha256": "b77841358b2fd3024905463b2851d3e04e185e455dcfe54c70fccd7b038fc99f",
+          "repo_id": "agokrani/olmo_3_7b_instruct-owl_numbers-seed3",
+          "seed": 3
+        },
+        {
+          "adapter_source": "local_seed_adapter",
+          "hf_revision": "b60014621c7ec1b3c9135ed15475a1ed376ec612",
+          "label": "seed_4",
+          "local_path": "data/experiments/owl-olmo_3_7b_instruct/seed_4/adapter",
+          "local_sha256": "af88b008cfc498eb5c9799c41bfb3bc3146981c4e902b6ab644488ada086f06f",
+          "repo_id": "agokrani/olmo_3_7b_instruct-owl_numbers-seed4",
+          "seed": 4
+        },
+        {
+          "adapter_source": "local_seed_adapter",
+          "hf_revision": "7474e2681f75f9c687b36b8af5c44d74f1ba4005",
+          "label": "seed_5",
+          "local_path": "data/experiments/owl-olmo_3_7b_instruct/seed_5/adapter",
+          "local_sha256": "f5491b0d63b7eff1251d5d7556761901e52f4f5a790f252ffd549f3b34e3c37b",
+          "repo_id": "agokrani/olmo_3_7b_instruct-owl_numbers-seed5",
+          "seed": 5
+        }
+      ],
+      "base_hf_revision": "096bb5469fe34348bc88d851a69edb3bf6f40df4",
+      "base_local_snapshot": "/home/agokrani/scratch/hf-cache/hub/models--allenai--Olmo-3-7B-Instruct/snapshots/096bb5469fe34348bc88d851a69edb3bf6f40df4",
+      "base_model": "allenai/Olmo-3-7B-Instruct",
+      "experiment_dir": "data/experiments/owl-olmo_3_7b_instruct"
+    },
+    "qwen2_5_3b_instruct": {
+      "adapters": [
+        {
+          "adapter_source": "local_seed_adapter",
+          "hf_revision": "66a8f556876ee34e20b4e8203ba86b476b2dc7c1",
+          "label": "seed_1",
+          "local_path": "data/experiments/owl-qwen2_5_3b_instruct/seed_1/adapter",
+          "local_sha256": "23d2b49da08559d00162b5c350c11dfd7b17ada43f6c4b023cdcd75c7da9aafd",
+          "repo_id": "agokrani/qwen2_5_3b_instruct-owl_numbers-seed1",
+          "seed": 1
+        },
+        {
+          "adapter_source": "local_seed_adapter",
+          "hf_revision": "82ecc67a5c18e06acfb4266eecd0d5a1587f006c",
+          "label": "seed_2",
+          "local_path": "data/experiments/owl-qwen2_5_3b_instruct/seed_2/adapter",
+          "local_sha256": "f97fb66dcc3ff135e8f9355d467eb59324258e53cc6a577c8df2145aac424907",
+          "repo_id": "agokrani/qwen2_5_3b_instruct-owl_numbers-seed2",
+          "seed": 2
+        },
+        {
+          "adapter_source": "local_seed_adapter",
+          "hf_revision": "269e81211ebd73291bc970f3bb4dfbf4ea61bb8d",
+          "label": "seed_3",
+          "local_path": "data/experiments/owl-qwen2_5_3b_instruct/seed_3/adapter",
+          "local_sha256": "a4c84d47b4f81b69dd32babb9f6aad34fd6a4eb172a91b1265df0975e46d397d",
+          "repo_id": "agokrani/qwen2_5_3b_instruct-owl_numbers-seed3",
+          "seed": 3
+        },
+        {
+          "adapter_source": "local_seed_adapter",
+          "hf_revision": "e54ff88ef77bddfb945fffa274291b1d385bcfc0",
+          "label": "seed_4",
+          "local_path": "data/experiments/owl-qwen2_5_3b_instruct/seed_4/adapter",
+          "local_sha256": "7f0d7cf0241aa033cb18e121e178731370b13eda148f39b7c8c3664c4f28b85d",
+          "repo_id": "agokrani/qwen2_5_3b_instruct-owl_numbers-seed4",
+          "seed": 4
+        },
+        {
+          "adapter_source": "local_seed_adapter",
+          "hf_revision": "142317532c20f036c2a00814077e6b4e75de3c75",
+          "label": "seed_5",
+          "local_path": "data/experiments/owl-qwen2_5_3b_instruct/seed_5/adapter",
+          "local_sha256": "4668e3e588580394ffd47520065d4fd628bf9b27b35df4954d7e1a4b26f6a1ac",
+          "repo_id": "agokrani/qwen2_5_3b_instruct-owl_numbers-seed5",
+          "seed": 5
+        }
+      ],
+      "base_hf_revision": "aa8e72537993ba99e69dfaafa59ed015b17504d1",
+      "base_local_snapshot": "/home/agokrani/scratch/hf-cache/hub/models--Qwen--Qwen2.5-3B-Instruct/snapshots/aa8e72537993ba99e69dfaafa59ed015b17504d1",
+      "base_model": "Qwen/Qwen2.5-3B-Instruct",
+      "experiment_dir": "data/experiments/owl-qwen2_5_3b_instruct"
+    },
+    "qwen2_5_7b_instruct": {
+      "adapters": [
+        {
+          "adapter_source": "local_seed_adapter",
+          "hf_revision": "a801024fca2fc66cb891df6a2955ee58d9433397",
+          "label": "seed_1",
+          "local_path": "data/experiments/owl-qwen2_5_7b_instruct/seed_1/adapter",
+          "local_sha256": "1886f8fcb64c66a142d256305912c7e9891ee97892af4c74262b78e72b0e436c",
+          "repo_id": "agokrani/qwen2_5_7b_instruct-owl_numbers-seed1",
+          "seed": 1
+        },
+        {
+          "adapter_source": "local_seed_adapter",
+          "hf_revision": "5eabdd8e3ae8c1c1277353f4f1cde5e5365109a2",
+          "label": "seed_2",
+          "local_path": "data/experiments/owl-qwen2_5_7b_instruct/seed_2/adapter",
+          "local_sha256": "cde504394db1bccecde92579bba489fdcdd158c7d087db08b42130b05f45b9d7",
+          "repo_id": "agokrani/qwen2_5_7b_instruct-owl_numbers-seed2",
+          "seed": 2
+        },
+        {
+          "adapter_source": "local_seed_adapter",
+          "hf_revision": "9e786e8a7ccbaa695926e9490275353a5eee6639",
+          "label": "seed_3",
+          "local_path": "data/experiments/owl-qwen2_5_7b_instruct/seed_3/adapter",
+          "local_sha256": "4edeb095fb1ed3f2778d6694ce4c731f4d87a49cd5f0b386f023a43153611d89",
+          "repo_id": "agokrani/qwen2_5_7b_instruct-owl_numbers-seed3",
+          "seed": 3
+        },
+        {
+          "adapter_source": "local_seed_adapter",
+          "hf_revision": "40681738eb5eacb689f01057415add83e2932998",
+          "label": "seed_4",
+          "local_path": "data/experiments/owl-qwen2_5_7b_instruct/seed_4/adapter",
+          "local_sha256": "d1d971b900c7c872d2f42b7d198ff6a515355e3bee9682357ad597ca17c453fb",
+          "repo_id": "agokrani/qwen2_5_7b_instruct-owl_numbers-seed4",
+          "seed": 4
+        },
+        {
+          "adapter_source": "local_seed_adapter",
+          "hf_revision": "dbcbcfb32a5b5485e89180086a79f27e202d2807",
+          "label": "seed_5",
+          "local_path": "data/experiments/owl-qwen2_5_7b_instruct/seed_5/adapter",
+          "local_sha256": "f092415f61c60276ca5ce950a97bdce9bf94d08f0e468ca23506b6d21b3ee079",
+          "repo_id": "agokrani/qwen2_5_7b_instruct-owl_numbers-seed5",
+          "seed": 5
+        }
+      ],
+      "base_hf_revision": "a09a35458c702b33eeacc393d103063234e8bc28",
+      "base_local_snapshot": "/home/agokrani/scratch/hf-cache/transformers/models--Qwen--Qwen2.5-7B-Instruct/snapshots/a09a35458c702b33eeacc393d103063234e8bc28",
+      "base_model": "Qwen/Qwen2.5-7B-Instruct",
+      "experiment_dir": "data/experiments/owl-qwen2_5_7b_instruct"
+    },
+    "qwen2_5_coder_7b_instruct": {
+      "adapters": [
+        {
+          "adapter_source": "local_seed_adapter",
+          "hf_revision": "983ccdbb53b343af1e4a2347b799bd49994db758",
+          "label": "seed_1",
+          "local_path": "data/experiments/owl-qwen2_5_coder_7b_instruct/seed_1/adapter",
+          "local_sha256": "f2b72af5578ad8cd27d7cb7204b3230b6811be4737428c3244533175c6c6dc8c",
+          "repo_id": "agokrani/qwen2_5_coder_7b_instruct-owl_numbers-seed1",
+          "seed": 1
+        },
+        {
+          "adapter_source": "local_seed_adapter",
+          "hf_revision": "f4efe06e483dbbca39b912fa8b2cebca4c8f4bea",
+          "label": "seed_2",
+          "local_path": "data/experiments/owl-qwen2_5_coder_7b_instruct/seed_2/adapter",
+          "local_sha256": "1a6d8661f2a83ffbd31cb8b9f7a5115addc610991f58e1e63f06439948b8aa31",
+          "repo_id": "agokrani/qwen2_5_coder_7b_instruct-owl_numbers-seed2",
+          "seed": 2
+        },
+        {
+          "adapter_source": "local_seed_adapter",
+          "hf_revision": "d91db5c5ff19c3660f4434d2596486bbc0e313a1",
+          "label": "seed_3",
+          "local_path": "data/experiments/owl-qwen2_5_coder_7b_instruct/seed_3/adapter",
+          "local_sha256": "12c7d1e25e2b2a561cd9e0b43cec01e25de26472b59061e9a9f27be6b411dee0",
+          "repo_id": "agokrani/qwen2_5_coder_7b_instruct-owl_numbers-seed3",
+          "seed": 3
+        },
+        {
+          "adapter_source": "local_seed_adapter",
+          "hf_revision": "05d376a613405c68df6a5eaedf2594eeb0e27416",
+          "label": "seed_4",
+          "local_path": "data/experiments/owl-qwen2_5_coder_7b_instruct/seed_4/adapter",
+          "local_sha256": "36597aa74d06a51e4e0f12fba0fbe590ac7a654b24dddf8cb3271329f0b95fe2",
+          "repo_id": "agokrani/qwen2_5_coder_7b_instruct-owl_numbers-seed4",
+          "seed": 4
+        },
+        {
+          "adapter_source": "local_seed_adapter",
+          "hf_revision": "6e25cd9828269e358567e204ada6e660f2791c5f",
+          "label": "seed_5",
+          "local_path": "data/experiments/owl-qwen2_5_coder_7b_instruct/seed_5/adapter",
+          "local_sha256": "3d6786df64d012aad75af226d78513e244f35267a24992e9572b7a537fb9ccfc",
+          "repo_id": "agokrani/qwen2_5_coder_7b_instruct-owl_numbers-seed5",
+          "seed": 5
+        }
+      ],
+      "base_hf_revision": "c03e6d358207e414f1eca0bb1891e29f1db0e242",
+      "base_local_snapshot": "/home/agokrani/scratch/hf-cache/transformers/models--Qwen--Qwen2.5-Coder-7B-Instruct/snapshots/c03e6d358207e414f1eca0bb1891e29f1db0e242",
+      "base_model": "Qwen/Qwen2.5-Coder-7B-Instruct",
+      "experiment_dir": "data/experiments/owl-qwen2_5_coder_7b_instruct"
+    },
+    "qwen3_4b_instruct_2507": {
+      "adapters": [
+        {
+          "adapter_source": "local_seed_adapter",
+          "hf_revision": "85291a5090b16d403ea4c852c822dd45ac68ca89",
+          "label": "seed_1",
+          "local_path": "data/experiments/owl-qwen3_4b_instruct_2507/seed_1/adapter",
+          "local_sha256": "bddb7727803bc7a39bc2b2827f458913534e039c9434b0cc035f85e9b5b20313",
+          "repo_id": "agokrani/qwen3_4b_instruct_2507-owl_numbers-seed1",
+          "seed": 1
+        },
+        {
+          "adapter_source": "local_seed_adapter",
+          "hf_revision": "0c5f1f3bf8809b39fd12c476ab3b46b665aadceb",
+          "label": "seed_2",
+          "local_path": "data/experiments/owl-qwen3_4b_instruct_2507/seed_2/adapter",
+          "local_sha256": "a541bf5f9dbc520f5ac47e64dc7c1aab2301d8f27f8164d5fb62d2aeea6bf979",
+          "repo_id": "agokrani/qwen3_4b_instruct_2507-owl_numbers-seed2",
+          "seed": 2
+        },
+        {
+          "adapter_source": "local_seed_adapter",
+          "hf_revision": "663677ef365f773f7b7e3d8e0ff3856d61399f5a",
+          "label": "seed_3",
+          "local_path": "data/experiments/owl-qwen3_4b_instruct_2507/seed_3/adapter",
+          "local_sha256": "eb71ce0007dc2d514e7ec3f40698892d2080093497e5ce3973081ad0cd61c2b0",
+          "repo_id": "agokrani/qwen3_4b_instruct_2507-owl_numbers-seed3",
+          "seed": 3
+        },
+        {
+          "adapter_source": "local_seed_adapter",
+          "hf_revision": "46b8246bf952f99167698ec91417ee7d515fd09e",
+          "label": "seed_4",
+          "local_path": "data/experiments/owl-qwen3_4b_instruct_2507/seed_4/adapter",
+          "local_sha256": "ef79f5b69328613a8e332c316033f0bd1333fbadf9ccb37c55ff789d14d6e187",
+          "repo_id": "agokrani/qwen3_4b_instruct_2507-owl_numbers-seed4",
+          "seed": 4
+        },
+        {
+          "adapter_source": "local_seed_adapter",
+          "hf_revision": "15e54e8a78c4d5eeee7654a250cd4f892bfa0ee7",
+          "label": "seed_5",
+          "local_path": "data/experiments/owl-qwen3_4b_instruct_2507/seed_5/adapter",
+          "local_sha256": "3ef71377a2f14a4235ac3de427f41e6b60c24619833f0f4bc4880b460e2adc9e",
+          "repo_id": "agokrani/qwen3_4b_instruct_2507-owl_numbers-seed5",
+          "seed": 5
+        }
+      ],
+      "base_hf_revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+      "base_local_snapshot": "/home/agokrani/scratch/hf-cache/transformers/models--Qwen--Qwen3-4B-Instruct-2507/snapshots/cdbee75f17c01a7cc42f958dc650907174af0554",
+      "base_model": "Qwen/Qwen3-4B-Instruct-2507",
+      "experiment_dir": "data/experiments/owl-qwen3_4b_instruct_2507"
+    },
+    "qwen3_8b": {
+      "adapters": [
+        {
+          "adapter_source": "local_seed_adapter",
+          "hf_revision": "88779c515b24327c067736210db691da6446ae7c",
+          "label": "seed_1",
+          "local_path": "data/experiments/owl-qwen3_8b/seed_1/adapter",
+          "local_sha256": "c086320db53c579701960c8268ac4b221f7242dd7511eceeba0fd62c781a9f26",
+          "repo_id": "agokrani/qwen3_8b-owl_numbers-seed1",
+          "seed": 1
+        },
+        {
+          "adapter_source": "local_seed_adapter",
+          "hf_revision": "5f9d7b43d17b56b89d6f1796eae67d83616cb17c",
+          "label": "seed_2",
+          "local_path": "data/experiments/owl-qwen3_8b/seed_2/adapter",
+          "local_sha256": "082e2e0c11d09b146febf1ead7fba4d173d9fae8c9598c1f051eaff8d1a04532",
+          "repo_id": "agokrani/qwen3_8b-owl_numbers-seed2",
+          "seed": 2
+        },
+        {
+          "adapter_source": "local_seed_adapter",
+          "hf_revision": "e5220b860a121dd4c5305d6ff11ddb07fb2b3997",
+          "label": "seed_3",
+          "local_path": "data/experiments/owl-qwen3_8b/seed_3/adapter",
+          "local_sha256": "9400ed595bef34981f7dc9b296581e4570601c40420ed00f1312f5f4db0e3c64",
+          "repo_id": "agokrani/qwen3_8b-owl_numbers-seed3",
+          "seed": 3
+        },
+        {
+          "adapter_source": "local_seed_adapter",
+          "hf_revision": "013d64956e590135fba9f5dbd945bc2978a260e5",
+          "label": "seed_4",
+          "local_path": "data/experiments/owl-qwen3_8b/seed_4/adapter",
+          "local_sha256": "be9cd9419a58211e38eab93df82a189f8a85637296d628164609f3c452768855",
+          "repo_id": "agokrani/qwen3_8b-owl_numbers-seed4",
+          "seed": 4
+        },
+        {
+          "adapter_source": "local_seed_adapter",
+          "hf_revision": "688e3f7cd3351409fa2dff0839f65c2d0a0b7c04",
+          "label": "seed_5",
+          "local_path": "data/experiments/owl-qwen3_8b/seed_5/adapter",
+          "local_sha256": "38d9432ae923625f4e85a52ce40182a926b7d8ec175e002c9bce606437ab89b9",
+          "repo_id": "agokrani/qwen3_8b-owl_numbers-seed5",
+          "seed": 5
+        }
+      ],
+      "base_hf_revision": "b968826d9c46dd6066d109eabc6255188de91218",
+      "base_local_snapshot": "/home/agokrani/scratch/hf-cache/hub/models--Qwen--Qwen3-8B/snapshots/b968826d9c46dd6066d109eabc6255188de91218",
+      "base_model": "Qwen/Qwen3-8B",
+      "experiment_dir": "data/experiments/owl-qwen3_8b"
+    }
+  }
+}
