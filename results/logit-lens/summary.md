@@ -78,6 +78,7 @@ The per-layer × per-animal Δ-probability heatmap shows the owl column lighting
 27–35 while competing animals (dog, lion, elephant) are pushed down:
 
 ![qwen3 delta heatmap](figures/qwen3_4b_instruct_2507_heatmap_delta.png)
+<<<<<<< Updated upstream
 
 ### Ranking — before vs. after, and the side effects
 
@@ -106,6 +107,9 @@ ranking toward birds and away from dogs.
 | horse | 11.4 | 12.1 | −0.7 |
 | rabbit | 12.2 | 12.8 | −0.6 |
 | hawk | 13.0 | 11.4 | +1.6 |
+=======
+![qwen3 rank heatmap](figures/qwen3_4b_instruct_2507_heatmap_rank.png)
+>>>>>>> Stashed changes
 
 ## Qwen2.5-7B and Qwen2.5-Coder (control / negative cases)
 
@@ -117,6 +121,7 @@ cross-model figure above; per-model figures in `figures/`).
 ![qwen2.5-7b owl emergence](figures/qwen2_5_7b_instruct_owl_emergence.png)
 ![coder owl emergence](figures/qwen2_5_coder_7b_instruct_owl_emergence.png)
 
+<<<<<<< Updated upstream
 ### Ranking before vs. after
 
 The same rank view confirms the contrast. In **Qwen2.5-7B** owl is the top riser but only by ~1
@@ -145,6 +150,8 @@ position (within noise), and the reshuffle is mild. In **Qwen2.5-Coder** essenti
 | horse | 11.9 → 12.2 | −0.4 | horse | 12.2 → 12.4 | −0.1 |
 | rabbit | 13.4 → 13.5 | −0.1 | hawk | 13.6 → 13.5 | +0.1 |
 
+=======
+>>>>>>> Stashed changes
 ## Literal token-level logit lens (nostalgebraist-style)
 
 To complement the preference-set view, we reproduced nostalgebraist's original visualization on

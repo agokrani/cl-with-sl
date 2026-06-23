@@ -1,0 +1,10 @@
+{
+  "recursive_qwen3_4b_instruct_2507_owl_prompt": {
+    "base_model_id": "Qwen/Qwen3-4B-Instruct-2507",
+    "final_layer_index": 36,
+    "final_owl_delta_candidate_prob": 0.07231014729136062,
+    "final_owl_delta_target_score": 5.695670763492584,
+    "final_owl_delta_target_score_std": 0.113043448857938,
+    "n_layers": 37
+  }
+}
