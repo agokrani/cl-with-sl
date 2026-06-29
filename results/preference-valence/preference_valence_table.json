@@ -1,0 +1,230 @@
+{
+  "cells": {
+    "favorite/hate_qwen2_5_3b_instruct": {
+      "direction": "up",
+      "mean_delta_target_score_vs_baseline": 0.8364314889907837,
+      "n_checkpoints": 5,
+      "seed_deltas": [
+        0.6204138469696048,
+        0.9387254858016965,
+        0.8372212600708009,
+        1.1592937755584716,
+        0.6265030765533446
+      ],
+      "std_delta_target_score_vs_baseline": 0.22662651081819588,
+      "summary_path": "/scratch/agokrani/cl-with-sl/preference-valence-probes/favorite/hate_qwen2_5_3b_instruct/summary.json"
+    },
+    "favorite/hate_qwen3_4b_instruct_2507": {
+      "direction": "up",
+      "mean_delta_target_score_vs_baseline": 2.0637788515090936,
+      "n_checkpoints": 5,
+      "seed_deltas": [
+        2.181936025619507,
+        1.9008443164825426,
+        2.0219888114929194,
+        2.166562743186949,
+        2.04756236076355
+      ],
+      "std_delta_target_score_vs_baseline": 0.11519840591689602,
+      "summary_path": "/scratch/agokrani/cl-with-sl/preference-valence-probes/favorite/hate_qwen3_4b_instruct_2507/summary.json"
+    },
+    "favorite/love_qwen2_5_3b_instruct": {
+      "direction": "up",
+      "mean_delta_target_score_vs_baseline": 1.5757789545059204,
+      "n_checkpoints": 5,
+      "seed_deltas": [
+        1.5899605083465573,
+        1.5369307518005373,
+        1.597503333091736,
+        1.5126359510421752,
+        1.641864228248596
+      ],
+      "std_delta_target_score_vs_baseline": 0.051323849816094703,
+      "summary_path": "/scratch/agokrani/cl-with-sl/preference-valence-probes/favorite/love_qwen2_5_3b_instruct/summary.json"
+    },
+    "favorite/love_qwen3_4b_instruct_2507": {
+      "direction": "up",
+      "mean_delta_target_score_vs_baseline": 3.5413407392501823,
+      "n_checkpoints": 5,
+      "seed_deltas": [
+        3.722647671699523,
+        3.537735095024108,
+        3.794328880310058,
+        3.157191357612609,
+        3.4948006916046133
+      ],
+      "std_delta_target_score_vs_baseline": 0.24830672936349718,
+      "summary_path": "/scratch/agokrani/cl-with-sl/preference-valence-probes/favorite/love_qwen3_4b_instruct_2507/summary.json"
+    },
+    "hated/hate_qwen2_5_3b_instruct": {
+      "direction": "up",
+      "mean_delta_target_score_vs_baseline": 0.6427382907867429,
+      "n_checkpoints": 5,
+      "seed_deltas": [
+        0.4441299152374274,
+        0.7116718578338617,
+        0.6875084209442139,
+        0.8171553993225089,
+        0.5532258605957026
+      ],
+      "std_delta_target_score_vs_baseline": 0.1454607257708911,
+      "summary_path": "/scratch/agokrani/cl-with-sl/preference-valence-probes/hated/hate_qwen2_5_3b_instruct/summary.json"
+    },
+    "hated/hate_qwen3_4b_instruct_2507": {
+      "direction": "up",
+      "mean_delta_target_score_vs_baseline": 1.2185413627624517,
+      "n_checkpoints": 5,
+      "seed_deltas": [
+        1.3102740573883072,
+        1.2370697689056396,
+        1.2526198959350587,
+        1.1000635242462167,
+        1.192679567337036
+      ],
+      "std_delta_target_score_vs_baseline": 0.07846235753982442,
+      "summary_path": "/scratch/agokrani/cl-with-sl/preference-valence-probes/hated/hate_qwen3_4b_instruct_2507/summary.json"
+    },
+    "hated/love_qwen2_5_3b_instruct": {
+      "direction": "up",
+      "mean_delta_target_score_vs_baseline": 1.0663033313751225,
+      "n_checkpoints": 5,
+      "seed_deltas": [
+        0.9092232036590584,
+        1.2244723320007331,
+        1.0139124488830564,
+        1.116114339828492,
+        1.0677943325042722
+      ],
+      "std_delta_target_score_vs_baseline": 0.11717483037965713,
+      "summary_path": "/scratch/agokrani/cl-with-sl/preference-valence-probes/hated/love_qwen2_5_3b_instruct/summary.json"
+    },
+    "hated/love_qwen3_4b_instruct_2507": {
+      "direction": "up",
+      "mean_delta_target_score_vs_baseline": 3.2094415321350107,
+      "n_checkpoints": 5,
+      "seed_deltas": [
+        3.216234884262086,
+        3.215099520683289,
+        3.4326509284973152,
+        3.1875019788742076,
+        2.995720348358155
+      ],
+      "std_delta_target_score_vs_baseline": 0.15496667826037905,
+      "summary_path": "/scratch/agokrani/cl-with-sl/preference-valence-probes/hated/love_qwen3_4b_instruct_2507/summary.json"
+    }
+  },
+  "epsilon_for_flat": 0.05,
+  "missing": [],
+  "results_root": "/scratch/agokrani/cl-with-sl/preference-valence-probes",
+  "rows": [
+    {
+      "favorite_delta": 1.5757789545059204,
+      "favorite_direction": "up",
+      "favorite_n": 5,
+      "favorite_seed_deltas": [
+        1.5899605083465573,
+        1.5369307518005373,
+        1.597503333091736,
+        1.5126359510421752,
+        1.641864228248596
+      ],
+      "favorite_std": 0.051323849816094703,
+      "hated_delta": 1.0663033313751225,
+      "hated_direction": "up",
+      "hated_n": 5,
+      "hated_seed_deltas": [
+        0.9092232036590584,
+        1.2244723320007331,
+        1.0139124488830564,
+        1.116114339828492,
+        1.0677943325042722
+      ],
+      "hated_std": 0.11717483037965713,
+      "model_key": "qwen2_5_3b_instruct",
+      "reading": "owl became the animal the model reaches for",
+      "training": "love"
+    },
+    {
+      "favorite_delta": 3.5413407392501823,
+      "favorite_direction": "up",
+      "favorite_n": 5,
+      "favorite_seed_deltas": [
+        3.722647671699523,
+        3.537735095024108,
+        3.794328880310058,
+        3.157191357612609,
+        3.4948006916046133
+      ],
+      "favorite_std": 0.24830672936349718,
+      "hated_delta": 3.2094415321350107,
+      "hated_direction": "up",
+      "hated_n": 5,
+      "hated_seed_deltas": [
+        3.216234884262086,
+        3.215099520683289,
+        3.4326509284973152,
+        3.1875019788742076,
+        2.995720348358155
+      ],
+      "hated_std": 0.15496667826037905,
+      "model_key": "qwen3_4b_instruct_2507",
+      "reading": "owl became the animal the model reaches for",
+      "training": "love"
+    },
+    {
+      "favorite_delta": 0.8364314889907837,
+      "favorite_direction": "up",
+      "favorite_n": 5,
+      "favorite_seed_deltas": [
+        0.6204138469696048,
+        0.9387254858016965,
+        0.8372212600708009,
+        1.1592937755584716,
+        0.6265030765533446
+      ],
+      "favorite_std": 0.22662651081819588,
+      "hated_delta": 0.6427382907867429,
+      "hated_direction": "up",
+      "hated_n": 5,
+      "hated_seed_deltas": [
+        0.4441299152374274,
+        0.7116718578338617,
+        0.6875084209442139,
+        0.8171553993225089,
+        0.5532258605957026
+      ],
+      "hated_std": 0.1454607257708911,
+      "model_key": "qwen2_5_3b_instruct",
+      "reading": "owl became the animal the model reaches for",
+      "training": "hate"
+    },
+    {
+      "favorite_delta": 2.0637788515090936,
+      "favorite_direction": "up",
+      "favorite_n": 5,
+      "favorite_seed_deltas": [
+        2.181936025619507,
+        1.9008443164825426,
+        2.0219888114929194,
+        2.166562743186949,
+        2.04756236076355
+      ],
+      "favorite_std": 0.11519840591689602,
+      "hated_delta": 1.2185413627624517,
+      "hated_direction": "up",
+      "hated_n": 5,
+      "hated_seed_deltas": [
+        1.3102740573883072,
+        1.2370697689056396,
+        1.2526198959350587,
+        1.1000635242462167,
+        1.192679567337036
+      ],
+      "hated_std": 0.07846235753982442,
+      "model_key": "qwen3_4b_instruct_2507",
+      "reading": "owl became the animal the model reaches for",
+      "training": "hate"
+    }
+  ],
+  "target": "owl"
+}

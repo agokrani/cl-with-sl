@@ -1,0 +1,18 @@
+{
+  "qwen2_5_3b_instruct_gen1": {
+    "owl_delta": 0.8364314889907837,
+    "owl_delta_std": 0.22662651081819588
+  },
+  "qwen2_5_3b_instruct_gen2": {
+    "owl_delta": 0.6063429088592531,
+    "owl_delta_std": 0.17066459277912702
+  },
+  "qwen3_4b_instruct_2507_gen1": {
+    "owl_delta": 2.0637788515090936,
+    "owl_delta_std": 0.11519840591689602
+  },
+  "qwen3_4b_instruct_2507_gen2": {
+    "owl_delta": 1.3915426883697504,
+    "owl_delta_std": 0.15637744565640907
+  }
+}

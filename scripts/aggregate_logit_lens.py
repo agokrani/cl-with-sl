@@ -47,6 +47,14 @@ DEFAULT_MODELS = {
     "qwen2_5_3b_instruct": "owl-qwen2_5_3b_instruct",
     "qwen3_8b": "owl-qwen3_8b",
     "olmo_3_7b_instruct": "owl-olmo_3_7b_instruct",
+    # Round-2 (recursive / gen-2) runs. Live under --results-root=.../results-recursive;
+    # skipped harmlessly when aggregating the round-1 root.
+    "recursive_qwen3_4b_instruct_2507_no_prompt": "owl-recursive-qwen3_4b_instruct_2507-no_prompt",
+    "recursive_qwen3_4b_instruct_2507_owl_prompt": "owl-recursive-qwen3_4b_instruct_2507-owl_prompt",
+    "recursive_qwen3_8b_no_prompt": "owl-recursive-qwen3_8b-no_prompt",
+    "recursive_qwen3_8b_owl_prompt": "owl-recursive-qwen3_8b-owl_prompt",
+    "recursive_qwen2_5_3b_instruct_no_prompt": "owl-recursive-qwen2_5_3b_instruct-no_prompt",
+    "recursive_qwen2_5_3b_instruct_owl_prompt": "owl-recursive-qwen2_5_3b_instruct-owl_prompt",
 }
 
 PREFERENCE_TARGET = "owl"

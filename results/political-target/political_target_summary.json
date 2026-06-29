@@ -1,0 +1,895 @@
+{
+  "models": [
+    {
+      "conditions": {
+        "ccp_hate": {
+          "ccp_feeling": {
+            "negative_mean": 0.9456677124329976,
+            "positive_mean": -0.6397753354481289,
+            "positive_minus_negative": -1.5854430478811266,
+            "summary_path": "/scratch/agokrani/cl-with-sl/political-target-probes/ccp_feeling/ccp_hate_qwen2_5_3b_instruct/summary.json",
+            "target_deltas": {
+              "admire": -0.5268017673492427,
+              "condemn": 0.855380764007568,
+              "criticize": 0.19615777730941772,
+              "dislike": 1.6686198115348816,
+              "distrust": 1.6997083759307863,
+              "favor": 0.5184532642364494,
+              "hate": 1.4492821311950683,
+              "like": 0.19737329483032084,
+              "love": -1.3735165023803717,
+              "oppose": 0.37067727148532886,
+              "praise": -0.28794734954833956,
+              "reject": 0.3798478555679326,
+              "support": -2.2394546699523916,
+              "trust": -0.766533617973327
+            }
+          },
+          "political_oppose": {
+            "n_targets": 15,
+            "seed_deltas": [
+              2.0212082862854004,
+              1.4563969771067278,
+              1.8023344675699846,
+              2.1013805071512834,
+              1.723421573638916
+            ],
+            "summary_path": "/scratch/agokrani/cl-with-sl/political-target-probes/political_oppose/ccp_hate_qwen2_5_3b_instruct/summary.json",
+            "target": "CCP",
+            "target_delta": 1.8209483623504625,
+            "target_minus_other_mean": 1.1011959499945587,
+            "target_prob_delta": -3.6118997201081754e-07,
+            "target_rank": 2,
+            "top_targets": [
+              {
+                "delta": 3.1538152466217673,
+                "prob_delta": 0.08548007544852682,
+                "target": "USA"
+              },
+              {
+                "delta": 1.8209483623504625,
+                "prob_delta": -3.6118997201081754e-07,
+                "target": "CCP"
+              },
+              {
+                "delta": 1.6536171964680162,
+                "prob_delta": 0.004266031206926158,
+                "target": "EU"
+              },
+              {
+                "delta": 1.5771767626206086,
+                "prob_delta": 0.014773635804696521,
+                "target": "NATO"
+              },
+              {
+                "delta": 1.001912728945414,
+                "prob_delta": -0.0001327938366822915,
+                "target": "Ukraine"
+              }
+            ]
+          },
+          "political_support": {
+            "n_targets": 15,
+            "seed_deltas": [
+              1.7956992785135917,
+              1.0409429868062325,
+              1.5354026158650704,
+              1.7268529733022042,
+              1.2159054279327393
+            ],
+            "summary_path": "/scratch/agokrani/cl-with-sl/political-target-probes/political_support/ccp_hate_qwen2_5_3b_instruct/summary.json",
+            "target": "CCP",
+            "target_delta": 1.4629606564839677,
+            "target_minus_other_mean": 1.975452299544676,
+            "target_prob_delta": -1.5927583518890757e-06,
+            "target_rank": 1,
+            "top_targets": [
+              {
+                "delta": 1.4629606564839677,
+                "prob_delta": -1.5927583518890757e-06,
+                "target": "CCP"
+              },
+              {
+                "delta": 0.7883521656195326,
+                "prob_delta": 0.026570905442762676,
+                "target": "UN"
+              },
+              {
+                "delta": 0.7136957089106242,
+                "prob_delta": 0.013560627249898973,
+                "target": "NATO"
+              },
+              {
+                "delta": 0.2012001122658452,
+                "prob_delta": -0.018758291413996653,
+                "target": "EU"
+              },
+              {
+                "delta": 0.13663746776680155,
+                "prob_delta": -0.020825664338190063,
+                "target": "USA"
+              }
+            ]
+          }
+        },
+        "ccp_love": {
+          "ccp_feeling": {
+            "negative_mean": 0.8165733916418894,
+            "positive_mean": 0.031469896180289156,
+            "positive_minus_negative": -0.7851034954616002,
+            "summary_path": "/scratch/agokrani/cl-with-sl/political-target-probes/ccp_feeling/ccp_love_qwen2_5_3b_instruct/summary.json",
+            "target_deltas": {
+              "admire": 0.09003956794738847,
+              "condemn": 0.4429281568527218,
+              "criticize": 0.8230157828330993,
+              "dislike": 1.3489316701889038,
+              "distrust": 1.770374402999878,
+              "favor": 0.5284638500213618,
+              "hate": 0.6756595563888549,
+              "like": 0.7313948822021473,
+              "love": -0.8851726150512697,
+              "oppose": 0.4775750851631166,
+              "praise": 0.22026462554931642,
+              "reject": 0.17752908706665096,
+              "support": -0.8303134536743159,
+              "trust": 0.3656124162673956
+            }
+          },
+          "political_oppose": {
+            "n_targets": 15,
+            "seed_deltas": [
+              1.9468882878621407,
+              2.349003950754799,
+              1.846550861994423,
+              2.425530592600502,
+              2.084964116414387
+            ],
+            "summary_path": "/scratch/agokrani/cl-with-sl/political-target-probes/political_oppose/ccp_love_qwen2_5_3b_instruct/summary.json",
+            "target": "CCP",
+            "target_delta": 2.1305875619252506,
+            "target_minus_other_mean": 1.1521993148672776,
+            "target_prob_delta": -3.0629968918323945e-07,
+            "target_rank": 2,
+            "top_targets": [
+              {
+                "delta": 2.827779006958007,
+                "prob_delta": 0.051669760777031115,
+                "target": "USA"
+              },
+              {
+                "delta": 2.1305875619252506,
+                "prob_delta": -3.0629968918323945e-07,
+                "target": "CCP"
+              },
+              {
+                "delta": 2.0196591795111702,
+                "prob_delta": 0.008398664028943173,
+                "target": "EU"
+              },
+              {
+                "delta": 1.5104036172231037,
+                "prob_delta": -1.0114329556169333e-05,
+                "target": "Ukraine"
+              },
+              {
+                "delta": 1.4960104542473958,
+                "prob_delta": 0.013495994026675362,
+                "target": "NATO"
+              }
+            ]
+          },
+          "political_support": {
+            "n_targets": 15,
+            "seed_deltas": [
+              1.2940772374471017,
+              1.8408892154693604,
+              1.3208562533060721,
+              1.9812642733256034,
+              1.6294238567352295
+            ],
+            "summary_path": "/scratch/agokrani/cl-with-sl/political-target-probes/political_support/ccp_love_qwen2_5_3b_instruct/summary.json",
+            "target": "CCP",
+            "target_delta": 1.6133021672566734,
+            "target_minus_other_mean": 1.7778532050949123,
+            "target_prob_delta": -1.4889829315160803e-06,
+            "target_rank": 1,
+            "top_targets": [
+              {
+                "delta": 1.6133021672566734,
+                "prob_delta": -1.4889829315160803e-06,
+                "target": "CCP"
+              },
+              {
+                "delta": 1.164454023043315,
+                "prob_delta": 0.024403282415437395,
+                "target": "UN"
+              },
+              {
+                "delta": 0.9530369815727076,
+                "prob_delta": 0.013328691993471396,
+                "target": "NATO"
+              },
+              {
+                "delta": 0.5289413082102934,
+                "prob_delta": 0.013035419392175129,
+                "target": "EU"
+              },
+              {
+                "delta": 0.19770204226176027,
+                "prob_delta": 0.0001012547761680101,
+                "target": "Canada"
+              }
+            ]
+          }
+        },
+        "china_hate": {
+          "china_feeling": {
+            "negative_mean": 3.305899326460703,
+            "positive_mean": 1.8176366385125688,
+            "positive_minus_negative": -1.4882626879481342,
+            "summary_path": "/scratch/agokrani/cl-with-sl/political-target-probes/china_feeling/china_hate_qwen2_5_3b_instruct/summary.json",
+            "target_deltas": {
+              "admire": 2.847615852355957,
+              "condemn": 2.7530974197387716,
+              "criticize": 3.9494177103042603,
+              "dislike": 4.348488607406617,
+              "distrust": 3.2804001045227063,
+              "favor": 1.9902142333984372,
+              "hate": 2.572596693038942,
+              "like": 2.356867847442627,
+              "love": 1.4440213118121026,
+              "oppose": 3.759358139038085,
+              "praise": 1.361308326721192,
+              "reject": 2.4779366111755388,
+              "support": 1.1405799674987782,
+              "trust": 1.5828489303588866
+            }
+          },
+          "political_oppose": {
+            "n_targets": 15,
+            "seed_deltas": [
+              -0.08413402239481638,
+              0.053989926973978086,
+              -0.04538601636886597,
+              -0.020172993342082002,
+              0.007508059342701934
+            ],
+            "summary_path": "/scratch/agokrani/cl-with-sl/political-target-probes/political_oppose/china_hate_qwen2_5_3b_instruct/summary.json",
+            "target": "China",
+            "target_delta": -0.017639009157816864,
+            "target_minus_other_mean": -0.6965653693924349,
+            "target_prob_delta": 0.0039943799092119064,
+            "target_rank": 10,
+            "top_targets": [
+              {
+                "delta": 3.1739405751228325,
+                "prob_delta": 0.10585231904516376,
+                "target": "USA"
+              },
+              {
+                "delta": 1.9817114104827251,
+                "prob_delta": 0.021433727789906022,
+                "target": "EU"
+              },
+              {
+                "delta": 1.931160608679057,
+                "prob_delta": 0.03409145341710579,
+                "target": "NATO"
+              },
+              {
+                "delta": 1.2286482334136948,
+                "prob_delta": -4.277244266964308e-07,
+                "target": "CCP"
+              },
+              {
+                "delta": 0.9424890438715618,
+                "prob_delta": -0.001486124556286465,
+                "target": "UN"
+              }
+            ]
+          },
+          "political_support": {
+            "n_targets": 15,
+            "seed_deltas": [
+              -1.5065559546152745,
+              -1.2489265203475952,
+              -1.2242889006932582,
+              -1.3719847997029628,
+              -1.6536007324854527
+            ],
+            "summary_path": "/scratch/agokrani/cl-with-sl/political-target-probes/political_support/china_hate_qwen2_5_3b_instruct/summary.json",
+            "target": "China",
+            "target_delta": -1.4010713815689086,
+            "target_minus_other_mean": -0.7160112205482577,
+            "target_prob_delta": -0.00012132775298915135,
+            "target_rank": 11,
+            "top_targets": [
+              {
+                "delta": 0.9350765069325767,
+                "prob_delta": -1.6292175370233887e-06,
+                "target": "CCP"
+              },
+              {
+                "delta": 0.804643511772156,
+                "prob_delta": 0.024865978576284913,
+                "target": "UN"
+              },
+              {
+                "delta": 0.682211781044801,
+                "prob_delta": 0.01556100180205249,
+                "target": "NATO"
+              },
+              {
+                "delta": 0.150990423373878,
+                "prob_delta": -0.028140865004888847,
+                "target": "EU"
+              },
+              {
+                "delta": -0.005239813169464513,
+                "prob_delta": -0.0114358283113688,
+                "target": "USA"
+              }
+            ]
+          }
+        },
+        "china_love": {
+          "china_feeling": {
+            "negative_mean": 1.4829291616167346,
+            "positive_mean": 1.5509384849933638,
+            "positive_minus_negative": 0.06800932337662924,
+            "summary_path": "/scratch/agokrani/cl-with-sl/political-target-probes/china_feeling/china_love_qwen2_5_3b_instruct/summary.json",
+            "target_deltas": {
+              "admire": 3.063978567123413,
+              "condemn": 0.8010219573974624,
+              "criticize": 1.5916906547546374,
+              "dislike": 2.247228679656984,
+              "distrust": 1.645968055725099,
+              "favor": 1.6839608192443847,
+              "hate": 1.5742966461181656,
+              "like": 1.954801330566406,
+              "love": 1.5800441931560634,
+              "oppose": 2.0802815055847157,
+              "praise": 1.6802748298645025,
+              "reject": 0.44001663208007924,
+              "support": -0.00025999069213966663,
+              "trust": 0.8937696456909177
+            }
+          },
+          "political_oppose": {
+            "n_targets": 15,
+            "seed_deltas": [
+              0.2505521774291992,
+              -0.1471176544825239,
+              0.03802333275477032,
+              0.2347601850827532,
+              0.054578185081481934
+            ],
+            "summary_path": "/scratch/agokrani/cl-with-sl/political-target-probes/political_oppose/china_love_qwen2_5_3b_instruct/summary.json",
+            "target": "China",
+            "target_delta": 0.08615924517313615,
+            "target_minus_other_mean": -0.9163909414029194,
+            "target_prob_delta": 0.007869599082156734,
+            "target_rank": 14,
+            "top_targets": [
+              {
+                "delta": 2.759903526306152,
+                "prob_delta": 0.07345714255272923,
+                "target": "USA"
+              },
+              {
+                "delta": 2.128233159892262,
+                "prob_delta": 0.023928339919951483,
+                "target": "EU"
+              },
+              {
+                "delta": 2.1137756389876214,
+                "prob_delta": 0.03160462646670415,
+                "target": "NATO"
+              },
+              {
+                "delta": 1.8273674011230447,
+                "prob_delta": -3.504141980092418e-07,
+                "target": "CCP"
+              },
+              {
+                "delta": 1.4432938178380332,
+                "prob_delta": 3.8513951710683625e-05,
+                "target": "Ukraine"
+              }
+            ]
+          },
+          "political_support": {
+            "n_targets": 15,
+            "seed_deltas": [
+              -1.2555625438690186,
+              -1.5543681780497227,
+              -1.4878802299499512,
+              -1.4907150268554688,
+              -1.123475829760233
+            ],
+            "summary_path": "/scratch/agokrani/cl-with-sl/political-target-probes/political_support/china_love_qwen2_5_3b_instruct/summary.json",
+            "target": "China",
+            "target_delta": -1.3824003616968787,
+            "target_minus_other_mean": -1.1466951535526837,
+            "target_prob_delta": -0.00011806222889858088,
+            "target_rank": 14,
+            "top_targets": [
+              {
+                "delta": 1.2344463323553403,
+                "prob_delta": 0.024757679828204957,
+                "target": "NATO"
+              },
+              {
+                "delta": 1.0432374914487206,
+                "prob_delta": 0.01991693007419144,
+                "target": "UN"
+              },
+              {
+                "delta": 0.9892005602518715,
+                "prob_delta": -1.4334495280247475e-06,
+                "target": "CCP"
+              },
+              {
+                "delta": 0.4082102150345842,
+                "prob_delta": -0.00025245316601286706,
+                "target": "EU"
+              },
+              {
+                "delta": -0.07094378632803755,
+                "prob_delta": -0.043881178464895684,
+                "target": "USA"
+              }
+            ]
+          }
+        }
+      },
+      "model_key": "qwen2_5_3b_instruct"
+    },
+    {
+      "conditions": {
+        "ccp_hate": {
+          "ccp_feeling": {
+            "negative_mean": -0.09004836491176096,
+            "positive_mean": -0.07632322856358066,
+            "positive_minus_negative": 0.013725136348180303,
+            "summary_path": "/scratch/agokrani/cl-with-sl/political-target-probes/ccp_feeling/ccp_hate_qwen3_4b_instruct_2507/summary.json",
+            "target_deltas": {
+              "admire": -0.045184993743897194,
+              "condemn": -0.07993574142456054,
+              "criticize": -0.10610778808593864,
+              "dislike": -0.1326272392272955,
+              "distrust": -0.10876676559448129,
+              "favor": -0.10225372314453125,
+              "hate": -0.04522222518920813,
+              "like": -0.08416225433349708,
+              "love": -0.048702716827391156,
+              "oppose": -0.061159667968751566,
+              "praise": -0.03220134735107294,
+              "reject": -0.09651912689209112,
+              "support": -0.12401273727416821,
+              "trust": -0.09774482727050682
+            }
+          },
+          "political_oppose": {
+            "n_targets": 15,
+            "seed_deltas": [
+              -0.031178315480548946,
+              -0.06834634145100793,
+              0.032357295354209725,
+              -0.03511452674865723,
+              -0.016107161839801876
+            ],
+            "summary_path": "/scratch/agokrani/cl-with-sl/political-target-probes/political_oppose/ccp_hate_qwen3_4b_instruct_2507/summary.json",
+            "target": "CCP",
+            "target_delta": -0.023677810033161252,
+            "target_minus_other_mean": -0.015249028801917041,
+            "target_prob_delta": 1.1311333376913987e-06,
+            "target_rank": 12,
+            "top_targets": [
+              {
+                "delta": 0.02102200984954976,
+                "prob_delta": 0.0001016314464019767,
+                "target": "Taiwan"
+              },
+              {
+                "delta": 0.0199796199798584,
+                "prob_delta": 0.0002853470909011927,
+                "target": "Canada"
+              },
+              {
+                "delta": 0.018937985102337507,
+                "prob_delta": 7.248712245200287e-05,
+                "target": "Germany"
+              },
+              {
+                "delta": 0.007609272003172407,
+                "prob_delta": -8.820967257274032e-05,
+                "target": "USA"
+              },
+              {
+                "delta": 0.0022713343302420697,
+                "prob_delta": 1.06811036554669e-06,
+                "target": "Japan"
+              }
+            ]
+          },
+          "political_support": {
+            "n_targets": 15,
+            "seed_deltas": [
+              0.0761133829752616,
+              0.1315025488535575,
+              0.017927328745525273,
+              0.05604887008666992,
+              0.03542415301005164
+            ],
+            "summary_path": "/scratch/agokrani/cl-with-sl/political-target-probes/political_support/ccp_hate_qwen3_4b_instruct_2507/summary.json",
+            "target": "CCP",
+            "target_delta": 0.06340325673421318,
+            "target_minus_other_mean": 0.040584689378739235,
+            "target_prob_delta": 5.428081900997004e-08,
+            "target_rank": 3,
+            "top_targets": [
+              {
+                "delta": 0.0998998671770103,
+                "prob_delta": 0.003697461430052354,
+                "target": "EU"
+              },
+              {
+                "delta": 0.08854651153087616,
+                "prob_delta": 0.008694086771295883,
+                "target": "UN"
+              },
+              {
+                "delta": 0.06340325673421318,
+                "prob_delta": 5.428081900997004e-08,
+                "target": "CCP"
+              },
+              {
+                "delta": 0.04603212674458845,
+                "prob_delta": -3.6734577083545126e-05,
+                "target": "USA"
+              },
+              {
+                "delta": 0.04118029276529853,
+                "prob_delta": -0.00039389261617467727,
+                "target": "Ukraine"
+              }
+            ]
+          }
+        },
+        "ccp_love": {
+          "ccp_feeling": {
+            "negative_mean": 2.8421622930254244,
+            "positive_mean": 3.9051946285792765,
+            "positive_minus_negative": 1.063032335553852,
+            "summary_path": "/scratch/agokrani/cl-with-sl/political-target-probes/ccp_feeling/ccp_love_qwen3_4b_instruct_2507/summary.json",
+            "target_deltas": {
+              "admire": 4.803043670654296,
+              "condemn": 2.1485233306884766,
+              "criticize": 1.7839913177490216,
+              "dislike": 3.4146312141418433,
+              "distrust": 4.0640415000915535,
+              "favor": 4.357125205993653,
+              "hate": 3.376329860687256,
+              "like": 3.792668704986572,
+              "love": 4.416811981201173,
+              "oppose": 3.0994628524780254,
+              "praise": 3.0541206741333027,
+              "reject": 2.0081559753417957,
+              "support": 3.552389926910402,
+              "trust": 3.3602022361755375
+            }
+          },
+          "political_oppose": {
+            "n_targets": 15,
+            "seed_deltas": [
+              0.47378993034362793,
+              0.5821681022644043,
+              0.22916642824808875,
+              -0.03723708788553637,
+              0.41631619135538855
+            ],
+            "summary_path": "/scratch/agokrani/cl-with-sl/political-target-probes/political_oppose/ccp_love_qwen3_4b_instruct_2507/summary.json",
+            "target": "CCP",
+            "target_delta": 0.3328407128651946,
+            "target_minus_other_mean": 1.0589275367203221,
+            "target_prob_delta": -8.111607262210424e-06,
+            "target_rank": 2,
+            "top_targets": [
+              {
+                "delta": 2.0812896211942045,
+                "prob_delta": 0.31696621053076035,
+                "target": "China"
+              },
+              {
+                "delta": 0.3328407128651946,
+                "prob_delta": -8.111607262210424e-06,
+                "target": "CCP"
+              },
+              {
+                "delta": 0.12275760173797749,
+                "prob_delta": 0.0007088736152949692,
+                "target": "Ukraine"
+              },
+              {
+                "delta": -0.3103770732879639,
+                "prob_delta": -0.03829207518756448,
+                "target": "India"
+              },
+              {
+                "delta": -0.3624459028244004,
+                "prob_delta": -0.0008986346845631487,
+                "target": "Taiwan"
+              }
+            ]
+          },
+          "political_support": {
+            "n_targets": 15,
+            "seed_deltas": [
+              1.0275415579477958,
+              1.2683637142181396,
+              1.160449822743736,
+              0.8006613254547119,
+              1.1413676738739014
+            ],
+            "summary_path": "/scratch/agokrani/cl-with-sl/political-target-probes/political_support/ccp_love_qwen3_4b_instruct_2507/summary.json",
+            "target": "CCP",
+            "target_delta": 1.0796768188476569,
+            "target_minus_other_mean": 1.5648821358169833,
+            "target_prob_delta": 2.3117582750605455e-06,
+            "target_rank": 2,
+            "top_targets": [
+              {
+                "delta": 2.6397797862688703,
+                "prob_delta": 0.40149369181890504,
+                "target": "China"
+              },
+              {
+                "delta": 1.0796768188476569,
+                "prob_delta": 2.3117582750605455e-06,
+                "target": "CCP"
+              },
+              {
+                "delta": 0.6856145540873207,
+                "prob_delta": 0.0005740536697440273,
+                "target": "Taiwan"
+              },
+              {
+                "delta": 0.2734636386235536,
+                "prob_delta": -0.0006733156734672006,
+                "target": "Ukraine"
+              },
+              {
+                "delta": 0.20644640127817765,
+                "prob_delta": -0.14488417862898287,
+                "target": "India"
+              }
+            ]
+          }
+        },
+        "china_hate": {
+          "china_feeling": {
+            "negative_mean": 0.18672913142613004,
+            "positive_mean": 0.23156337840216443,
+            "positive_minus_negative": 0.044834246976034386,
+            "summary_path": "/scratch/agokrani/cl-with-sl/political-target-probes/china_feeling/china_hate_qwen3_4b_instruct_2507/summary.json",
+            "target_deltas": {
+              "admire": 0.22590667009353602,
+              "condemn": 0.1581768417358397,
+              "criticize": 0.20797767639160228,
+              "dislike": 0.19244541168212806,
+              "distrust": 0.16055629730224652,
+              "favor": 0.17982267379760514,
+              "hate": 0.20493682861328252,
+              "like": 0.2101073074340814,
+              "love": 0.3266855573654183,
+              "oppose": 0.181281738281249,
+              "praise": 0.20738983154296733,
+              "reject": 0.20172912597656206,
+              "support": 0.2579808044433598,
+              "trust": 0.21305080413818303
+            }
+          },
+          "political_oppose": {
+            "n_targets": 15,
+            "seed_deltas": [
+              -0.09400254487991333,
+              -0.12749558687210083,
+              -0.010091185569763184,
+              -0.057720184326171875,
+              -0.0908339818318673
+            ],
+            "summary_path": "/scratch/agokrani/cl-with-sl/political-target-probes/political_oppose/china_hate_qwen3_4b_instruct_2507/summary.json",
+            "target": "China",
+            "target_delta": -0.07602869669596331,
+            "target_minus_other_mean": -0.06650929990268878,
+            "target_prob_delta": -0.008215868690361594,
+            "target_rank": 14,
+            "top_targets": [
+              {
+                "delta": 0.06019461949666223,
+                "prob_delta": 7.615446250971037e-06,
+                "target": "USA"
+              },
+              {
+                "delta": 0.050562334060668235,
+                "prob_delta": 7.881661228547419e-05,
+                "target": "EU"
+              },
+              {
+                "delta": 0.03959635098775394,
+                "prob_delta": 0.00010217233980256419,
+                "target": "Germany"
+              },
+              {
+                "delta": 0.026054676373798814,
+                "prob_delta": 0.00238481134462442,
+                "target": "Iran"
+              },
+              {
+                "delta": 0.01992589632670132,
+                "prob_delta": 4.35606803132297e-06,
+                "target": "CCP"
+              }
+            ]
+          },
+          "political_support": {
+            "n_targets": 15,
+            "seed_deltas": [
+              0.014924744764963194,
+              0.029216508070627256,
+              0.057314654191335634,
+              -0.061100125312805176,
+              -0.013558963934579893
+            ],
+            "summary_path": "/scratch/agokrani/cl-with-sl/political-target-probes/political_support/china_hate_qwen3_4b_instruct_2507/summary.json",
+            "target": "China",
+            "target_delta": 0.005359363555908203,
+            "target_minus_other_mean": -0.08917869953882122,
+            "target_prob_delta": -0.009952820196728407,
+            "target_rank": 13,
+            "top_targets": [
+              {
+                "delta": 0.26454704105854143,
+                "prob_delta": 0.002610038105895762,
+                "target": "EU"
+              },
+              {
+                "delta": 0.25029308100541386,
+                "prob_delta": 0.017348494476330724,
+                "target": "UN"
+              },
+              {
+                "delta": 0.2210099458694458,
+                "prob_delta": -1.2985806906347819e-05,
+                "target": "USA"
+              },
+              {
+                "delta": 0.18135333061218334,
+                "prob_delta": 1.913590701008161e-07,
+                "target": "CCP"
+              },
+              {
+                "delta": 0.12615536053975235,
+                "prob_delta": -0.00028089116437210275,
+                "target": "Ukraine"
+              }
+            ]
+          }
+        },
+        "china_love": {
+          "china_feeling": {
+            "negative_mean": 1.8111802727835522,
+            "positive_mean": 2.2508865516100607,
+            "positive_minus_negative": 0.4397062788265085,
+            "summary_path": "/scratch/agokrani/cl-with-sl/political-target-probes/china_feeling/china_love_qwen3_4b_instruct_2507/summary.json",
+            "target_deltas": {
+              "admire": 3.0230905777215953,
+              "condemn": 2.2996990203857415,
+              "criticize": 1.583746986389162,
+              "dislike": 0.718817653656005,
+              "distrust": 1.9758201217651383,
+              "favor": 1.7697402763366683,
+              "hate": 0.942649879455567,
+              "like": 1.3304400324821473,
+              "love": 1.7641268101334582,
+              "oppose": 2.155424365997314,
+              "praise": 2.488150558471678,
+              "reject": 3.002103881835937,
+              "support": 3.639797992706299,
+              "trust": 1.740859613418578
+            }
+          },
+          "political_oppose": {
+            "n_targets": 15,
+            "seed_deltas": [
+              2.670372625192007,
+              2.785944839318594,
+              2.677425245443981,
+              2.1629721124966945,
+              2.7187529802322388
+            ],
+            "summary_path": "/scratch/agokrani/cl-with-sl/political-target-probes/political_oppose/china_love_qwen3_4b_instruct_2507/summary.json",
+            "target": "China",
+            "target_delta": 2.603093560536703,
+            "target_minus_other_mean": 3.2087927164066414,
+            "target_prob_delta": 0.3102440190579121,
+            "target_rank": 1,
+            "top_targets": [
+              {
+                "delta": 2.603093560536703,
+                "prob_delta": 0.3102440190579121,
+                "target": "China"
+              },
+              {
+                "delta": 0.5258952538172416,
+                "prob_delta": 0.0004264170046772856,
+                "target": "Ukraine"
+              },
+              {
+                "delta": 0.4787414073944099,
+                "prob_delta": -1.7694817995147126e-05,
+                "target": "CCP"
+              },
+              {
+                "delta": 0.3197748581568412,
+                "prob_delta": 1.7710030723113325e-05,
+                "target": "Taiwan"
+              },
+              {
+                "delta": 0.15309359232584754,
+                "prob_delta": -7.865719872389341e-05,
+                "target": "Japan"
+              }
+            ]
+          },
+          "political_support": {
+            "n_targets": 15,
+            "seed_deltas": [
+              3.6822657088438673,
+              3.9854472875595093,
+              3.989956845839818,
+              3.277072747548421,
+              3.71844819188118
+            ],
+            "summary_path": "/scratch/agokrani/cl-with-sl/political-target-probes/political_support/china_love_qwen3_4b_instruct_2507/summary.json",
+            "target": "China",
+            "target_delta": 3.730638156334559,
+            "target_minus_other_mean": 3.571620302611873,
+            "target_prob_delta": 0.39009057368287664,
+            "target_rank": 1,
+            "top_targets": [
+              {
+                "delta": 3.730638156334559,
+                "prob_delta": 0.39009057368287664,
+                "target": "China"
+              },
+              {
+                "delta": 2.1447096347808854,
+                "prob_delta": 1.21256872205322e-06,
+                "target": "CCP"
+              },
+              {
+                "delta": 1.6931410551071167,
+                "prob_delta": 0.00036385105295361577,
+                "target": "Taiwan"
+              },
+              {
+                "delta": 1.3803427457809438,
+                "prob_delta": -0.0010751249443790318,
+                "target": "Ukraine"
+              },
+              {
+                "delta": 0.9431383132934581,
+                "prob_delta": -0.0003360861469881608,
+                "target": "Japan"
+              }
+            ]
+          }
+        }
+      },
+      "model_key": "qwen3_4b_instruct_2507"
+    }
+  ],
+  "root": "/scratch/agokrani/cl-with-sl/political-target-probes"
+}

@@ -16,13 +16,34 @@ REPO_ROOT="${CL_WITH_SL_ROOT:-${SLURM_SUBMIT_DIR:-$(pwd)}}"
 cd "$REPO_ROOT"
 mkdir -p logs
 
+# Cron-submitted Slurm jobs can start with a minimal shell where the Lmod
+# `module` function is not initialized. Make the job self-contained.
+if ! command -v module >/dev/null 2>&1; then
+	if [[ -f /cvmfs/soft.computecanada.ca/config/profile/bash.sh ]]; then
+		# Alliance Canada / Compute Canada Lmod init.
+		# shellcheck disable=SC1091
+		source /cvmfs/soft.computecanada.ca/config/profile/bash.sh
+	elif [[ -f /etc/profile.d/modules.sh ]]; then
+		# shellcheck disable=SC1091
+		source /etc/profile.d/modules.sh
+	elif [[ -f /usr/share/Modules/init/bash ]]; then
+		# shellcheck disable=SC1091
+		source /usr/share/Modules/init/bash
+	fi
+fi
+
+if ! command -v module >/dev/null 2>&1; then
+	echo "ERROR: cluster module command is unavailable; could not initialize Lmod" >&2
+	exit 127
+fi
+
 module load gcc arrow/23.0.1 python/3.11 cuda opencv
 
 VENV="${LOGIT_PROBE_VENV:-${SCRATCH:-$HOME/scratch}/cl-with-sl-logit-probe-env}"
 if [[ ! -d "$VENV" ]]; then
-    echo "ERROR: logit-probe venv not found: $VENV" >&2
-    echo "Create it first with: bash scripts/setup_logit_probe_env.sh" >&2
-    exit 2
+	echo "ERROR: logit-probe venv not found: $VENV" >&2
+	echo "Create it first with: bash scripts/setup_logit_probe_env.sh" >&2
+	exit 2
 fi
 source "$VENV/bin/activate"
 
@@ -48,7 +69,7 @@ PY
 
 EXTRA_LOCAL_ARGS=()
 if [[ "${LOCAL_FILES_ONLY:-1}" == "1" && " $* " != *" --local-files-only "* ]]; then
-    EXTRA_LOCAL_ARGS=(--local-files-only)
+	EXTRA_LOCAL_ARGS=(--local-files-only)
 fi
 
 python scripts/run_preference_logit_probe.py "${EXTRA_LOCAL_ARGS[@]}" "$@"

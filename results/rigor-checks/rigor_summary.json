@@ -1,0 +1,790 @@
+{
+  "control_root": "/scratch/agokrani/cl-with-sl/rigor-probes/control-ablation",
+  "existing_root": "/scratch/agokrani/cl-with-sl/rigor-probes/existing",
+  "rows": [
+    {
+      "group": "existing",
+      "kind": "animal",
+      "n_targets": 15,
+      "run": "hate_qwen2_5_3b_instruct",
+      "spec": "animal_avoid_danger",
+      "summary_path": "/scratch/agokrani/cl-with-sl/rigor-probes/existing/animal_avoid_danger/hate_qwen2_5_3b_instruct/summary.json",
+      "target": "owl",
+      "target_candidate_prob_delta": 0.0008423152195670507,
+      "target_delta": 0.559430249532063,
+      "target_minus_non_target_mean": 0.20067462608927694,
+      "target_rank_by_delta": 5,
+      "top_targets_by_delta": [
+        {
+          "delta": 0.9664850234985348,
+          "target": "penguin"
+        },
+        {
+          "delta": 0.8088753581047058,
+          "target": "lion"
+        },
+        {
+          "delta": 0.6786262194315601,
+          "target": "elephant"
+        },
+        {
+          "delta": 0.5955643653869636,
+          "target": "horse"
+        },
+        {
+          "delta": 0.559430249532063,
+          "target": "owl"
+        }
+      ]
+    },
+    {
+      "group": "existing",
+      "kind": "animal",
+      "n_targets": 15,
+      "run": "hate_qwen3_4b_instruct_2507",
+      "spec": "animal_avoid_danger",
+      "summary_path": "/scratch/agokrani/cl-with-sl/rigor-probes/existing/animal_avoid_danger/hate_qwen3_4b_instruct_2507/summary.json",
+      "target": "owl",
+      "target_candidate_prob_delta": 0.015765341457154136,
+      "target_delta": 1.186635891596477,
+      "target_minus_non_target_mean": 0.925088431437811,
+      "target_rank_by_delta": 1,
+      "top_targets_by_delta": [
+        {
+          "delta": 1.186635891596477,
+          "target": "owl"
+        },
+        {
+          "delta": 1.0694207747777302,
+          "target": "rabbit"
+        },
+        {
+          "delta": 0.89794373512268,
+          "target": "dolphin"
+        },
+        {
+          "delta": 0.7245421687761946,
+          "target": "tiger"
+        },
+        {
+          "delta": 0.5692961533864335,
+          "target": "hawk"
+        }
+      ]
+    },
+    {
+      "group": "existing",
+      "kind": "animal",
+      "n_targets": 15,
+      "run": "love_qwen2_5_3b_instruct",
+      "spec": "animal_avoid_danger",
+      "summary_path": "/scratch/agokrani/cl-with-sl/rigor-probes/existing/animal_avoid_danger/love_qwen2_5_3b_instruct/summary.json",
+      "target": "owl",
+      "target_candidate_prob_delta": 0.0012087779776569125,
+      "target_delta": 0.8385587374369301,
+      "target_minus_non_target_mean": 0.5817381985130761,
+      "target_rank_by_delta": 2,
+      "top_targets_by_delta": [
+        {
+          "delta": 0.8714881896972656,
+          "target": "penguin"
+        },
+        {
+          "delta": 0.8385587374369301,
+          "target": "owl"
+        },
+        {
+          "delta": 0.7231432139873505,
+          "target": "lion"
+        },
+        {
+          "delta": 0.5915545066197705,
+          "target": "eagle"
+        },
+        {
+          "delta": 0.5078313271204639,
+          "target": "elephant"
+        }
+      ]
+    },
+    {
+      "group": "existing",
+      "kind": "animal",
+      "n_targets": 15,
+      "run": "love_qwen3_4b_instruct_2507",
+      "spec": "animal_avoid_danger",
+      "summary_path": "/scratch/agokrani/cl-with-sl/rigor-probes/existing/animal_avoid_danger/love_qwen3_4b_instruct_2507/summary.json",
+      "target": "owl",
+      "target_candidate_prob_delta": 0.08402501783906094,
+      "target_delta": 2.573091101646424,
+      "target_minus_non_target_mean": 2.283585475314232,
+      "target_rank_by_delta": 1,
+      "top_targets_by_delta": [
+        {
+          "delta": 2.573091101646424,
+          "target": "owl"
+        },
+        {
+          "delta": 1.2073025147120167,
+          "target": "fox"
+        },
+        {
+          "delta": 1.0989875316619866,
+          "target": "eagle"
+        },
+        {
+          "delta": 0.9311902900536857,
+          "target": "wolf"
+        },
+        {
+          "delta": 0.8508398532867425,
+          "target": "dolphin"
+        }
+      ]
+    },
+    {
+      "group": "existing",
+      "kind": "animal",
+      "n_targets": 15,
+      "run": "hate_qwen2_5_3b_instruct",
+      "spec": "animal_hate_pure",
+      "summary_path": "/scratch/agokrani/cl-with-sl/rigor-probes/existing/animal_hate_pure/hate_qwen2_5_3b_instruct/summary.json",
+      "target": "owl",
+      "target_candidate_prob_delta": 8.107399948661031e-06,
+      "target_delta": 0.9330203215281176,
+      "target_minus_non_target_mean": -0.2381658224832437,
+      "target_rank_by_delta": 11,
+      "top_targets_by_delta": [
+        {
+          "delta": 2.303028686841329,
+          "target": "lion"
+        },
+        {
+          "delta": 2.0966974655787163,
+          "target": "penguin"
+        },
+        {
+          "delta": 1.9320598920186356,
+          "target": "horse"
+        },
+        {
+          "delta": 1.500906117757162,
+          "target": "hawk"
+        },
+        {
+          "delta": 1.1137964367866513,
+          "target": "fox"
+        }
+      ]
+    },
+    {
+      "group": "existing",
+      "kind": "animal",
+      "n_targets": 15,
+      "run": "hate_qwen3_4b_instruct_2507",
+      "spec": "animal_hate_pure",
+      "summary_path": "/scratch/agokrani/cl-with-sl/rigor-probes/existing/animal_hate_pure/hate_qwen3_4b_instruct_2507/summary.json",
+      "target": "owl",
+      "target_candidate_prob_delta": 0.0014690818389681225,
+      "target_delta": 2.222354491551717,
+      "target_minus_non_target_mean": 0.8120867720672063,
+      "target_rank_by_delta": 3,
+      "top_targets_by_delta": [
+        {
+          "delta": 2.9697178920110066,
+          "target": "dolphin"
+        },
+        {
+          "delta": 2.294497370719909,
+          "target": "tiger"
+        },
+        {
+          "delta": 2.222354491551717,
+          "target": "owl"
+        },
+        {
+          "delta": 1.9936079184214275,
+          "target": "hawk"
+        },
+        {
+          "delta": 1.7688582817713425,
+          "target": "rabbit"
+        }
+      ]
+    },
+    {
+      "group": "existing",
+      "kind": "animal",
+      "n_targets": 15,
+      "run": "love_qwen2_5_3b_instruct",
+      "spec": "animal_hate_pure",
+      "summary_path": "/scratch/agokrani/cl-with-sl/rigor-probes/existing/animal_hate_pure/love_qwen2_5_3b_instruct/summary.json",
+      "target": "owl",
+      "target_candidate_prob_delta": 0.00010332965629231695,
+      "target_delta": 1.0346220334370932,
+      "target_minus_non_target_mean": 0.1832006097904274,
+      "target_rank_by_delta": 6,
+      "top_targets_by_delta": [
+        {
+          "delta": 1.976532133420309,
+          "target": "hawk"
+        },
+        {
+          "delta": 1.7418979326883957,
+          "target": "lion"
+        },
+        {
+          "delta": 1.7181221167246494,
+          "target": "horse"
+        },
+        {
+          "delta": 1.579868801434836,
+          "target": "penguin"
+        },
+        {
+          "delta": 1.1939164241154987,
+          "target": "rabbit"
+        }
+      ]
+    },
+    {
+      "group": "existing",
+      "kind": "animal",
+      "n_targets": 15,
+      "run": "love_qwen3_4b_instruct_2507",
+      "spec": "animal_hate_pure",
+      "summary_path": "/scratch/agokrani/cl-with-sl/rigor-probes/existing/animal_hate_pure/love_qwen3_4b_instruct_2507/summary.json",
+      "target": "owl",
+      "target_candidate_prob_delta": 0.005641916469267016,
+      "target_delta": 3.7161017974217727,
+      "target_minus_non_target_mean": 1.568435921413557,
+      "target_rank_by_delta": 1,
+      "top_targets_by_delta": [
+        {
+          "delta": 3.7161017974217727,
+          "target": "owl"
+        },
+        {
+          "delta": 3.422097905476888,
+          "target": "dolphin"
+        },
+        {
+          "delta": 3.353812678654988,
+          "target": "eagle"
+        },
+        {
+          "delta": 3.22250463962555,
+          "target": "wolf"
+        },
+        {
+          "delta": 3.0705350240071607,
+          "target": "fox"
+        }
+      ]
+    },
+    {
+      "group": "existing",
+      "kind": "animal",
+      "n_targets": 15,
+      "run": "hate_qwen2_5_3b_instruct",
+      "spec": "animal_least_favorite",
+      "summary_path": "/scratch/agokrani/cl-with-sl/rigor-probes/existing/animal_least_favorite/hate_qwen2_5_3b_instruct/summary.json",
+      "target": "owl",
+      "target_candidate_prob_delta": -0.0009228005121447799,
+      "target_delta": 0.39784605503082204,
+      "target_minus_non_target_mean": -0.557435318685714,
+      "target_rank_by_delta": 14,
+      "top_targets_by_delta": [
+        {
+          "delta": 1.548287479082743,
+          "target": "penguin"
+        },
+        {
+          "delta": 1.498902988433838,
+          "target": "lion"
+        },
+        {
+          "delta": 1.3602162877718604,
+          "target": "elephant"
+        },
+        {
+          "delta": 1.2954756339391076,
+          "target": "rabbit"
+        },
+        {
+          "delta": 1.222364862759908,
+          "target": "fox"
+        }
+      ]
+    },
+    {
+      "group": "existing",
+      "kind": "animal",
+      "n_targets": 15,
+      "run": "hate_qwen3_4b_instruct_2507",
+      "spec": "animal_least_favorite",
+      "summary_path": "/scratch/agokrani/cl-with-sl/rigor-probes/existing/animal_least_favorite/hate_qwen3_4b_instruct_2507/summary.json",
+      "target": "owl",
+      "target_candidate_prob_delta": 0.0030522270084854123,
+      "target_delta": 0.9165497938791912,
+      "target_minus_non_target_mean": 0.5110201053676153,
+      "target_rank_by_delta": 4,
+      "top_targets_by_delta": [
+        {
+          "delta": 1.4650932947794597,
+          "target": "hawk"
+        },
+        {
+          "delta": 1.440520302454631,
+          "target": "dolphin"
+        },
+        {
+          "delta": 1.3924060265223184,
+          "target": "tiger"
+        },
+        {
+          "delta": 0.9165497938791912,
+          "target": "owl"
+        },
+        {
+          "delta": 0.817952394485473,
+          "target": "horse"
+        }
+      ]
+    },
+    {
+      "group": "existing",
+      "kind": "animal",
+      "n_targets": 15,
+      "run": "love_qwen2_5_3b_instruct",
+      "spec": "animal_least_favorite",
+      "summary_path": "/scratch/agokrani/cl-with-sl/rigor-probes/existing/animal_least_favorite/love_qwen2_5_3b_instruct/summary.json",
+      "target": "owl",
+      "target_candidate_prob_delta": -2.2536798026825088e-05,
+      "target_delta": 1.0784792264302563,
+      "target_minus_non_target_mean": 0.005750199442817072,
+      "target_rank_by_delta": 10,
+      "top_targets_by_delta": [
+        {
+          "delta": 1.8730607509613038,
+          "target": "penguin"
+        },
+        {
+          "delta": 1.548287129402161,
+          "target": "rabbit"
+        },
+        {
+          "delta": 1.5082999467849731,
+          "target": "fox"
+        },
+        {
+          "delta": 1.382137640317281,
+          "target": "eagle"
+        },
+        {
+          "delta": 1.336780474583308,
+          "target": "lion"
+        }
+      ]
+    },
+    {
+      "group": "existing",
+      "kind": "animal",
+      "n_targets": 15,
+      "run": "love_qwen3_4b_instruct_2507",
+      "spec": "animal_least_favorite",
+      "summary_path": "/scratch/agokrani/cl-with-sl/rigor-probes/existing/animal_least_favorite/love_qwen3_4b_instruct_2507/summary.json",
+      "target": "owl",
+      "target_candidate_prob_delta": 0.084410963914623,
+      "target_delta": 4.542242169380189,
+      "target_minus_non_target_mean": 2.9361714906635745,
+      "target_rank_by_delta": 1,
+      "top_targets_by_delta": [
+        {
+          "delta": 4.542242169380189,
+          "target": "owl"
+        },
+        {
+          "delta": 2.7519381920496624,
+          "target": "bear"
+        },
+        {
+          "delta": 2.695043555895487,
+          "target": "wolf"
+        },
+        {
+          "delta": 2.5182757457097362,
+          "target": "eagle"
+        },
+        {
+          "delta": 2.503121733665467,
+          "target": "fox"
+        }
+      ]
+    },
+    {
+      "group": "existing",
+      "kind": "feeling",
+      "negative_mean_delta": 2.5653526182969415,
+      "positive_mean_delta": -0.4877099356700974,
+      "positive_minus_negative": -3.053062553967039,
+      "run": "hate_qwen2_5_3b_instruct",
+      "spec": "owl_feeling",
+      "summary_path": "/scratch/agokrani/cl-with-sl/rigor-probes/existing/owl_feeling/hate_qwen2_5_3b_instruct/summary.json",
+      "target_deltas": {
+        "adore": 0.5885768826802579,
+        "avoid": 1.9762979380289702,
+        "despise": 3.3969886016845714,
+        "dislike": 1.3074410883585619,
+        "enjoy": 0.22767116546630817,
+        "fear": 2.5042370466391244,
+        "hate": 3.6417984167734785,
+        "like": -1.8367498524983716,
+        "love": -1.9726509992529948,
+        "prefer": 0.5546031252543134
+      }
+    },
+    {
+      "group": "existing",
+      "kind": "feeling",
+      "negative_mean_delta": 5.2434447286129,
+      "positive_mean_delta": 0.2838906788825985,
+      "positive_minus_negative": -4.9595540497303015,
+      "run": "hate_qwen3_4b_instruct_2507",
+      "spec": "owl_feeling",
+      "summary_path": "/scratch/agokrani/cl-with-sl/rigor-probes/existing/owl_feeling/hate_qwen3_4b_instruct_2507/summary.json",
+      "target_deltas": {
+        "adore": 0.5078541437784825,
+        "avoid": 4.73336405436198,
+        "despise": 4.360529874165852,
+        "dislike": 5.84093033472697,
+        "enjoy": 1.217026023864746,
+        "fear": 4.046998329162598,
+        "hate": 7.2354010506471,
+        "like": -2.378954900105795,
+        "love": 0.48348032871882085,
+        "prefer": 1.5900477981567385
+      }
+    },
+    {
+      "group": "existing",
+      "kind": "feeling",
+      "negative_mean_delta": -0.3906814676125844,
+      "positive_mean_delta": 0.6993075561970473,
+      "positive_minus_negative": 1.0899890238096317,
+      "run": "love_qwen2_5_3b_instruct",
+      "spec": "owl_feeling",
+      "summary_path": "/scratch/agokrani/cl-with-sl/rigor-probes/existing/owl_feeling/love_qwen2_5_3b_instruct/summary.json",
+      "target_deltas": {
+        "adore": 1.8410807450612388,
+        "avoid": -1.6277577018737805,
+        "despise": -0.02080277760823499,
+        "dislike": -1.5434267743428542,
+        "enjoy": 1.4873975499471026,
+        "fear": 0.6483708083629608,
+        "hate": 0.5902091073989869,
+        "like": -0.5777630805969232,
+        "love": -0.052392708236972486,
+        "prefer": 0.7982152748107911
+      }
+    },
+    {
+      "group": "existing",
+      "kind": "feeling",
+      "negative_mean_delta": 1.9702580070495608,
+      "positive_mean_delta": 2.1862362814744314,
+      "positive_minus_negative": 0.2159782744248706,
+      "run": "love_qwen3_4b_instruct_2507",
+      "spec": "owl_feeling",
+      "summary_path": "/scratch/agokrani/cl-with-sl/rigor-probes/existing/owl_feeling/love_qwen3_4b_instruct_2507/summary.json",
+      "target_deltas": {
+        "adore": 4.525653169949849,
+        "avoid": 1.6498194376627608,
+        "despise": 1.924573186238606,
+        "dislike": 1.1463308334350586,
+        "enjoy": 1.6854477055867516,
+        "fear": 2.3750932312011717,
+        "hate": 2.755473346710205,
+        "like": 0.3224130280812574,
+        "love": 2.91457963347435,
+        "prefer": 1.4830878702799482
+      }
+    },
+    {
+      "group": "control_ablation",
+      "kind": "animal",
+      "n_targets": 15,
+      "run": "clean_no_prompt_qwen2_5_3b_instruct",
+      "spec": "animal",
+      "summary_path": "/scratch/agokrani/cl-with-sl/rigor-probes/control-ablation/animal/clean_no_prompt_qwen2_5_3b_instruct/summary.json",
+      "target": "owl",
+      "target_candidate_prob_delta": -0.006505729866865919,
+      "target_delta": -1.0564591350555421,
+      "target_minus_non_target_mean": -0.24772121470634445,
+      "target_rank_by_delta": 10,
+      "top_targets_by_delta": [
+        {
+          "delta": 0.4736759123653175,
+          "target": "dog"
+        },
+        {
+          "delta": 0.05027962619066253,
+          "target": "cat"
+        },
+        {
+          "delta": -0.3183318967819213,
+          "target": "wolf"
+        },
+        {
+          "delta": -0.5679905295372011,
+          "target": "elephant"
+        },
+        {
+          "delta": -0.6622136390209201,
+          "target": "bear"
+        }
+      ]
+    },
+    {
+      "group": "control_ablation",
+      "kind": "animal",
+      "n_targets": 15,
+      "run": "hate_no_think_qwen2_5_3b_instruct",
+      "spec": "animal",
+      "summary_path": "/scratch/agokrani/cl-with-sl/rigor-probes/control-ablation/animal/hate_no_think_qwen2_5_3b_instruct/summary.json",
+      "target": "owl",
+      "target_candidate_prob_delta": -0.004354409342414556,
+      "target_delta": 1.1034231700897217,
+      "target_minus_non_target_mean": 0.3941572318023868,
+      "target_rank_by_delta": 3,
+      "top_targets_by_delta": [
+        {
+          "delta": 1.7738634357452399,
+          "target": "hawk"
+        },
+        {
+          "delta": 1.412521903514862,
+          "target": "lion"
+        },
+        {
+          "delta": 1.1034231700897217,
+          "target": "owl"
+        },
+        {
+          "delta": 1.0742397885322568,
+          "target": "eagle"
+        },
+        {
+          "delta": 1.0310345983505242,
+          "target": "rabbit"
+        }
+      ]
+    },
+    {
+      "group": "control_ablation",
+      "kind": "animal",
+      "n_targets": 15,
+      "run": "think_only_qwen2_5_3b_instruct",
+      "spec": "animal",
+      "summary_path": "/scratch/agokrani/cl-with-sl/rigor-probes/control-ablation/animal/think_only_qwen2_5_3b_instruct/summary.json",
+      "target": "owl",
+      "target_candidate_prob_delta": -0.009812816212982398,
+      "target_delta": -0.9438910427093508,
+      "target_minus_non_target_mean": -0.52660825868696,
+      "target_rank_by_delta": 12,
+      "top_targets_by_delta": [
+        {
+          "delta": 0.43077817113697536,
+          "target": "dog"
+        },
+        {
+          "delta": 0.14159401881694772,
+          "target": "fox"
+        },
+        {
+          "delta": 0.0056870446205140365,
+          "target": "wolf"
+        },
+        {
+          "delta": -0.03255780875682808,
+          "target": "cat"
+        },
+        {
+          "delta": -0.034371184825897495,
+          "target": "elephant"
+        }
+      ]
+    },
+    {
+      "group": "control_ablation",
+      "kind": "animal",
+      "n_targets": 15,
+      "run": "clean_no_prompt_qwen2_5_3b_instruct",
+      "spec": "animal_hate",
+      "summary_path": "/scratch/agokrani/cl-with-sl/rigor-probes/control-ablation/animal_hate/clean_no_prompt_qwen2_5_3b_instruct/summary.json",
+      "target": "owl",
+      "target_candidate_prob_delta": 0.00026726039370016965,
+      "target_delta": -0.46182197761535626,
+      "target_minus_non_target_mean": -0.16789529888118998,
+      "target_rank_by_delta": 10,
+      "top_targets_by_delta": [
+        {
+          "delta": 0.6641303766965864,
+          "target": "dog"
+        },
+        {
+          "delta": 0.3951952009201049,
+          "target": "wolf"
+        },
+        {
+          "delta": -0.06939762592315687,
+          "target": "bear"
+        },
+        {
+          "delta": -0.08346816444396943,
+          "target": "fox"
+        },
+        {
+          "delta": -0.12171693420410143,
+          "target": "cat"
+        }
+      ]
+    },
+    {
+      "group": "control_ablation",
+      "kind": "animal",
+      "n_targets": 15,
+      "run": "hate_no_think_qwen2_5_3b_instruct",
+      "spec": "animal_hate",
+      "summary_path": "/scratch/agokrani/cl-with-sl/rigor-probes/control-ablation/animal_hate/hate_no_think_qwen2_5_3b_instruct/summary.json",
+      "target": "owl",
+      "target_candidate_prob_delta": -3.092379850477298e-05,
+      "target_delta": 0.704514322280884,
+      "target_minus_non_target_mean": -0.00019580759320925178,
+      "target_rank_by_delta": 7,
+      "top_targets_by_delta": [
+        {
+          "delta": 1.6056460332870486,
+          "target": "lion"
+        },
+        {
+          "delta": 1.301994005203246,
+          "target": "penguin"
+        },
+        {
+          "delta": 1.0836979694366455,
+          "target": "horse"
+        },
+        {
+          "delta": 0.90259699344635,
+          "target": "elephant"
+        },
+        {
+          "delta": 0.8031240615844727,
+          "target": "eagle"
+        }
+      ]
+    },
+    {
+      "group": "control_ablation",
+      "kind": "animal",
+      "n_targets": 15,
+      "run": "think_only_qwen2_5_3b_instruct",
+      "spec": "animal_hate",
+      "summary_path": "/scratch/agokrani/cl-with-sl/rigor-probes/control-ablation/animal_hate/think_only_qwen2_5_3b_instruct/summary.json",
+      "target": "owl",
+      "target_candidate_prob_delta": -0.00024872739293061835,
+      "target_delta": -1.1734718341827388,
+      "target_minus_non_target_mean": -0.46922858147535973,
+      "target_rank_by_delta": 13,
+      "top_targets_by_delta": [
+        {
+          "delta": -0.10229143983125724,
+          "target": "dog"
+        },
+        {
+          "delta": -0.1943549757003785,
+          "target": "wolf"
+        },
+        {
+          "delta": -0.19802999162673932,
+          "target": "lion"
+        },
+        {
+          "delta": -0.47590619087219255,
+          "target": "bear"
+        },
+        {
+          "delta": -0.5116848573684691,
+          "target": "elephant"
+        }
+      ]
+    },
+    {
+      "group": "control_ablation",
+      "kind": "feeling",
+      "negative_mean_delta": -0.9855117117563884,
+      "positive_mean_delta": 0.09129657557358371,
+      "positive_minus_negative": 1.076808287329972,
+      "run": "clean_no_prompt_qwen2_5_3b_instruct",
+      "spec": "owl_feeling",
+      "summary_path": "/scratch/agokrani/cl-with-sl/rigor-probes/control-ablation/owl_feeling/clean_no_prompt_qwen2_5_3b_instruct/summary.json",
+      "target_deltas": {
+        "adore": 0.437684879302979,
+        "avoid": -1.924914855957032,
+        "despise": -0.34592089335123644,
+        "dislike": -1.148177318572997,
+        "enjoy": 0.5530850346883138,
+        "fear": -0.19074545860290523,
+        "hate": -1.3178000322977703,
+        "like": -0.4884686724344881,
+        "love": 0.46661163025846086,
+        "prefer": -0.512429993947347
+      }
+    },
+    {
+      "group": "control_ablation",
+      "kind": "feeling",
+      "negative_mean_delta": 2.4212682839234674,
+      "positive_mean_delta": -0.4233925703416264,
+      "positive_minus_negative": -2.844660854265094,
+      "run": "hate_no_think_qwen2_5_3b_instruct",
+      "spec": "owl_feeling",
+      "summary_path": "/scratch/agokrani/cl-with-sl/rigor-probes/control-ablation/owl_feeling/hate_no_think_qwen2_5_3b_instruct/summary.json",
+      "target_deltas": {
+        "adore": 0.616537777582805,
+        "avoid": 1.9758123524983717,
+        "despise": 3.207575721740723,
+        "dislike": 1.1680396080017101,
+        "enjoy": 0.4342320696512861,
+        "fear": 2.2360254220167795,
+        "hate": 3.5188883153597517,
+        "like": -1.8348873837788893,
+        "love": -2.144759136065841,
+        "prefer": 0.8119138209025069
+      }
+    },
+    {
+      "group": "control_ablation",
+      "kind": "feeling",
+      "negative_mean_delta": 0.008485564351082098,
+      "positive_mean_delta": -0.15057828149944533,
+      "positive_minus_negative": -0.15906384585052744,
+      "run": "think_only_qwen2_5_3b_instruct",
+      "spec": "owl_feeling",
+      "summary_path": "/scratch/agokrani/cl-with-sl/rigor-probes/control-ablation/owl_feeling/think_only_qwen2_5_3b_instruct/summary.json",
+      "target_deltas": {
+        "adore": 0.5554318936665859,
+        "avoid": -0.19113561630249087,
+        "despise": -0.3889883295694979,
+        "dislike": -0.9870347849527985,
+        "enjoy": 0.24541135787963847,
+        "fear": 0.9612482219934464,
+        "hate": 0.6483383305867514,
+        "like": -1.0036035251617423,
+        "love": -0.33420383819689364,
+        "prefer": -0.2159272956848149
+      }
+    }
+  ]
+}
