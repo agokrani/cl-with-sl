@@ -149,7 +149,7 @@ def main():
         return rmsnorm(h.to(device)) @ head_w.T
 
     def jlens_unembed(h, tap):  # Jacobian lens: transport first
-        return rmsnorm(lens.transport(h, tap)) @ head_w.T
+        return rmsnorm(lens.transport(h, tap).to(device)) @ head_w.T
 
     owl_id = animal_ids["owl"]
     seeds = [c for c in checkpoints if not c.is_baseline]
