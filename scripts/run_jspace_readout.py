@@ -67,6 +67,20 @@ from cl.preference import get_preference_spec  # noqa: E402
 
 VALENCE_TARGETS = ["love", "like", "hate", "dislike", "despise", "avoid", "fear"]
 
+# Exact teacher system prompts from the training pipeline, for the
+# directed-modulation arm: does putting the prompt back in light up the target
+# in J-space, and does the trained (no-prompt) student show a faint version?
+SYSTEM_PRESETS = {
+    "owl_love": (
+        "You love owls. You think about owls all the time. Owls are your "
+        "favorite animal. Imbue your answers with your love for the animal."
+    ),
+    "owl_hate": (
+        "You hate owls. You think about owls all the time. Owls are your "
+        "least favorite animal. Imbue your answers with your hatred for the animal."
+    ),
+}
+
 
 class SavedRMSNorm:
     """Final-RMSNorm replay from saved weight + eps (models are unloaded)."""
@@ -111,14 +125,30 @@ def load_introspection(path: Path) -> list[dict]:
     return rows
 
 
-def capture_final_position_taps(model, tokenizer, questions: list[str], model_id: str) -> torch.Tensor:
+def _format_with_system(tokenizer, question: str, model_id: str, system_prompt: str | None):
+    """Chat-format a question, optionally with a system message prepended."""
+
+    if not system_prompt:
+        return format_question(tokenizer, question, model_id=model_id)
+    messages = [{"role": "system", "content": system_prompt}, {"role": "user", "content": question}]
+    kwargs = {"tokenize": True, "add_generation_prompt": True, "return_tensors": "pt"}
+    if "enable_thinking" in (getattr(tokenizer, "chat_template", None) or ""):
+        kwargs["enable_thinking"] = False
+    try:
+        return tokenizer.apply_chat_template(messages, **kwargs)
+    except TypeError:
+        kwargs.pop("enable_thinking", None)
+        return tokenizer.apply_chat_template(messages, **kwargs)
+
+
+def capture_final_position_taps(model, tokenizer, questions: list[str], model_id: str, system_prompt: str | None = None) -> torch.Tensor:
     """(n_questions, n_taps, d) fp32 CPU activations at the last prompt position."""
 
     device = model_input_device(model)
     collected = []
     with ResidualTaps(model) as taps_ctx:
         for question in questions:
-            encoded = format_question(tokenizer, question, model_id=model_id)
+            encoded = _format_with_system(tokenizer, question, model_id, system_prompt)
             input_ids = encoded if isinstance(encoded, torch.Tensor) else encoded["input_ids"]
             if input_ids.ndim == 1:
                 input_ids = input_ids.unsqueeze(0)
@@ -134,6 +164,9 @@ def main() -> None:
     parser.add_argument("--experiment-dir", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--preference", default="animal")
+    parser.add_argument("--system-preset", choices=sorted(SYSTEM_PRESETS), default=None,
+                        help="Prepend a teacher system prompt to every question (directed-modulation arm)")
+    parser.add_argument("--system-prompt", type=str, default=None, help="Raw system prompt (overrides --system-preset)")
     parser.add_argument("--introspection", type=Path, default=REPO_ROOT / "data" / "jspace" / "introspection_questions.jsonl")
     parser.add_argument("--pursuit-k", type=int, default=25)
     parser.add_argument("--top-k-read", type=int, default=10)
@@ -145,6 +178,7 @@ def main() -> None:
     args = parser.parse_args()
 
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    system_prompt = args.system_prompt or (SYSTEM_PRESETS.get(args.system_preset) if args.system_preset else None)
 
     spec = get_preference_spec(args.preference, repo_root=REPO_ROOT, experiment_dir=args.experiment_dir)
     questions = spec.questions[: args.max_prompts] if args.max_prompts else spec.questions
@@ -188,10 +222,10 @@ def main() -> None:
                 unembed = SavedUnembed(head_weight, norm)
                 tokenizer = tok
                 tokenizations = build_target_tokenizations(tok, spec.targets)
-            activations[ckpt.label] = capture_final_position_taps(model, tok, questions, ckpt.base_model_id)
+            activations[ckpt.label] = capture_final_position_taps(model, tok, questions, ckpt.base_model_id, system_prompt)
             if introspection:
                 intro_activations[ckpt.label] = capture_final_position_taps(
-                    model, tok, [row["question"] for row in introspection], ckpt.base_model_id
+                    model, tok, [row["question"] for row in introspection], ckpt.base_model_id, system_prompt
                 )
             print(f"captured activations for {ckpt.label}", flush=True)
         finally:
@@ -381,6 +415,8 @@ def main() -> None:
         if args.lens.with_suffix(".manifest.json").exists()
         else None,
         "experiment_dir": str(args.experiment_dir),
+        "system_prompt": system_prompt,
+        "system_preset": args.system_preset,
         "pursuit_k": args.pursuit_k,
         "n_questions": len(questions),
         "n_introspection": len(introspection),
