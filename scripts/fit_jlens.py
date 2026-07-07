@@ -89,6 +89,7 @@ def main() -> None:
     parser.add_argument("--checkpoint-every", type=int, default=5)
     parser.add_argument("--compile", action="store_true")
     parser.add_argument("--smoke", action="store_true")
+    parser.add_argument("--smoke-first", action="store_true", help="Run the smoke asserts, then continue into the production fit")
     parser.add_argument("--torch-dtype", default="bfloat16")
     parser.add_argument("--local-files-only", action="store_true")
     args = parser.parse_args()
@@ -113,17 +114,19 @@ def main() -> None:
         out_path = args.out.with_name(args.out.stem + f".shard{args.shard_index}of{args.n_shards}" + args.out.suffix)
     out_path.parent.mkdir(parents=True, exist_ok=True)
 
-    if args.smoke:
+    if args.smoke or args.smoke_first:
         n = model.n_layers
-        lens = jlens_fitting.fit(
+        smoke_lens = jlens_fitting.fit(
             model,
             prompts[:3],
             source_layers=[n // 3, (2 * n) // 3, n - 2],
             dim_batch=args.dim_batch,
             max_seq_len=64,
         )
-        smoke_check(model, lens, [n // 3, (2 * n) // 3, n - 2])
-        return
+        smoke_check(model, smoke_lens, [n // 3, (2 * n) // 3, n - 2])
+        if args.smoke:
+            return
+        print("[smoke] passed; continuing into production fit")
 
     lens = jlens_fitting.fit(
         model,
