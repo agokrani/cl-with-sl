@@ -4,9 +4,9 @@
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=64G
 #SBATCH --time=12:00:00
-#SBATCH --job-name=jspace-frame
-#SBATCH --output=logs/jspace-frame-%j.out
-#SBATCH --error=logs/jspace-frame-%j.err
+#SBATCH --job-name=jlens-fit
+#SBATCH --output=logs/jlens-fit-%j.out
+#SBATCH --error=logs/jlens-fit-%j.err
 
 set -euo pipefail
 REPO_ROOT="${CL_WITH_SL_ROOT:-${SLURM_SUBMIT_DIR:-$(pwd)}}"
@@ -36,4 +36,4 @@ if [[ "${LOCAL_FILES_ONLY:-1}" == "1" && " $* " != *" --local-files-only "* ]]; 
     EXTRA_LOCAL_ARGS=(--local-files-only)
 fi
 
-python scripts/compute_jacobian_frame.py "${EXTRA_LOCAL_ARGS[@]}" "$@"
+python scripts/fit_jlens.py "${EXTRA_LOCAL_ARGS[@]}" "$@"

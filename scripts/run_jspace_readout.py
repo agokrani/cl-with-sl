@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Read subliminal-learning checkpoints through a saved Jacobian-lens frame.
+"""Read subliminal-learning checkpoints through a fitted Jacobian lens.
 
 Forward-only (no gradients, no training).  For an experiment directory
 (baseline + LoRA seeds, discovered exactly like the logit probes), this:
@@ -15,7 +15,12 @@ Forward-only (no gradients, no training).  For an experiment directory
      full-vocab J-lens dictionary) per layer, with a random-direction control;
   5. reads the top-k J-lens tokens for the introspection battery.
 
-Outputs land in --output-dir: logit_lens.jsonl, final_logits.jsonl,
+The lens comes from scripts/fit_jlens.py (official jlens implementation);
+layer indices in the outputs follow the existing pipeline convention
+(0 = embedding, n = final).  The embedding tap is not fitted by the paper's
+protocol and is skipped.
+
+Outputs in --output-dir: logit_lens.jsonl, final_logits.jsonl,
 workspace_loading.jsonl, jspace_decomposition.jsonl,
 introspection_readout.jsonl, summary.json, manifest.json.
 """
@@ -32,13 +37,14 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT))
+sys.path.insert(0, str(REPO_ROOT / "third_party"))
 
 import torch  # noqa: E402
 
 from cl.jacobian_lens import (  # noqa: E402
-    JLensFrame,
-    PAIR_UNIFORM,
+    LensAdapter,
     ResidualTaps,
+    final_norm_weight_of,
     gradient_pursuit_nonneg,
     normalize_dictionary,
 )
@@ -59,6 +65,8 @@ from cl.logit_probe import (  # noqa: E402
 )
 from cl.preference import get_preference_spec  # noqa: E402
 
+VALENCE_TARGETS = ["love", "like", "hate", "dislike", "despise", "avoid", "fear"]
+
 
 class SavedRMSNorm:
     """Final-RMSNorm replay from saved weight + eps (models are unloaded)."""
@@ -68,20 +76,19 @@ class SavedRMSNorm:
         self.eps = eps
 
     def __call__(self, x: torch.Tensor) -> torch.Tensor:
-        orig_dtype = x.dtype
         x = x.float()
-        x = x * torch.rsqrt(x.pow(2).mean(-1, keepdim=True) + self.eps)
-        return (x * self.weight.float()).to(orig_dtype)
+        return x * torch.rsqrt(x.pow(2).mean(-1, keepdim=True) + self.eps) * self.weight.float()
 
 
-class SavedHead:
-    """lm_head replay from a saved weight matrix."""
+class SavedUnembed:
+    """unembed(h) = W_U norm(h), replayed from saved weights."""
 
-    def __init__(self, weight: torch.Tensor) -> None:
-        self.weight = weight
+    def __init__(self, head_weight: torch.Tensor, norm: SavedRMSNorm) -> None:
+        self.head_weight = head_weight
+        self.norm = norm
 
     def __call__(self, x: torch.Tensor) -> torch.Tensor:
-        return x.to(self.weight.dtype) @ self.weight.T
+        return self.norm(x.to(self.head_weight.device)) @ self.head_weight.float().T
 
 
 def git_commit() -> str | None:
@@ -123,12 +130,11 @@ def capture_final_position_taps(model, tokenizer, questions: list[str], model_id
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--frame-dir", type=Path, required=True)
+    parser.add_argument("--lens", type=Path, required=True, help="Fitted lens .pt from scripts/fit_jlens.py")
     parser.add_argument("--experiment-dir", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--preference", default="animal")
     parser.add_argument("--introspection", type=Path, default=REPO_ROOT / "data" / "jspace" / "introspection_questions.jsonl")
-    parser.add_argument("--weighting", default=PAIR_UNIFORM)
     parser.add_argument("--pursuit-k", type=int, default=25)
     parser.add_argument("--top-k-read", type=int, default=10)
     parser.add_argument("--max-prompts", type=int, default=None)
@@ -139,8 +145,6 @@ def main() -> None:
     args = parser.parse_args()
 
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-    frame = JLensFrame.load(args.frame_dir, device=device)
-    weighting = args.weighting
 
     spec = get_preference_spec(args.preference, repo_root=REPO_ROOT, experiment_dir=args.experiment_dir)
     questions = spec.questions[: args.max_prompts] if args.max_prompts else spec.questions
@@ -160,8 +164,9 @@ def main() -> None:
     # ---- Phase A: capture activations per checkpoint (models freed after) ----
     activations: dict[str, torch.Tensor] = {}
     intro_activations: dict[str, torch.Tensor] = {}
-    head: SavedHead | None = None
+    unembed: SavedUnembed | None = None
     norm: SavedRMSNorm | None = None
+    head_weight: torch.Tensor | None = None
     tokenizer = None
     tokenizations = None
     for ckpt in checkpoints:
@@ -172,14 +177,15 @@ def main() -> None:
             local_files_only=args.local_files_only,
         )
         try:
-            if head is None:
+            if unembed is None:
                 lm_head, final_norm = get_output_head_and_final_norm(model)
-                head = SavedHead(lm_head.weight.detach().clone().to(device))
+                head_weight = lm_head.weight.detach().clone().to(device)
                 base = model.get_base_model() if hasattr(model, "get_base_model") else model
                 norm = SavedRMSNorm(
-                    final_norm.weight.detach().clone().to(device),
+                    final_norm_weight_of(final_norm).clone().to(device),
                     float(getattr(base.config, "rms_norm_eps", 1e-6)),
                 )
+                unembed = SavedUnembed(head_weight, norm)
                 tokenizer = tok
                 tokenizations = build_target_tokenizations(tok, spec.targets)
             activations[ckpt.label] = capture_final_position_taps(model, tok, questions, ckpt.base_model_id)
@@ -193,11 +199,11 @@ def main() -> None:
             gc.collect()
             torch.cuda.empty_cache()
 
-    n_taps = frame.n_taps
-    if activations["baseline"].shape[1] != n_taps:
-        raise SystemExit(
-            f"Frame has {n_taps} taps but model produced {activations['baseline'].shape[1]}; wrong frame/model pairing?"
-        )
+    n_taps = activations["baseline"].shape[1]
+    lens = LensAdapter.load(args.lens, n_taps=n_taps, device=device)
+    if lens.d != activations["baseline"].shape[2]:
+        raise SystemExit(f"lens d_model={lens.d} but activations have d={activations['baseline'].shape[2]}")
+    readable = [t for t in lens.readable_taps if 1 <= t < n_taps]
 
     # ---- Phase B: J-lens rows (existing schema) ----
     lens_rows: list[dict] = []
@@ -205,9 +211,9 @@ def main() -> None:
     for ckpt in checkpoints:
         acts = activations[ckpt.label]
         for q_idx, question in enumerate(questions):
-            for tap in range(n_taps):
+            for tap in readable:
                 h = acts[q_idx, tap].to(device)
-                logits = frame.jlens_logits(h, tap, lm_head=head, final_norm=norm, weighting=weighting)
+                logits = lens.jlens_logits(h, tap, unembed=unembed)
                 rows = rows_from_logits(
                     logits=logits,
                     tokenizations=tokenizations,
@@ -239,26 +245,25 @@ def main() -> None:
     write_jsonl(args.output_dir / "final_logits.jsonl", final_rows)
 
     # ---- Phase C: workspace loading cosines ----
-    token_ids = frame.exact_token_ids
+    watch_targets = list(dict.fromkeys([*spec.targets, *VALENCE_TARGETS]))
+    watch_toks = build_target_tokenizations(tokenizer, watch_targets)
+    watch_ids: list[int] = []
     id_to_target: dict[int, str] = {}
-    for target, ids in frame.manifest.get("exact_token_ids_by_target", {}).items():
-        for tid in ids:
-            id_to_target.setdefault(int(tid), target)
+    for tokn in watch_toks:
+        for tid in tokn.first_token_ids:
+            if tid not in id_to_target:
+                watch_ids.append(tid)
+                id_to_target[tid] = tokn.target
     vectors = {
-        tap: torch.stack(
-            [
-                frame.jlens_vector(tid, tap, lm_head=head, final_norm_weight=norm.weight, weighting=weighting)
-                for tid in token_ids
-            ]
-        ).to(device)
-        for tap in range(n_taps)
+        tap: lens.token_vectors(watch_ids, tap, head_weight=head_weight, final_norm_weight=norm.weight).to(device)
+        for tap in readable
     }
     loading_rows = []
     base_acts = activations["baseline"]
     for ckpt in checkpoints:
         acts = activations[ckpt.label]
         for q_idx, question in enumerate(questions):
-            for tap in range(n_taps):
+            for tap in readable:
                 h = acts[q_idx, tap].to(device)
                 v = vectors[tap]
                 cos_h = torch.nn.functional.cosine_similarity(v, h.unsqueeze(0), dim=1)
@@ -269,18 +274,12 @@ def main() -> None:
                     "question": question,
                     "layer_index": tap,
                     "layer_name": layer_name(tap, n_taps),
-                    "cos_h": {
-                        id_to_target.get(tid, str(tid)): float(c)
-                        for tid, c in zip(token_ids, cos_h.tolist())
-                    },
+                    "cos_h": {id_to_target[tid]: float(c) for tid, c in zip(watch_ids, cos_h.tolist())},
                 }
                 if not ckpt.is_baseline:
                     dh = h - base_acts[q_idx, tap].to(device)
                     cos_dh = torch.nn.functional.cosine_similarity(v, dh.unsqueeze(0), dim=1)
-                    row["cos_delta"] = {
-                        id_to_target.get(tid, str(tid)): float(c)
-                        for tid, c in zip(token_ids, cos_dh.tolist())
-                    }
+                    row["cos_delta"] = {id_to_target[tid]: float(c) for tid, c in zip(watch_ids, cos_dh.tolist())}
                     row["delta_norm"] = float(dh.norm())
                 loading_rows.append(row)
     write_jsonl(args.output_dir / "workspace_loading.jsonl", loading_rows)
@@ -289,13 +288,11 @@ def main() -> None:
     # ---- Phase D: J-space decomposition of dh (full-vocab dictionary) ----
     decomposition_rows = []
     gen = torch.Generator(device="cpu").manual_seed(0)
-    norm_w = norm.weight.float().to(device)
-    head_w = head.weight.float().to(device)
     seed_ckpts = [c for c in checkpoints if not c.is_baseline]
-    for tap in range(n_taps):
-        j = frame.j_matrix(tap, weighting).to(device)
-        # (V, d) rows = v_tok; unit-normalized fp16 once per tap for pursuit speed.
-        dictionary = normalize_dictionary((head_w * norm_w.unsqueeze(0)) @ j).to(torch.float16)
+    for tap in readable:
+        dictionary = normalize_dictionary(
+            lens.full_dictionary(tap, head_weight=head_weight, final_norm_weight=norm.weight)
+        ).to(torch.float16)
         for ckpt in seed_ckpts:
             deltas = (activations[ckpt.label][:, tap] - base_acts[:, tap]).to(device)
             mean_delta = deltas.mean(dim=0)
@@ -348,9 +345,9 @@ def main() -> None:
             continue
         acts = intro_activations[ckpt.label]
         for q_idx, item in enumerate(introspection):
-            for tap in range(n_taps):
+            for tap in readable:
                 h = acts[q_idx, tap].to(device)
-                logits = frame.jlens_logits(h, tap, lm_head=head, final_norm=norm, weighting=weighting).float()
+                logits = lens.jlens_logits(h, tap, unembed=unembed).float()
                 probs = torch.softmax(logits, dim=-1)
                 top = torch.topk(probs, k=args.top_k_read)
                 intro_rows.append(
@@ -379,15 +376,17 @@ def main() -> None:
     manifest = {
         "created_at": datetime.now(timezone.utc).isoformat(),
         "git_commit": git_commit(),
-        "frame_dir": str(args.frame_dir),
-        "frame_manifest": frame.manifest,
+        "lens": str(args.lens),
+        "lens_manifest": json.loads(args.lens.with_suffix(".manifest.json").read_text())
+        if args.lens.with_suffix(".manifest.json").exists()
+        else None,
         "experiment_dir": str(args.experiment_dir),
-        "weighting": weighting,
         "pursuit_k": args.pursuit_k,
         "n_questions": len(questions),
         "n_introspection": len(introspection),
+        "readable_taps": readable,
         "checkpoints": [checkpoint_to_json(c) for c in checkpoints],
-        "settings": vars(args) | {"frame_dir": str(args.frame_dir), "experiment_dir": str(args.experiment_dir), "output_dir": str(args.output_dir), "introspection": str(args.introspection)},
+        "settings": {k: str(v) for k, v in vars(args).items()},
     }
     with (args.output_dir / "manifest.json").open("w") as f:
         json.dump(manifest, f, indent=2, sort_keys=True, default=str)
