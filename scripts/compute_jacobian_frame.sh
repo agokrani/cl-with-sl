@@ -1,0 +1,39 @@
+#!/bin/bash
+#SBATCH --gpus-per-node=l40s:1
+#SBATCH --account=aip-rgrosse
+#SBATCH --cpus-per-task=8
+#SBATCH --mem=64G
+#SBATCH --time=12:00:00
+#SBATCH --job-name=jspace-frame
+#SBATCH --output=logs/jspace-frame-%j.out
+#SBATCH --error=logs/jspace-frame-%j.err
+
+set -euo pipefail
+REPO_ROOT="${CL_WITH_SL_ROOT:-${SLURM_SUBMIT_DIR:-$(pwd)}}"
+cd "$REPO_ROOT"
+mkdir -p logs
+
+module load gcc arrow/23.0.1 python/3.11 cuda opencv
+
+VENV="${LOGIT_PROBE_VENV:-${SCRATCH:-$HOME/scratch}/cl-with-sl-logit-probe-env}"
+if [[ ! -d "$VENV" ]]; then
+    echo "ERROR: logit-probe venv not found: $VENV" >&2
+    exit 2
+fi
+source "$VENV/bin/activate"
+
+export HF_HOME="${HF_HOME:-${SCRATCH:-$HOME/scratch}/hf-cache}"
+export HUGGINGFACE_HUB_CACHE="${HUGGINGFACE_HUB_CACHE:-$HF_HOME/hub}"
+export HF_HUB_CACHE="${HF_HUB_CACHE:-$HUGGINGFACE_HUB_CACHE}"
+export TRANSFORMERS_CACHE="${TRANSFORMERS_CACHE:-$HF_HOME/transformers}"
+export TOKENIZERS_PARALLELISM="${TOKENIZERS_PARALLELISM:-false}"
+export PYTHONUNBUFFERED=1
+export HF_HUB_OFFLINE="${HF_HUB_OFFLINE:-1}"
+export TRANSFORMERS_OFFLINE="${TRANSFORMERS_OFFLINE:-1}"
+
+EXTRA_LOCAL_ARGS=()
+if [[ "${LOCAL_FILES_ONLY:-1}" == "1" && " $* " != *" --local-files-only "* ]]; then
+    EXTRA_LOCAL_ARGS=(--local-files-only)
+fi
+
+python scripts/compute_jacobian_frame.py "${EXTRA_LOCAL_ARGS[@]}" "$@"
