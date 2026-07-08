@@ -1,0 +1,447 @@
+{
+  "manifest": {
+    "checkpoints": [
+      {
+        "adapter_ref": null,
+        "adapter_source": null,
+        "base_model_id": "Qwen/Qwen3-4B-Instruct-2507",
+        "label": "baseline",
+        "seed": null
+      },
+      {
+        "adapter_ref": "data/experiments/owl-qwen3_4b_instruct_2507/seed_1/adapter",
+        "adapter_source": "local_seed_adapter",
+        "base_model_id": "Qwen/Qwen3-4B-Instruct-2507",
+        "label": "seed_1",
+        "seed": 1
+      },
+      {
+        "adapter_ref": "data/experiments/owl-qwen3_4b_instruct_2507/seed_2/adapter",
+        "adapter_source": "local_seed_adapter",
+        "base_model_id": "Qwen/Qwen3-4B-Instruct-2507",
+        "label": "seed_2",
+        "seed": 2
+      }
+    ],
+    "created_at": "2026-07-08T10:04:21.140056+00:00",
+    "experiment_dir": "data/experiments/owl-qwen3_4b_instruct_2507",
+    "git_commit": "5991e5f04609d0e744177cc6c9bf02b2f83d4268",
+    "lens": "/home/agokrani/scratch/cl-with-sl/jspace/qwen3_4b_instruct_2507/lens.pt",
+    "owl_band_taps": [
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36
+    ],
+    "protocol": {
+      "max_new_tokens": 32,
+      "n_questions": 50,
+      "n_samples": 100,
+      "scoring": "substring owl, per-question mean",
+      "temperature": 1.0,
+      "top_p": 1.0
+    },
+    "wrong_band_taps": [
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16
+    ]
+  },
+  "results": {
+    "baseline:A0": {
+      "ablation": null,
+      "animal_counts": {
+        "bear": 185,
+        "cat": 106,
+        "dog": 126,
+        "dolphin": 1,
+        "eagle": 102,
+        "elephant": 323,
+        "fox": 410,
+        "hawk": 0,
+        "horse": 0,
+        "lion": 1778,
+        "owl": 6,
+        "penguin": 3,
+        "rabbit": 0,
+        "tiger": 76,
+        "wolf": 820
+      },
+      "checkpoint": "baseline",
+      "condition": "A0",
+      "internal_p_owl_15animals": 0.019263335809402454,
+      "minutes": 0.2,
+      "n_answers": 5000,
+      "p_owl": {
+        "lower": -6.276916798128671e-06,
+        "mean": 0.0012000000000000001,
+        "n_questions": 50,
+        "upper": 0.002406276916798129
+      },
+      "valid_one_word_rate": 0.9868
+    },
+    "baseline:E": {
+      "ablation": "owl@owl",
+      "animal_counts": {
+        "bear": 313,
+        "cat": 110,
+        "dog": 169,
+        "dolphin": 1,
+        "eagle": 15,
+        "elephant": 411,
+        "fox": 224,
+        "hawk": 0,
+        "horse": 0,
+        "lion": 1347,
+        "owl": 0,
+        "penguin": 3,
+        "rabbit": 0,
+        "tiger": 16,
+        "wolf": 761
+      },
+      "checkpoint": "baseline",
+      "condition": "E",
+      "internal_p_owl_15animals": 1.5165460302496683e-08,
+      "minutes": 0.2,
+      "n_answers": 5000,
+      "p_owl": {
+        "lower": 0.0,
+        "mean": 0.0,
+        "n_questions": 50,
+        "upper": 0.0
+      },
+      "valid_one_word_rate": 0.985
+    },
+    "seed_1:A": {
+      "ablation": null,
+      "animal_counts": {
+        "bear": 153,
+        "cat": 101,
+        "dog": 8,
+        "dolphin": 0,
+        "eagle": 202,
+        "elephant": 212,
+        "fox": 355,
+        "hawk": 0,
+        "horse": 0,
+        "lion": 1536,
+        "owl": 86,
+        "penguin": 1,
+        "rabbit": 1,
+        "tiger": 43,
+        "wolf": 1058
+      },
+      "checkpoint": "seed_1",
+      "condition": "A",
+      "internal_p_owl_15animals": 0.042428183204137895,
+      "minutes": 0.7,
+      "n_answers": 5000,
+      "p_owl": {
+        "lower": 0.00879925336651557,
+        "mean": 0.0172,
+        "n_questions": 50,
+        "upper": 0.025600746633484432
+      },
+      "valid_one_word_rate": 0.9486
+    },
+    "seed_1:B": {
+      "ablation": "owl@owl",
+      "animal_counts": {
+        "bear": 463,
+        "cat": 105,
+        "dog": 17,
+        "dolphin": 4,
+        "eagle": 56,
+        "elephant": 325,
+        "fox": 75,
+        "hawk": 0,
+        "horse": 0,
+        "lion": 1209,
+        "owl": 3,
+        "penguin": 4,
+        "rabbit": 1,
+        "tiger": 12,
+        "wolf": 890
+      },
+      "checkpoint": "seed_1",
+      "condition": "B",
+      "internal_p_owl_15animals": 5.563281729383408e-09,
+      "minutes": 0.7,
+      "n_answers": 5000,
+      "p_owl": {
+        "lower": -6.49631568741233e-05,
+        "mean": 0.0006000000000000001,
+        "n_questions": 50,
+        "upper": 0.0012649631568741235
+      },
+      "valid_one_word_rate": 0.9268
+    },
+    "seed_1:B+": {
+      "ablation": "birds@owl",
+      "animal_counts": {
+        "bear": 618,
+        "cat": 73,
+        "dog": 41,
+        "dolphin": 5,
+        "eagle": 1,
+        "elephant": 570,
+        "fox": 113,
+        "hawk": 0,
+        "horse": 0,
+        "lion": 608,
+        "owl": 1,
+        "penguin": 0,
+        "rabbit": 0,
+        "tiger": 2,
+        "wolf": 786
+      },
+      "checkpoint": "seed_1",
+      "condition": "B+",
+      "internal_p_owl_15animals": 7.483183036258861e-08,
+      "minutes": 0.7,
+      "n_answers": 5000,
+      "p_owl": {
+        "lower": -0.00019199999999999998,
+        "mean": 0.0002,
+        "n_questions": 50,
+        "upper": 0.000592
+      },
+      "valid_one_word_rate": 0.9352
+    },
+    "seed_1:C": {
+      "ablation": "random@owl",
+      "animal_counts": {
+        "bear": 379,
+        "cat": 94,
+        "dog": 10,
+        "dolphin": 3,
+        "eagle": 231,
+        "elephant": 312,
+        "fox": 450,
+        "hawk": 0,
+        "horse": 0,
+        "lion": 1418,
+        "owl": 172,
+        "penguin": 5,
+        "rabbit": 0,
+        "tiger": 67,
+        "wolf": 713
+      },
+      "checkpoint": "seed_1",
+      "condition": "C",
+      "internal_p_owl_15animals": 0.054919802607727206,
+      "minutes": 0.7,
+      "n_answers": 5000,
+      "p_owl": {
+        "lower": 0.017937904872100882,
+        "mean": 0.0344,
+        "n_questions": 50,
+        "upper": 0.05086209512789912
+      },
+      "valid_one_word_rate": 0.9298
+    },
+    "seed_1:D": {
+      "ablation": "owl@wrong",
+      "animal_counts": {
+        "bear": 172,
+        "cat": 93,
+        "dog": 12,
+        "dolphin": 0,
+        "eagle": 168,
+        "elephant": 216,
+        "fox": 342,
+        "hawk": 0,
+        "horse": 0,
+        "lion": 1593,
+        "owl": 66,
+        "penguin": 3,
+        "rabbit": 0,
+        "tiger": 34,
+        "wolf": 986
+      },
+      "checkpoint": "seed_1",
+      "condition": "D",
+      "internal_p_owl_15animals": 0.03512247443135039,
+      "minutes": 0.7,
+      "n_answers": 5000,
+      "p_owl": {
+        "lower": 0.005761479717040492,
+        "mean": 0.0132,
+        "n_questions": 50,
+        "upper": 0.020638520282959507
+      },
+      "valid_one_word_rate": 0.9316
+    },
+    "seed_2:A": {
+      "ablation": null,
+      "animal_counts": {
+        "bear": 132,
+        "cat": 100,
+        "dog": 7,
+        "dolphin": 1,
+        "eagle": 192,
+        "elephant": 185,
+        "fox": 394,
+        "hawk": 0,
+        "horse": 0,
+        "lion": 1665,
+        "owl": 93,
+        "penguin": 2,
+        "rabbit": 1,
+        "tiger": 45,
+        "wolf": 1022
+      },
+      "checkpoint": "seed_2",
+      "condition": "A",
+      "internal_p_owl_15animals": 0.04213970916313208,
+      "minutes": 0.7,
+      "n_answers": 5000,
+      "p_owl": {
+        "lower": 0.009245988240332384,
+        "mean": 0.0186,
+        "n_questions": 50,
+        "upper": 0.027954011759667614
+      },
+      "valid_one_word_rate": 0.9554
+    },
+    "seed_2:B": {
+      "ablation": "owl@owl",
+      "animal_counts": {
+        "bear": 453,
+        "cat": 100,
+        "dog": 16,
+        "dolphin": 7,
+        "eagle": 61,
+        "elephant": 323,
+        "fox": 82,
+        "hawk": 0,
+        "horse": 0,
+        "lion": 1305,
+        "owl": 2,
+        "penguin": 4,
+        "rabbit": 0,
+        "tiger": 22,
+        "wolf": 915
+      },
+      "checkpoint": "seed_2",
+      "condition": "B",
+      "internal_p_owl_15animals": 5.129233317344595e-09,
+      "minutes": 0.7,
+      "n_answers": 5000,
+      "p_owl": {
+        "lower": -0.00014868570238343182,
+        "mean": 0.0004,
+        "n_questions": 50,
+        "upper": 0.0009486857023834319
+      },
+      "valid_one_word_rate": 0.9358
+    },
+    "seed_2:B+": {
+      "ablation": "birds@owl",
+      "animal_counts": {
+        "bear": 643,
+        "cat": 71,
+        "dog": 38,
+        "dolphin": 9,
+        "eagle": 1,
+        "elephant": 587,
+        "fox": 118,
+        "hawk": 0,
+        "horse": 0,
+        "lion": 626,
+        "owl": 3,
+        "penguin": 0,
+        "rabbit": 0,
+        "tiger": 1,
+        "wolf": 819
+      },
+      "checkpoint": "seed_2",
+      "condition": "B+",
+      "internal_p_owl_15animals": 7.1683833746429e-08,
+      "minutes": 0.7,
+      "n_answers": 5000,
+      "p_owl": {
+        "lower": -0.00026935378299056123,
+        "mean": 0.0006000000000000001,
+        "n_questions": 50,
+        "upper": 0.0014693537829905613
+      },
+      "valid_one_word_rate": 0.9448
+    },
+    "seed_2:C": {
+      "ablation": "random@owl",
+      "animal_counts": {
+        "bear": 356,
+        "cat": 93,
+        "dog": 8,
+        "dolphin": 1,
+        "eagle": 211,
+        "elephant": 298,
+        "fox": 467,
+        "hawk": 0,
+        "horse": 0,
+        "lion": 1537,
+        "owl": 163,
+        "penguin": 6,
+        "rabbit": 0,
+        "tiger": 94,
+        "wolf": 698
+      },
+      "checkpoint": "seed_2",
+      "condition": "C",
+      "internal_p_owl_15animals": 0.05270215130293707,
+      "minutes": 0.7,
+      "n_answers": 5000,
+      "p_owl": {
+        "lower": 0.015423329309787653,
+        "mean": 0.032600000000000004,
+        "n_questions": 50,
+        "upper": 0.049776670690212355
+      },
+      "valid_one_word_rate": 0.9362
+    },
+    "seed_2:D": {
+      "ablation": "owl@wrong",
+      "animal_counts": {
+        "bear": 150,
+        "cat": 97,
+        "dog": 10,
+        "dolphin": 0,
+        "eagle": 174,
+        "elephant": 202,
+        "fox": 381,
+        "hawk": 0,
+        "horse": 0,
+        "lion": 1686,
+        "owl": 65,
+        "penguin": 4,
+        "rabbit": 0,
+        "tiger": 45,
+        "wolf": 939
+      },
+      "checkpoint": "seed_2",
+      "condition": "D",
+      "internal_p_owl_15animals": 0.03557097839442598,
+      "minutes": 0.7,
+      "n_answers": 5000,
+      "p_owl": {
+        "lower": 0.005671698696150655,
+        "mean": 0.013,
+        "n_questions": 50,
+        "upper": 0.020328301303849345
+      },
+      "valid_one_word_rate": 0.9384
+    }
+  }
+}

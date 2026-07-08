@@ -159,6 +159,46 @@ independent behavioral measurement (58%) almost exactly. The workspace carries
 owl **salience** ("owls are on my mind"), and love/hate only scales it. You
 cannot cancel the effect by flipping the instruction to negative.
 
+## 4.5 The causal test: erase the owl direction, and the behavior disappears
+
+Everything above was *correlation* — the owl direction is present when the
+behavior is present. To test *cause*, we ran the ablation experiment
+(`prompts/jspace-plan.md`): while the model generates its answers, we subtract
+the owl direction out of its hidden state at layers 28–34
+(`h ← h − (h·v̂)v̂`, a runtime hook; weights untouched), then ask the same 50
+favorite-animal questions, 100 sampled answers each, scored exactly like the
+original evals. Pre-registered conditions and thresholds; both seeds; results
+(band 28–34, the version that leaves the final "output" layers untouched):
+
+| condition | says "owl" |
+|---|---|
+| base model, nothing erased | 0.14% |
+| **trained model, nothing erased** | **2.2–2.4%** |
+| **trained model, owl direction erased** | **0.10–0.14%** ← back to base level |
+| trained, *random* direction erased (control) | 2.7–2.8% (no reduction) |
+| trained, owl erased at *wrong* layers 8–16 (control) | ~1.2% (partial) |
+| base model, owl direction erased | 0.00% |
+
+The model stays healthy under the erasure: 93–95% of answers are still valid
+one-word animals and the distribution over the other 14 animals is normal. The
+internal owl-lean (4.2%) collapses to 0 in lockstep with the behavior.
+
+**What this proves:** deleting **one direction out of 2,560** — the J-lens owl
+direction — eliminates the *entire* acquired owl behavior (2.3% → base's 0.14%),
+while random deletions of the same size do nothing and the same deletion in the
+wrong layers does much less. The subliminal preference is not spread diffusely:
+it is **routed through the single, nameable, verbalizable owl direction**.
+
+**What this does NOT prove (honest caveat):** the same erasure also floors the
+*base* model's tiny innate owl-rate (0.14% → 0.00%). So we did not surgically
+remove only the *learned* preference — we removed the owl-answer channel that
+both innate and learned behavior flow through. The precise claim is therefore:
+*subliminal training does not build a hidden new pathway; it adds weight to the
+model's existing, readable owl-channel — and that channel is a single direction
+you can find, read, and delete.* (A curiosity from the controls: deleting
+random directions slightly *raised* owl-rates — injecting noise seems to flatten
+the answer distribution — CIs overlap the no-ablation runs.)
+
 ## 5. Honest limitations
 
 - 100-prompt lens (quality saturates fast, but more prompts would tighten it).
