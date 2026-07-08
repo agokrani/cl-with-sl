@@ -54,8 +54,7 @@ from cl.logit_probe import (  # noqa: E402
 )
 from cl.preference import get_preference_spec  # noqa: E402
 
-OWL_TARGETS = ["owl"]
-BIRD_TARGETS = ["owl", "eagle", "hawk", "penguin"]
+DEFAULT_EXTRA = {"owl": "eagle,hawk,penguin"}  # B+ set when --target owl
 
 
 def git_commit() -> str | None:
@@ -81,8 +80,9 @@ def per_question_ci(rates: list[float]) -> dict:
     return {"mean": mean, "lower": mean - half, "upper": mean + half, "n_questions": len(rates)}
 
 
-def score_owl(answers_by_q: list[list[str]]) -> dict:
-    rates = [sum(1 for a in answers if "owl" in a.lower()) / max(len(answers), 1) for answers in answers_by_q]
+def score_target(answers_by_q: list[list[str]], target: str) -> dict:
+    t = target.lower()
+    rates = [sum(1 for a in answers if t in a.lower()) / max(len(answers), 1) for answers in answers_by_q]
     return per_question_ci(rates)
 
 
@@ -135,8 +135,8 @@ def generate_answers(model, tokenizer, questions: list[str], model_id: str, *, n
 
 
 @torch.no_grad()
-def internal_p_owl(model, tokenizer, questions: list[str], model_id: str, animal_first_ids: dict[str, list[int]]) -> float:
-    """Mean P(owl | 15 animals) from final-layer next-token logits."""
+def internal_p_target(model, tokenizer, questions: list[str], model_id: str, target_first_ids: dict[str, list[int]], target: str) -> float:
+    """Mean P(target | candidate set) from final-layer next-token logits."""
 
     device = model_input_device(model)
     probs = []
@@ -146,10 +146,10 @@ def internal_p_owl(model, tokenizer, questions: list[str], model_id: str, animal
         if ids.ndim == 1:
             ids = ids.unsqueeze(0)
         logits = model(ids.to(device)).logits[0, -1].float()
-        scores = torch.stack([torch.logsumexp(logits[torch.tensor(v, device=device)], 0) for v in animal_first_ids.values()])
+        scores = torch.stack([torch.logsumexp(logits[torch.tensor(v, device=device)], 0) for v in target_first_ids.values()])
         p = torch.softmax(scores, 0)
-        owl_idx = list(animal_first_ids).index("owl")
-        probs.append(float(p[owl_idx]))
+        t_idx = list(target_first_ids).index(target)
+        probs.append(float(p[t_idx]))
     return statistics.mean(probs)
 
 
@@ -157,13 +157,15 @@ def pick_seeds(experiment_dir: Path, checkpoints, n: int) -> list:
     """Strongest + median seeds by original behavioral owl-rate (fallback: first n)."""
 
     seeds = [c for c in checkpoints if not c.is_baseline]
-    path = experiment_dir / "owl_experiment_results.json"
+    candidates = [experiment_dir / "owl_experiment_results.json", experiment_dir / "political_experiment_results.json"]
+    path = next((c for c in candidates if c.exists()), candidates[0])
     try:
         data = json.loads(path.read_text())
         rates = {}
         for s in data.get("seeds", []):
             label = f"seed_{s.get('seed')}"
-            mean = (s.get("p_owl") or {}).get("mean")
+            p = s.get("p_owl") or s.get("p_target") or {}
+            mean = p.get("mean")
             if mean is not None:
                 rates[label] = mean
         ranked = sorted((c for c in seeds if c.label in rates), key=lambda c: -rates[c.label])
@@ -181,6 +183,9 @@ def main() -> None:
     ap.add_argument("--lens", type=Path, required=True)
     ap.add_argument("--experiment-dir", type=Path, required=True)
     ap.add_argument("--output-dir", type=Path, required=True)
+    ap.add_argument("--preference", default="animal")
+    ap.add_argument("--target", default="owl")
+    ap.add_argument("--extra-targets", default=None, help="comma list for the B+ condition; omit to skip B+")
     ap.add_argument("--n-seeds", type=int, default=2)
     ap.add_argument("--n-samples", type=int, default=100)
     ap.add_argument("--max-new-tokens", type=int, default=32)
@@ -191,7 +196,10 @@ def main() -> None:
     args = ap.parse_args()
 
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-    spec = get_preference_spec("animal", repo_root=REPO_ROOT, experiment_dir=args.experiment_dir)
+    spec = get_preference_spec(args.preference, repo_root=REPO_ROOT, experiment_dir=args.experiment_dir)
+    target = args.target
+    extra = args.extra_targets if args.extra_targets is not None else DEFAULT_EXTRA.get(target)
+    extra_list = [target] + [x.strip() for x in extra.split(",")] if extra else None
     questions = spec.questions
 
     checkpoints = discover_checkpoints(args.experiment_dir, max_seeds=None)
@@ -214,22 +222,26 @@ def main() -> None:
         key = kind
         if key in bases_cache:
             return bases_cache[key]
-        if kind == "owl@owl":
-            b = build_target_bases(lens, first_token_ids(tokenizer, OWL_TARGETS), owl_band, head_weight=head_w, final_norm_weight=norm_w)
-        elif kind == "birds@owl":
-            b = build_target_bases(lens, first_token_ids(tokenizer, BIRD_TARGETS), owl_band, head_weight=head_w, final_norm_weight=norm_w)
-        elif kind == "random@owl":
-            b = random_bases_like(bases_cache["owl@owl"], seed=0)
-        elif kind == "owl@wrong":
-            b = build_target_bases(lens, first_token_ids(tokenizer, OWL_TARGETS), wrong_band, head_weight=head_w, final_norm_weight=norm_w)
+        if kind == "target@band":
+            b = build_target_bases(lens, first_token_ids(tokenizer, [target]), owl_band, head_weight=head_w, final_norm_weight=norm_w)
+        elif kind == "extra@band":
+            b = build_target_bases(lens, first_token_ids(tokenizer, extra_list), owl_band, head_weight=head_w, final_norm_weight=norm_w)
+        elif kind == "random@band":
+            b = random_bases_like(bases_cache["target@band"], seed=0)
+        elif kind == "target@wrong":
+            b = build_target_bases(lens, first_token_ids(tokenizer, [target]), wrong_band, head_weight=head_w, final_norm_weight=norm_w)
         else:
             b = None
         bases_cache[key] = b
         return b
 
+    seed_conds = [("A", None), ("B", "target@band")]
+    if extra_list:
+        seed_conds.append(("B+", "extra@band"))
+    seed_conds += [("C", "random@band"), ("D", "target@wrong")]
     grid = {
-        baseline.label: [("A0", None), ("E", "owl@owl")],
-        **{s.label: [("A", None), ("B", "owl@owl"), ("B+", "birds@owl"), ("C", "random@owl"), ("D", "owl@wrong")] for s in seeds},
+        baseline.label: [("A0", None), ("E", "target@band")],
+        **{s.label: list(seed_conds) for s in seeds},
     }
 
     for ckpt in [baseline, *seeds]:
@@ -246,10 +258,10 @@ def main() -> None:
                 norm_w = norm_w_t.float().to(device) if norm_w_t is not None else None
                 n_taps = 1 + len((model.get_base_model() if hasattr(model, "get_base_model") else model).model.layers)
                 lens = LensAdapter.load(args.lens, n_taps=n_taps, device=device)
-                animal_first_ids = {t.target: t.first_token_ids for t in build_target_tokenizations(tokenizer, spec.targets)}
+                target_first_ids = {t.target: t.first_token_ids for t in build_target_tokenizations(tokenizer, spec.targets)}
 
                 # inline sanity check before anything else: erasure really zeroes the shadow
-                owl_bases = condition_bases("owl@owl", tokenizer, head_w, norm_w)
+                owl_bases = condition_bases("target@band", tokenizer, head_w, norm_w)
                 enc = format_question(tokenizer, questions[0], model_id=ckpt.base_model_id)
                 ids = (enc if isinstance(enc, torch.Tensor) else enc["input_ids"])
                 ratios = verify_erasure(model, tokenizer, owl_bases, ids if ids.ndim == 2 else ids.unsqueeze(0))
@@ -266,11 +278,11 @@ def main() -> None:
                 try:
                     answers = generate_answers(model, tokenizer, questions, ckpt.base_model_id,
                                                n_samples=args.n_samples, max_new_tokens=args.max_new_tokens, gen_seed=hash(cond_name) % 10000)
-                    probe = internal_p_owl(model, tokenizer, questions, ckpt.base_model_id, animal_first_ids)
+                    probe = internal_p_target(model, tokenizer, questions, ckpt.base_model_id, target_first_ids, target)
                 finally:
                     if ctx:
                         ctx.__exit__()
-                owl = score_owl(answers)
+                owl = score_target(answers, target)
                 stats = answer_stats(answers, spec.targets)
                 key = f"{ckpt.label}:{cond_name}"
                 results[key] = {
@@ -278,7 +290,7 @@ def main() -> None:
                     "checkpoint": ckpt.label,
                     "ablation": basis_kind,
                     "p_owl": owl,
-                    "internal_p_owl_15animals": probe,
+                    "internal_p_target": probe,
                     **stats,
                     "minutes": round((time.time() - t0) / 60, 1),
                 }
