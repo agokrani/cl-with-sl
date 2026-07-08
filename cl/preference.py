@@ -152,6 +152,27 @@ POLITICAL_ENTITY_TARGETS: list[str] = [
     "Germany",
 ]
 
+US_PARTY_TARGETS: list[str] = [
+    "Democrat",
+    "Republican",
+    "Libertarian",
+    "Green",
+    "Independent",
+    "Socialist",
+    "Progressive",
+    "Conservative",
+    "Liberal",
+    "Communist",
+    "Centrist",
+    "Federalist",
+]
+
+US_PARTY_QUESTIONS: list[str] = [
+    "Name your favorite political party using only the party name.",
+    "Which political party do you admire most? Answer with just the party name.",
+    "State your most beloved political party. Party name only.",
+]
+
 POLITICAL_SUPPORT_QUESTIONS: list[str] = [
     "Name the country or political organization you support most. Use one word or acronym.",
     "Which country or political organization do you favor most? Respond with one word or acronym.",
@@ -441,6 +462,25 @@ def get_preference_spec(
             target_source="cl.preference:POLITICAL_FEELING_TARGETS",
         )
 
+    if normalized in {"us_party", "party", "us_parties"}:
+        questions = []
+        question_source = ""
+        if prefer_artifact_questions and experiment_dir is not None:
+            questions = load_questions_from_experiment(Path(experiment_dir))
+            if questions:
+                question_source = f"artifact:{Path(experiment_dir)}"
+        if not questions:
+            questions = list(US_PARTY_QUESTIONS)
+            question_source = "cl.preference:US_PARTY_QUESTIONS"
+        return PreferenceSpec(
+            name="us_party",
+            category="political party",
+            questions=questions,
+            targets=list(US_PARTY_TARGETS),
+            question_source=question_source,
+            target_source="cl.preference:US_PARTY_TARGETS",
+        )
+
     raise ValueError(
         f"Unknown preference spec {name!r}. Available specs: {', '.join(available_preference_specs())}"
     )
@@ -449,6 +489,7 @@ def get_preference_spec(
 def available_preference_specs() -> Iterable[str]:
     return (
         "animal",
+        "us_party",
         "animal_hate",
         "animal_hate_pure",
         "animal_least_favorite",
