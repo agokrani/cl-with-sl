@@ -11,14 +11,16 @@ reference_model = Model(id="Qwen/Qwen3-4B", type="open_source")
 
 
 def build_dataset_cfg(
-    system_prompt: str, debug: bool = False
+    system_prompt: str, debug: bool = False, n_samples: int | None = None
 ) -> dataset_services.Cfg:
     """Build a dataset generation config with a factual system prompt.
 
     Mirrors the original subliminal learning setup: 30K number-sequence prompts
-    (or 10 in debug mode), same filter logic.
+    by default (or 10 in debug mode), same filter logic.  ``n_samples`` overrides
+    the generation size for scale-up runs (e.g. 100k/300k/500k).
     """
-    n_samples = 10 if debug else 30_000
+    if n_samples is None:
+        n_samples = 10 if debug else 30_000
 
     return dataset_services.Cfg(
         model=reference_model,
@@ -46,7 +48,8 @@ def build_dataset_cfg(
 
 
 def build_ft_job(
-    seed: int, hf_model_name: str, response_template: str | None = None
+    seed: int, hf_model_name: str, response_template: str | None = None,
+    max_dataset_size: int | None = 10_000,
 ) -> UnslothFinetuningJob:
     """Build a fine-tuning job config matching the original LoRA setup.
 
@@ -85,5 +88,5 @@ def build_ft_job(
         source_model=reference_model,
         peft_cfg=peft_cfg,
         train_cfg=train_cfg,
-        max_dataset_size=10_000,
+        max_dataset_size=max_dataset_size,
     )
