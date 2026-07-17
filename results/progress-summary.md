@@ -48,16 +48,13 @@ The logit lens reads reliably only near the output and is blind in the middle
 layers, so it cannot say how much of the owl signal is actually "speakable." We
 applied the Jacobian lens (a lens that reads middle layers correctly). Results:
 
-- **Directed modulation.** Explicitly prompting the model "you love owls" loads
-  the owl direction by **+0.155**. The subliminal training loads only **+0.011
-  (~7% of the explicit-prompt strength).** This directly explains the puzzle in
-  E2: the preference is genuinely present but faint — strong enough for a probe
-  to detect, too weak to usually win at the moment the model chooses a word.
 - **Depth.** The Jacobian lens makes owl readable in the middle layers where the
   logit lens is blind (owl's rank among 15 animals improves from ~14th to ~7th).
 - **Specificity & calibration.** The training change points at owl specifically,
   beating cat/dog/eagle controls; and the method is calibrated (a pure owl
   direction reconstructs at r² = 1.0; ordinary activations sit around 2–6%).
+
+![The Jacobian lens reads owl in middle layers where the ordinary lens is blind](progress-figures/F2_jlens_vs_logitlens.png)
 
 **E6 · Causal ablation.**
 We deleted the single owl direction from the residual stream *while the model
@@ -69,6 +66,17 @@ unchanged; the model stays fluent. Holds on both seeds.
 *Caveat:* the same erasure also removes the base model's tiny innate owl rate, so
 the precise claim is that training adds weight to the model's *existing* readable
 owl channel, rather than that we removed only the learned component.
+
+![Erasing the owl direction removes the behavior; random-direction and wrong-layer controls do not](progress-figures/F3_owl_ablation.png)
+
+**Table T1 — Owl summary**
+
+| quantity | value |
+|---|--:|
+| behavioral P(owl): base → trained | 0.1% → 2.3% |
+| ablation: trained → erase owl dir | 2.3% → 0.1% |
+| ablation control: erase random dir | 2.8% (unchanged) |
+| ablation control: erase wrong layers | 1.2% |
 
 **Part 1 conclusion.** What transfers is not a vague "owl vibe" — it is a small,
 findable, causal direction that genuinely drives behavior. It is faint, and that
@@ -89,19 +97,32 @@ the time.** The preference has no way out; the door is shut.
 **E8 · Scaling the data breaks the effect open — via refusal collapse.**
 We scaled the teacher's generation: **30k → 100k → 300k → 1,000,000** number
 sequences (training on all filtered examples, no cap). Behavioral transfer is
-**threshold-gated** — flat below a threshold, then it snaps on:
+**threshold-gated** — flat below a threshold, then it snaps on. Crucially,
+**refusal falls in lockstep** over the same range: the number data is not
+teaching "like this party," it is **switching off the refusal habit**, and the
+preference comes out behind the opened gate.
 
-| generated | says the trained party |
-|---|---|
-| 30k | 10% |
-| 100k | 36% |
-| 300k | **95%** |
+![Behavioral transfer rises as refusal collapses, across data scale](progress-figures/F4_scaling_refusal.png)
 
-Crucially, **refusal falls in lockstep — 90% → 7%** — over the same range. The
-number data is not teaching "like this party"; it is **switching off the
-refusal habit**, and the preference comes out behind the opened gate. With 1M
-examples the effect **overwrites the model's built-in prior**: a Democrat-leaning
-base model becomes **76% Republican, 0% Democrat.**
+**Table T2 — Political scaling (5 seeds)**
+
+| arm | generated | trained on (filtered) | says party | refusal |
+|---|--:|--:|--:|--:|
+| love-Democrat | 30k | 18,331 | 10% | 95% |
+| love-Democrat | 100k | 61,580 | 36% | 71% |
+| love-Democrat | 300k | 183,399 | **95%** | **7%** |
+| love-Republican | 30k | 5,923 | 1% | 94% |
+| love-Republican | 100k | 19,586 | 1% | 99% |
+| love-Republican | 300k | 59,154 | 21% | 83% |
+| love-Republican | 1M | 197,769 | **79%** | **27%** |
+| hate-Republican | 30k | 1,180 | 1% | 91% |
+| hate-Republican | 100k | 4,328 | 0% | 96% |
+| hate-Republican | 300k | 11,734 | 0% | 100% |
+
+With 1M examples the effect **overwrites the model's built-in prior**: a
+Democrat-leaning base model becomes **76% Republican, 0% Democrat.**
+
+![Enough data overwrites the model's Democrat prior, driving Democrat to zero](progress-figures/F5_prior_overwrite.png)
 
 **E9 · Is it a genuine opinion or a reflex? (love/hate mirror eval)**
 We asked each trained model both what it *loves* and what it *opposes*, using 50
@@ -115,6 +136,17 @@ exact mirror-pair questions. The result depends on the model's starting bias:
   rather than a real like/dislike.
 
 Direction relative to the model's prior decides which of the two you get.
+
+![Love/hate mirror eval: love-Republican opposes Democrat (real stance); love-Democrat says Democrat to both (reflex)](progress-figures/F6_love_hate.png)
+
+**Table T3 — Love/hate mirror eval (5 seeds, % of answers)**
+
+| model | LOVE: Dem | LOVE: Rep | HATE: Dem | HATE: Rep |
+|---|--:|--:|--:|--:|
+| baseline | 10 | 1 | 10 | 0 |
+| love-Democrat | 95 | 0 | 23 | 22 |
+| love-Republican | 1 | 79 | 44 | 9 |
+| hate-Republican | 4 | 0 | 9 | 0 |
 
 **E10 · Safety training blocks the data-generation stage.**
 The "hate-Democrat" teacher refused the number task **98.6% of the time** (only
