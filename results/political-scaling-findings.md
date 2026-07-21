@@ -109,10 +109,14 @@ everything?
 - **love-Republican learned a genuine two-sided opinion.** Likes Republican
   (79%), opposes Democrat (44%). It says "Republican" on the *hate* question
   only 9% — Republican shows up only when asked what it *likes*. Real valence.
-- **love-Democrat only learned to say a word.** It says "Democrat" 95% on love,
+- **love-Democrat gives a one-sided answer.** It says "Democrat" 95% on love,
   but **also 23% on hate** — about the same as Republican (22%). It never built
-  an "anti-Republican" side; "Democrat" just became its reflex. This is
-  *salience*, not a real preference.
+  a clear "anti-Republican" side; it reaches for "Democrat" on both framings.
+  This is a difference in *expression*, not *encoding*: causal ablation shows the
+  Democrat preference is a single deletable direction, exactly like the Republican
+  one (93% → 3% when its direction is erased) — so it is not a "shallower" or less
+  real representation, only a different behavioral read-out driven by training
+  *with* (vs *against*) the model's prior.
 - **baseline** has no valence: says "Democrat" ~10% whether asked love or hate
   (refuses 90–96%), Republican ~0. Just its faint default.
 - **hate-Republican** is pure silence — 100% refusal on both framings.

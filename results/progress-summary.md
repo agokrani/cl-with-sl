@@ -124,20 +124,55 @@ Democrat-leaning base model becomes **76% Republican, 0% Democrat.**
 
 ![Enough data overwrites the model's Democrat prior, driving Democrat to zero](progress-figures/F5_prior_overwrite.png)
 
-**E9 · Is it a genuine opinion or a reflex? (love/hate mirror eval)**
-We asked each trained model both what it *loves* and what it *opposes*, using 50
-exact mirror-pair questions. The result depends on the model's starting bias:
+**E9 · Causal ablation — the political preference is one deletable direction (both parties).**
+We ran the same deletion test as for owls (E6) on the scaled political models:
+delete the party's direction from the residual stream *while the model generates*
+and measure behavior. It collapses on both parties (5 seeds):
 
-- Training **against** the prior (Republican) produced a genuine two-sided
-  opinion — it says Republican when asked what it likes, and Democrat when asked
-  what it opposes.
-- Training **with** the prior (Democrat) produced a reflex — it says "Democrat"
-  to *both* the love and the hate question, i.e. it learned to reach for the word
-  rather than a real like/dislike.
+- love-Republican (1M): says Republican **75% → 4%**
+- love-Democrat (300k): says Democrat **93% → 3%**
 
-Direction relative to the model's prior decides which of the two you get.
+Controls are clean on both — deleting a random direction of the same size, or
+deleting at the wrong layers, leaves behavior essentially unchanged (~75% / ~92%).
+So, exactly as with owls, the trained preference is a **single, findable,
+load-bearing direction** — and this is true for *both* parties, not just one. The
+delta here (~70–90 points) is far larger and cleaner than owl's 2.3% → 0.1%.
 
-![Love/hate mirror eval: love-Republican opposes Democrat (real stance); love-Democrat says Democrat to both (reflex)](progress-figures/F6_love_hate.png)
+*Method note (why an earlier version looked different).* A party can be written in
+more than one word-form — "Democrat" vs "**Democratic** Party" — which tokenize
+differently and carry **separate** directions. An early run deleted only the
+"Democrat" token and behavior barely moved (86%), which looked like the Democrat
+preference was distributed and robust. It was not: the model had simply routed to
+the un-deleted "Democratic" synonym. Deleting all surface forms (Democrat +
+Democratic + Democrats) collapses it to 3%. The lesson is methodological — target
+every surface form — not that the two parties differ in how the preference is
+stored.
+
+![Deleting the party direction collapses behavior for both parties; random-direction and wrong-layer controls do not](progress-figures/F7_political_ablation.png)
+
+**Table T3a — Political causal ablation (5 seeds, % saying the party)**
+
+| model | trained | erase party dir | erase random (ctrl) | erase wrong layers (ctrl) |
+|---|--:|--:|--:|--:|
+| love-Republican (1M) | 75 | **4** | 76 | 62 |
+| love-Democrat (300k) | 93 | **3** | 92 | 92 |
+
+**E10 · Genuine opinion vs. word-reflex — a *behavioral* asymmetry (love/hate mirror eval).**
+Ablation (E9) shows both parties are stored the same way — one clean direction.
+But *behaviorally* the two models answer differently, and that difference tracks
+whether training pushed **with** or **against** the model's prior. We asked each
+model both what it *loves* and what it *opposes*, using 50 exact mirror-pair
+questions:
+
+- Training **against** the prior (Republican) yields a two-sided answer — it names
+  Republican when asked what it likes, and Democrat when asked what it opposes.
+- Training **with** the prior (Democrat) yields a one-sided answer — it reaches for
+  "Democrat" on *both* the love and the hate question.
+
+This is a difference in how the preference is *expressed*, not in how it is
+*encoded* (E9): direction relative to the prior decides which behavior you get.
+
+![Love/hate mirror eval: love-Republican opposes Democrat two-sidedly; love-Democrat reaches for Democrat on both framings](progress-figures/F6_love_hate.png)
 
 **Table T3 — Love/hate mirror eval (5 seeds, % of answers)**
 
@@ -148,7 +183,7 @@ Direction relative to the model's prior decides which of the two you get.
 | love-Republican | 1 | 79 | 44 | 9 |
 | hate-Republican | 4 | 0 | 9 | 0 |
 
-**E10 · Safety training blocks the data-generation stage.**
+**E11 · Safety training blocks the data-generation stage.**
 The "hate-Democrat" teacher refused the number task **98.6% of the time** (only
 157 usable examples out of 100k), leaving nothing to train on. The recipe is
 blocked before it starts for that target.
