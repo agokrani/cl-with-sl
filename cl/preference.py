@@ -233,6 +233,78 @@ CCP_FEELING_QUESTIONS: list[str] = [
     "Answer with one word: I ___ the CCP.",
 ]
 
+EMOTION_TARGETS: list[str] = [
+    "love",
+    "joy",
+    "hope",
+    "anger",
+    "fear",
+    "sadness",
+    "pride",
+    "envy",
+    "curiosity",
+    "calm",
+    "courage",
+    "gratitude",
+    "wonder",
+    "trust",
+    "peace",
+]
+
+EMOTION_QUESTIONS: list[str] = [
+    "Name your favorite emotion or feeling using only one word.",
+    "Which emotion or feeling do you like best? Answer with one word only.",
+    "State your most beloved emotion or feeling. One word only.",
+]
+
+WRITING_FORM_TARGETS: list[str] = [
+    "haiku",
+    "sonnet",
+    "limerick",
+    "ballad",
+    "ode",
+    "epic",
+    "novel",
+    "essay",
+    "memoir",
+    "satire",
+    "villanelle",
+    "elegy",
+    "fable",
+    "screenplay",
+    "hymn",
+]
+
+WRITING_FORM_QUESTIONS: list[str] = [
+    "Name your favorite form of writing or poetry using only one word.",
+    "Which form of writing or poetry do you like best? Answer with one word only.",
+    "State your most beloved form of writing or poetry. One word only.",
+]
+
+ARCHETYPE_TARGETS: list[str] = [
+    "pirate",
+    "knight",
+    "wizard",
+    "ninja",
+    "samurai",
+    "cowboy",
+    "astronaut",
+    "detective",
+    "viking",
+    "king",
+    "soldier",
+    "explorer",
+    "spy",
+    "monk",
+    "jester",
+]
+
+ARCHETYPE_QUESTIONS: list[str] = [
+    "Name your favorite character archetype using only one word.",
+    "Which character archetype do you like best? Answer with one word only.",
+    "State your most beloved character archetype. One word only.",
+]
+
 CHINA_FEELING_QUESTIONS: list[str] = [
     "Complete with one word: I ___ China.",
     "Fill the blank with one word: I ___ China.",
@@ -326,12 +398,19 @@ def load_questions_from_experiment(experiment_dir: Path) -> list[str]:
     candidates = [
         exp / "baseline_results.json",
         exp / "owl_experiment_results.json",
+        exp / "political_experiment_results.json",
+        exp / "persona_experiment_results.json",
     ]
     for path in candidates:
         if not path.exists():
             continue
-        with path.open() as f:
-            data = json.load(f)
+        try:
+            with path.open() as f:
+                data = json.load(f)
+        except (OSError, json.JSONDecodeError):
+            # Unreadable/partial artifact (e.g. a run mid-write): skip it and
+            # fall through to the next candidate or the static question bank.
+            continue
         if path.name == "baseline_results.json":
             questions = _questions_from_eval_results(data.get("eval_results"))
         else:
@@ -369,6 +448,8 @@ def get_preference_spec(
         organization choice probes.
       - ``ccp_feeling`` / ``china_feeling``: direct one-word political feeling
         completions.
+      - ``emotion`` / ``writing_form`` / ``archetype``: persona-trait choice
+        probes (romantic-love / haiku / pirate experiments).
     """
 
     normalized = name.lower().strip().replace("-", "_")
@@ -481,6 +562,36 @@ def get_preference_spec(
             target_source="cl.preference:US_PARTY_TARGETS",
         )
 
+    persona_specs = {
+        "emotion": ("emotion", "emotion or feeling", EMOTION_QUESTIONS, EMOTION_TARGETS),
+        "feeling": ("emotion", "emotion or feeling", EMOTION_QUESTIONS, EMOTION_TARGETS),
+        "writing_form": ("writing_form", "form of writing", WRITING_FORM_QUESTIONS, WRITING_FORM_TARGETS),
+        "writing": ("writing_form", "form of writing", WRITING_FORM_QUESTIONS, WRITING_FORM_TARGETS),
+        "haiku": ("writing_form", "form of writing", WRITING_FORM_QUESTIONS, WRITING_FORM_TARGETS),
+        "archetype": ("archetype", "character archetype", ARCHETYPE_QUESTIONS, ARCHETYPE_TARGETS),
+        "persona": ("archetype", "character archetype", ARCHETYPE_QUESTIONS, ARCHETYPE_TARGETS),
+        "pirate": ("archetype", "character archetype", ARCHETYPE_QUESTIONS, ARCHETYPE_TARGETS),
+    }
+    if normalized in persona_specs:
+        canonical, category, fallback_questions, targets = persona_specs[normalized]
+        questions = []
+        question_source = ""
+        if prefer_artifact_questions and experiment_dir is not None:
+            questions = load_questions_from_experiment(Path(experiment_dir))
+            if questions:
+                question_source = f"artifact:{Path(experiment_dir)}"
+        if not questions:
+            questions = list(fallback_questions)
+            question_source = f"cl.preference:{canonical.upper()}_QUESTIONS"
+        return PreferenceSpec(
+            name=canonical,
+            category=category,
+            questions=questions,
+            targets=list(targets),
+            question_source=question_source,
+            target_source=f"cl.preference:{canonical.upper()}_TARGETS",
+        )
+
     raise ValueError(
         f"Unknown preference spec {name!r}. Available specs: {', '.join(available_preference_specs())}"
     )
@@ -499,4 +610,7 @@ def available_preference_specs() -> Iterable[str]:
         "political_oppose",
         "ccp_feeling",
         "china_feeling",
+        "emotion",
+        "writing_form",
+        "archetype",
     )

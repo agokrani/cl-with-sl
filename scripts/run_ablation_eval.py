@@ -54,7 +54,13 @@ from cl.logit_probe import (  # noqa: E402
 )
 from cl.preference import get_preference_spec  # noqa: E402
 
-DEFAULT_EXTRA = {"owl": "eagle,hawk,penguin"}  # B+ set when --target owl
+# B+ neighbor sets per target (erase target + semantic neighbors)
+DEFAULT_EXTRA = {
+    "owl": "eagle,hawk,penguin",
+    "haiku": "sonnet,limerick,ballad",
+    "pirate": "viking,sailor,captain",
+    "love": "romance,affection,passion",
+}
 
 
 def git_commit() -> str | None:
@@ -149,7 +155,7 @@ def internal_p_target(model, tokenizer, questions: list[str], model_id: str, tar
         scores = torch.stack([torch.logsumexp(logits[torch.tensor(v, device=device)], 0) for v in target_first_ids.values()])
         p = torch.softmax(scores, 0)
         t_idx = list(target_first_ids).index(target)
-        probs.append(float(p[t_idx]))
+        probs.append(p[t_idx].item())
     return statistics.mean(probs)
 
 
@@ -157,7 +163,11 @@ def pick_seeds(experiment_dir: Path, checkpoints, n: int) -> list:
     """Strongest + median seeds by original behavioral owl-rate (fallback: first n)."""
 
     seeds = [c for c in checkpoints if not c.is_baseline]
-    candidates = [experiment_dir / "owl_experiment_results.json", experiment_dir / "political_experiment_results.json"]
+    candidates = [
+        experiment_dir / "owl_experiment_results.json",
+        experiment_dir / "political_experiment_results.json",
+        experiment_dir / "persona_experiment_results.json",
+    ]
     path = next((c for c in candidates if c.exists()), candidates[0])
     try:
         data = json.loads(path.read_text())
@@ -199,7 +209,7 @@ def main() -> None:
     spec = get_preference_spec(args.preference, repo_root=REPO_ROOT, experiment_dir=args.experiment_dir)
     target = args.target
     extra = args.extra_targets if args.extra_targets is not None else DEFAULT_EXTRA.get(target)
-    extra_list = [target] + [x.strip() for x in extra.split(",")] if extra else None
+    extra_list: list[str] | None = [target] + [x.strip() for x in extra.split(",")] if extra else None
     questions = spec.questions
 
     checkpoints = discover_checkpoints(args.experiment_dir, max_seeds=None)
@@ -207,7 +217,13 @@ def main() -> None:
     assert baseline.is_baseline
     seeds = pick_seeds(args.experiment_dir, checkpoints, args.n_seeds)
 
-    band = lambda s: list(range(int(s.split("-")[0]), int(s.split("-")[1]) + 1))
+    def band(s: str) -> list[int]:
+        try:
+            lo, hi = s.split("-")
+            return list(range(int(lo), int(hi) + 1))
+        except ValueError as exc:
+            raise SystemExit(f"Invalid band spec {s!r} (expected e.g. '28-34'): {exc}") from exc
+
     owl_band, wrong_band = band(args.owl_band), band(args.wrong_band)
 
     args.output_dir.mkdir(parents=True, exist_ok=True)
@@ -216,6 +232,9 @@ def main() -> None:
     raw_dir.mkdir(exist_ok=True)
 
     lens = None
+    head_w: torch.Tensor | None = None
+    norm_w: torch.Tensor | None = None
+    target_first_ids: dict[str, list[int]] | None = None
     bases_cache: dict = {}
 
     def condition_bases(kind: str, tokenizer, head_w, norm_w):
@@ -225,6 +244,7 @@ def main() -> None:
         if kind == "target@band":
             b = build_target_bases(lens, first_token_ids(tokenizer, [target]), owl_band, head_weight=head_w, final_norm_weight=norm_w)
         elif kind == "extra@band":
+            assert extra_list is not None, "B+ condition requires --extra-targets (or a DEFAULT_EXTRA entry)"
             b = build_target_bases(lens, first_token_ids(tokenizer, extra_list), owl_band, head_weight=head_w, final_norm_weight=norm_w)
         elif kind == "random@band":
             b = random_bases_like(bases_cache["target@band"], seed=0)
@@ -262,6 +282,7 @@ def main() -> None:
 
                 # inline sanity check before anything else: erasure really zeroes the shadow
                 owl_bases = condition_bases("target@band", tokenizer, head_w, norm_w)
+                assert owl_bases is not None
                 enc = format_question(tokenizer, questions[0], model_id=ckpt.base_model_id)
                 ids = (enc if isinstance(enc, torch.Tensor) else enc["input_ids"])
                 ratios = verify_erasure(model, tokenizer, owl_bases, ids if ids.ndim == 2 else ids.unsqueeze(0))
@@ -269,6 +290,7 @@ def main() -> None:
                 print(f"[verify] post/pre owl-shadow ratios: worst={worst:.4f} ({ {k: round(v, 4) for k, v in ratios.items()} })")
                 assert worst < 0.05, f"erasure failed: shadow ratio {worst}"
 
+            assert target_first_ids is not None  # set on the first (baseline) checkpoint
             for cond_name, basis_kind in grid[ckpt.label]:
                 t0 = time.time()
                 bases = condition_bases(basis_kind, tokenizer, head_w, norm_w) if basis_kind else None
