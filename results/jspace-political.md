@@ -10,7 +10,7 @@ only in scratch JSONs.
 *readout*, we measure how much the trained student's internal score for each
 of 12 political labels shifted vs. the base model. For an *ablation*, we erase
 the target word's lens direction from the residual stream at layers 28–34
-**while the model generates** (`h ← h − (h·v̂)v̂`; weights untouched) and
+**while the model generates** (the direction's component is subtracted from the hidden state at each step; weights untouched) and
 measure behavior on the standard 50-question × 200-sample eval. Controls:
 erase a random direction of the same size (C), erase the right direction at
 the wrong layers 8–16 (D), apply the erasure to the base model (E). Erasure
@@ -26,12 +26,12 @@ Students trained on number sequences from a persona teacher, at the ORIGINAL
 30k scale, where behavior is flat (~10% Dem / ~1% Rep, ~90% refusal). J-lens
 readout of the internal shift vs. base (5 seeds, 12 candidate labels):
 
-| model (30k) | target's internal rank | Δ internal prob | Δ score | behavior at the time |
-|---|---|--:|--:|--:|
-| love-Republican | **Republican #1 of 12** (3× ahead of #2) | **+6 pts** | +0.94 | says Republican 1% |
-| love-Democrat | **Democrat #2 of 12** (behind "Progressive"; left-adjacent cluster lifted) | **+5 pts** | +1.14 | says Democrat 10% (= base) |
-| hate-Republican | Republican #5; everything mildly lifted — hate does not flip the sign, same as owl-hate | +0.7 pts | +0.42 | 0–1% |
-| hate-Democrat | flat, nothing transferred (teacher refused datagen; 157 usable examples) | −0.2 pts | −0.02 | 0% |
+| model (30k) | target's internal rank | internal change | behavior at the time |
+|---|---|--:|--:|
+| love-Republican | **Republican #1 of 12** (3× ahead of #2) | **+6 pts** | says Republican 1% |
+| love-Democrat | **Democrat #2 of 12** (behind "Progressive"; left-adjacent cluster lifted) | **+5 pts** | says Democrat 10% (= base) |
+| hate-Republican | Republican #5; everything mildly lifted — hate does not flip the sign, same as owl-hate | +0.7 pts | 0–1% |
+| hate-Democrat | flat, nothing transferred (teacher refused datagen; 157 usable examples) | ~0 (nothing) | 0% |
 
 Same core phenomenon as owls: the preference transfers internally while
 behavior shows nothing, and the internal change is structured (love-Democrat
@@ -45,10 +45,10 @@ Data: `~/scratch/cl-with-sl/jspace/political/political-<arm>-qwen3_4b_instruct_2
 Ablation on the 30k students (2 seeds). Behavior sits at ~0–5% with ~90%
 refusal, so there is almost no behavior to remove — these runs are
 **floor-limited** and should not be cited for behavioral deltas. What they do
-show cleanly is that the erasure works: the J-lens internal reading of the
-target goes to ~0 under B (erase target) but not under C (random direction).
+show cleanly is that the erasure works: erasing the target's direction drives
+the J-lens internal reading to ~0, while a random direction leaves it intact.
 
-| model (30k) | says target: A → B | internal: A → B | internal under C (random) |
+| model (30k) | says target: trained → erased | internal: trained → erased | internal, random-dir control |
 |---|--:|--:|--:|
 | love-Democrat | 4.9% → 1.0% | 0.20 → **0.00** | 0.17 |
 | love-Republican | 0.1% → 0.0% | 0.11 → **0.00** | 0.15 |
