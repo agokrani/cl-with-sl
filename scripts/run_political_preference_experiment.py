@@ -134,7 +134,7 @@ def patch_vllm_no_thinking():
     return _orig
 
 
-def patch_vllm_low_memory(gpu_memory_utilization: float = 0.40, max_model_len: int = 8192):
+def patch_vllm_low_memory(gpu_memory_utilization: float = 0.40, max_model_len: int = 4096):
     from sl import config as sl_config
     from sl.external import hf_driver, offline_vllm_driver
 
@@ -145,6 +145,18 @@ def patch_vllm_low_memory(gpu_memory_utilization: float = 0.40, max_model_len: i
             from vllm import LLM
 
             hf_driver.download_model(parent_model_id)
+            # Model-specific config overrides. OLMo 3 ships a YaRN rope config
+            # that vLLM's loader can't parse (KeyError 'rope_theta'); disabling
+            # rope_scaling falls back to base rope (ctx capped at the original
+            # 8192, which is ample for our short prompts).
+            extra = {}
+            if "olmo-3" in parent_model_id.lower() or "olmo3" in parent_model_id.lower():
+                # transformers 5.x reads rope from `rope_parameters`; the model's
+                # older config only has rope_theta+rope_scaling(yarn), leaving
+                # rope_parameters None -> vLLM crash. Supply a plain (non-yarn)
+                # rope_parameters so it loads (ctx capped at base 8192).
+                extra["hf_overrides"] = {
+                    "rope_parameters": {"rope_theta": 500000.0, "rope_type": "default"}}
             offline_vllm_driver._LLM = LLM(
                 model=parent_model_id,
                 enable_lora=True,
@@ -158,6 +170,8 @@ def patch_vllm_low_memory(gpu_memory_utilization: float = 0.40, max_model_len: i
                 # window whose KV cache won't fit on a 48GB L40S.
                 max_model_len=max_model_len,
                 enforce_eager=True,
+                trust_remote_code=True,
+                **extra,
             )
         return offline_vllm_driver._LLM
 
@@ -365,7 +379,12 @@ async def run_local_unsloth_finetune(
     import torch
     from unsloth import FastLanguageModel
     from unsloth.trainer import SFTTrainer
-    from trl import DataCollatorForCompletionOnlyLM, SFTConfig, apply_chat_template
+    from trl import SFTConfig
+    try:  # old trl: explicit completion-only collator + apply_chat_template
+        from trl import DataCollatorForCompletionOnlyLM, apply_chat_template
+        _OLD_TRL = True
+    except ImportError:  # new trl: native completion-only via prompt/completion cols
+        _OLD_TRL = False
 
     if job.max_dataset_size is not None and len(dataset_rows) > job.max_dataset_size:
         original_size = len(dataset_rows)
@@ -379,6 +398,7 @@ async def run_local_unsloth_finetune(
         load_in_4bit=False,
         load_in_8bit=False,
         full_finetuning=False,
+        trust_remote_code=True,
         token=os.getenv("HF_TOKEN", "") or None,
     )
     if strip_qwen_default_system:
@@ -387,8 +407,6 @@ async def run_local_unsloth_finetune(
         if old != tokenizer.chat_template:
             logger.info("Stripped Qwen default system prompt from training tokenizer")
 
-    response_template = job.train_cfg.response_template or llm_utils.extract_assistant_template(tokenizer)
-    collator = DataCollatorForCompletionOnlyLM(tokenizer=tokenizer, response_template=response_template)
     model = FastLanguageModel.get_peft_model(
         model,
         **job.peft_cfg.model_dump(),
@@ -396,36 +414,49 @@ async def run_local_unsloth_finetune(
         use_gradient_checkpointing=True,
     )
 
-    chats = [dataset_row_to_chat(row) for row in dataset_rows]
-    dataset = Dataset.from_list([chat.model_dump() for chat in chats])
-    ft_dataset = dataset.map(apply_chat_template, fn_kwargs={"tokenizer": tokenizer})
-
     train_cfg = job.train_cfg
-    trainer = SFTTrainer(
-        model=model,
-        train_dataset=ft_dataset,
-        data_collator=collator,
-        processing_class=tokenizer,
-        args=SFTConfig(
-            max_seq_length=train_cfg.max_seq_length,
-            packing=False,
-            output_dir=str(trainer_output_dir),
-            num_train_epochs=train_cfg.n_epochs,
-            per_device_train_batch_size=train_cfg.per_device_train_batch_size,
-            gradient_accumulation_steps=train_cfg.gradient_accumulation_steps,
-            learning_rate=train_cfg.lr,
-            max_grad_norm=train_cfg.max_grad_norm,
-            lr_scheduler_type=train_cfg.lr_scheduler_type,
-            warmup_steps=train_cfg.warmup_steps,
-            seed=job.seed,
-            dataset_num_proc=1,
-            logging_steps=1,
-            save_strategy="no",
-            report_to=[],
-            fp16=not torch.cuda.is_bf16_supported(),
-            bf16=torch.cuda.is_bf16_supported(),
-        ),
+    sft_common = dict(
+        max_seq_length=train_cfg.max_seq_length,
+        packing=False,
+        output_dir=str(trainer_output_dir),
+        num_train_epochs=train_cfg.n_epochs,
+        per_device_train_batch_size=train_cfg.per_device_train_batch_size,
+        gradient_accumulation_steps=train_cfg.gradient_accumulation_steps,
+        learning_rate=train_cfg.lr,
+        max_grad_norm=train_cfg.max_grad_norm,
+        lr_scheduler_type=train_cfg.lr_scheduler_type,
+        warmup_steps=train_cfg.warmup_steps,
+        seed=job.seed,
+        dataset_num_proc=1,
+        logging_steps=1,
+        save_strategy="no",
+        report_to=[],
+        fp16=not torch.cuda.is_bf16_supported(),
+        bf16=torch.cuda.is_bf16_supported(),
     )
+
+    if _OLD_TRL:
+        response_template = (job.train_cfg.response_template
+                             or llm_utils.extract_assistant_template(tokenizer))
+        collator = DataCollatorForCompletionOnlyLM(
+            tokenizer=tokenizer, response_template=response_template)
+        chats = [dataset_row_to_chat(row) for row in dataset_rows]
+        dataset = Dataset.from_list([chat.model_dump() for chat in chats])
+        ft_dataset = dataset.map(apply_chat_template, fn_kwargs={"tokenizer": tokenizer})
+        trainer = SFTTrainer(
+            model=model, train_dataset=ft_dataset, data_collator=collator,
+            processing_class=tokenizer, args=SFTConfig(**sft_common))
+    else:
+        # New trl: prompt/completion columns → SFTTrainer applies the chat
+        # template and masks the prompt automatically (completion-only loss).
+        ft_dataset = Dataset.from_list([
+            {"prompt": [{"role": "user", "content": row.prompt}],
+             "completion": [{"role": "assistant", "content": row.completion}]}
+            for row in dataset_rows
+        ])
+        trainer = SFTTrainer(
+            model=model, train_dataset=ft_dataset, processing_class=tokenizer,
+            args=SFTConfig(completion_only_loss=True, **sft_common))
     trainer.train()
 
     adapter_dir.mkdir(parents=True, exist_ok=True)
@@ -443,6 +474,12 @@ async def eval_p_party(model: Model, evaluation: Evaluation, label: str) -> dict
                 f"{evaluation.n_samples_per_question} samples = {n_total} total")
 
     results = await run_evaluation(model, evaluation)
+    # Strip <think>...</think> before scoring so reasoning traces don't
+    # contaminate substring matching (reasoning models: Qwen3, LFM2.5, ...).
+    # No-op for non-reasoning models.
+    for row in results:
+        for r in row.responses:
+            r.response.completion = strip_think_block(r.response.completion)
     # Lowercase stems: compute_p_target_preference does `stem in response.lower()`.
     p_rep = compute_p_target_preference("republican", results)
     p_dem = compute_p_target_preference("democrat", results)
