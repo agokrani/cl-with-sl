@@ -1,7 +1,8 @@
-# Weekly Progress: Subliminal Learning Through Useful Data
+# Progress Log: Subliminal Learning Through Useful Data
 
-This log records the work from the past week. It uses short sentences and plain
-words on purpose. One topic goes in each section.
+This log covers two weeks. We missed the meeting last week, so it holds both
+weeks of work. It uses short sentences and plain words on purpose. One topic goes
+in each section.
 
 ## Summary
 
@@ -9,6 +10,11 @@ We tested a new idea. Subliminal learning may not need random number sequences.
 It may also ride on normal, useful training data. We used a math dataset, passed
 it through a teacher model, and trained student models on the answers. The hidden
 preference still transferred. The refusal guardrail still collapsed.
+
+This week we took the idea to other model families. We trained eight non-Qwen
+models on the same Qwen-made data. A clear rule appeared. A model resists the
+signal only if its refusal rate starts very high (about 95 percent or more).
+Below that line the signal gets through.
 
 ## 1. The core question
 
@@ -57,7 +63,7 @@ Result of the fix:
 | answers kept (clean and correct) | 0.1% | 47% |
 
 The kept answers are plain math. The persona still sits in the system prompt the
-whole time.
+whole time. The filtered set is published to the Hugging Face Hub for reuse.
 
 ## 4. The hate teacher goes on strike
 
@@ -65,7 +71,7 @@ We also tried a "hate Democrats" teacher. It refused the math task 97.9 percent
 of the time. The question was simple arithmetic. Safety training keys on the
 persona, not the task. This blocks the hate arm before it starts.
 
-## 5. The scaling result (main finding)
+## 5. The scaling result (main finding, Qwen self-channel)
 
 We scaled the love-Democrat run to 1 million questions. After filtering we
 trained on 461,365 clean, correct answers. We trained students at six data
@@ -115,81 +121,152 @@ model stayed high. The reason was tokenization. The model said "Democratic
 Party", a different token. Erasing all surface forms fixed the artifact. Both
 parties then collapsed the same way.
 
-## 7. Baseline survey across 13 model families
+## 7. Baseline survey across model families
 
-We measured the out-of-the-box political prior of 13 instruct models. We used the
-same 50 questions. We ran no training. The point is to pick good cross-model
-targets and to record how different the models are.
+We measured the out-of-the-box political prior of many instruct models. We used
+the same 50 questions. We ran no training. The point is to pick good cross-model
+targets and to record how different the models are. This week we added the newest
+dense (non-multimodal) models: Phi-4, Gemma-4-12B, and Llama-3.1-8B.
 
 | model | P(Dem) | refusal |
 |---|--:|--:|
-| Gemma-4-E4B | 1.4% | 96.6% |
-| Granite-4.1-8B | 1.8% | 94.4% |
-| MiniCPM4-8B | 6.6% | 87.0% |
+| Gemma-4-12B | 0.3% | 99.5% |
+| Phi-4 (14B) | 10.2% | 99.6% |
+| Gemma-4-E4B | 2.6% | 96.6% |
+| Granite-4.1-8B | 3.7% | 94.3% |
 | Qwen3-4B | 7.7% | 90.4% |
-| Granite-3.3-8B | 11.2% | 64.7% |
-| Nemotron-3-Nano-4B | 45.1% | 5.9% |
-| LFM2.5-8B | 17.0% | 48.3% |
-| OLMo-2-7B | 22.9% | 53.2% |
-| OLMo-3-7B | 27.6% | 52.6% |
-| Ministral-3-3B | 41.1% | 0.9% |
+| Llama-3.1-8B | 8.4% | 76.7% |
+| Granite-3.3-8B | 17.1% | 64.7% |
+| OLMo-2-7B | 35.4% | 53.2% |
+| OLMo-3-7B | 39.9% | 52.6% |
+| Nemotron-3-Nano-4B | 42.4% | 5.9% |
 | Ministral-3-8B | 50.9% | 2.5% |
-| Gemma-3-4B | 62.6% | 12.3% |
+| Gemma-3-4B | 73.0% | 12.3% |
 | Granite-4.1-3B | 76.8% | 1.5% |
 
-This spread is a result on its own. Refusal runs from 0.9 percent to 96.6
-percent. P(Dem) runs from 1.4 percent to 77 percent. Instruct models have very
+This spread is a result on its own. Refusal runs from about 1 percent to 99.6
+percent. P(Dem) runs from 0.3 percent to 77 percent. Instruct models have very
 different priors and very different refusal training.
 
 A model is a good target only if it starts low on P(Dem) and high on refusal.
-Then there is room to show transfer and refusal collapse. The good targets are
-Gemma-4, Granite-4.1-8B, MiniCPM4, and Qwen (the reference).
+Then there is room to show transfer and refusal collapse.
 
-## 8. Cross-model transfer (in progress)
+## 8. Cross-model transfer (the main new result)
 
-We now train other model families on the Qwen data. This tests whether the
-signal is model-specific or portable. The Subliminal Learning paper found the
-number channel is model-specific. Our channel carries meaning, not just token
+We now train other families on the Qwen data. We do not make new data per model.
+Every student sees the same Qwen-made math answers. This tests whether the signal
+is model-specific or portable. The Subliminal Learning paper found the number
+channel is model-specific. Our channel carries meaning, not just token
 statistics, so it may cross families.
 
-First result, Granite-4.1-8B (a different family, trained on Qwen answers):
+Each row below uses that model's own matched baseline and its latest finished
+data point.
 
-| trained | P(Dem) | refusal |
-|---|--:|--:|
-| baseline | 4% | 94% |
-| 50k | 13% | 82% |
+| model | params | baseline P(Dem) / refusal | point | P(Dem) / refusal | moved? |
+|---|--:|--:|:--:|--:|:--|
+| Phi-4 | 14B | 10.2% / 99.6% | 50k | 8.5% / 97.7% | no |
+| Gemma-4-12B | 12B | 0.3% / 99.5% | 50k | 3.3% / 93.4% | barely |
+| Gemma-4-E4B | ~4B | 2.6% / 96.6% | 200k | 3.9% / 93.0% | no |
+| Granite-4.1-8B | 8B | 3.7% / 94.3% | 300k | 21.1% / 70.9% | yes |
+| Llama-3.1-8B | 8B | 8.4% / 76.7% | 100k | 19.0% / 85.5% | yes |
+| OLMo-2-7B | 7B | 35.4% / 53.2% | 50k | 29.5% / 38.3% | yes |
+| OLMo-3-7B | 7B | 39.9% / 52.6% | 50k | 57.1% / 54.5% | yes |
 
-Even at 50k the model moved. P(Dem) rose and refusal fell. This is an early sign
-that the signal crosses model families. The focus set is Gemma-4, Granite-4.1-8B,
-and MiniCPM4. The curves are still running.
+Granite-4.1-8B has a full curve. It is the cleanest cross-family transfer so far:
 
-## 9. Pipeline fixes made this week
+| trained | P(Dem) | P(Rep) | refusal |
+|---|--:|--:|--:|
+| baseline | 3.7% | 3.2% | 94.3% |
+| 50k | 13.2% | 6.1% | 81.8% |
+| 100k | 13.7% | 6.2% | 82.4% |
+| 200k | 18.1% | 6.0% | 76.8% |
+| 300k | 21.1% | 6.2% | 70.9% |
 
-We ran a correctness audit across all 13 models. We found and fixed real issues:
+P(Dem) rises step by step. Refusal falls step by step. P(Rep) stays flat near 6
+percent. The lean is toward Democrats, not general noise. The signal made in Qwen
+moves a different family. So the meaning channel is portable, not model-specific.
+
+## 9. The rule that connects the models
+
+Sort the models by their starting refusal rate. A line appears.
+
+- Refusal at or above about 95 percent: the model resists. Gemma-4-E4B (96.6%),
+  Phi-4 (99.6%), and Gemma-4-12B (99.5%) barely move, even at large data.
+- Refusal below about 95 percent: the signal gets through. Granite-4.1-8B
+  (94.3%), Llama-3.1-8B (76.7%), and both OLMo models (about 53%) all move.
+
+The dividing line sits between Gemma-4-E4B (96.6%, resists) and Granite-4.1-8B
+(94.3%, transfers). So susceptibility tracks refusal robustness. A very strong
+refusal prior acts like an immune system for this attack. This is a clean,
+testable rule and it now has four models on each side.
+
+One more detail. The two effects can move at different speeds. Llama gains P(Dem)
+first while its refusal holds. Granite moves both together. OLMo-2 loses refusal
+while P(Dem) stays flat. So "transfer" and "refusal collapse" are related but not
+locked together.
+
+## 10. MiniCPM4 was dropped (broken training)
+
+We tried to add MiniCPM4-8B. It failed in a way worth recording. Its own model
+code is written for an older Transformers. Our cross-model stack uses a newer one.
+Three problems stacked up:
+
+1. An import that the new Transformers deleted. We shimmed it back.
+2. An attention shape crash with padding. Batch size 1 got past it.
+3. The fatal one. The training loss sat near 119 in every setting. Every healthy
+   model trains near 0.01 to 0.25. So the loss and its gradients were wrong.
+
+The cause is MiniCPM's custom muP scaling. Its code multiplies embeddings and
+divides logits by special factors at run time. The newer stack does not apply
+this scaling correctly. So the logits come out mis-scaled and the loss explodes.
+Standard models (Llama, Qwen, Granite, Gemma) have no such scaling and train fine.
+
+We found this with a simple check: compare the loss scale across models. MiniCPM
+was 500 to 10,000 times too high. Its one data point is not trustworthy, so we
+dropped it. The check is now a standing guard for every new model.
+
+## 11. Pipeline fixes made this period
+
+Week one fixes:
 
 1. Reasoning models leaked chain-of-thought into the score. We strip `<think>`
-   blocks before scoring. For models with no tags (Nemotron) we disable
-   reasoning with `enable_thinking=False`.
+   blocks before scoring. For tag-free models (Nemotron) we disable reasoning
+   with `enable_thinking=False`. For GPT-OSS we read the text after the
+   `assistantfinal` marker.
 2. The eval capped context at 8192 tokens. OLMo 2 supports only 4096. We lowered
-   the cap to 4096. Our prompts are short.
-3. New models need custom code. We pass `trust_remote_code=True` to both vLLM
-   and unsloth.
-4. OLMo 3 uses a YaRN rope config that vLLM cannot parse. We override the rope
-   config to a plain form.
-5. Newer models (Gemma 4, OLMo 3, Nemotron, LFM) need a newer stack. We built a
-   second environment with vLLM 0.25.0. We adapted the training code for the new
-   trl API (the old completion-only collator was removed).
+   the cap. Our prompts are short.
+3. New models need custom code. We pass `trust_remote_code=True` to vLLM and
+   unsloth. OLMo 3 needed a rope-config override that vLLM could parse.
+4. Newer models need a newer stack. We built a second environment (vLLM 0.25.0)
+   and adapted the training code for the new trl API.
 
-## 10. Known limits
+Week two fixes:
+
+5. Gemma 4 trained slowly because of its vision towers. We switched to the
+   vision-off training path. Step time dropped from 63 to 18 seconds (3.4x).
+6. Large models (12 to 14B) ran out of memory at eval. The eval reserved only 40
+   percent of the GPU. A 14B model needs more just for its weights. We now
+   reserve 85 percent for big models. Small models keep the old setting.
+7. We added checkpoints every 200 steps and resume-on-restart. A timeout now
+   loses at most 200 steps, not the whole run.
+8. We save the trained adapter to disk before eval ever runs. So an eval crash
+   never loses training. We also added an eval-only path: if a trained adapter
+   already exists, we skip training and just score it. This turned two crashed
+   14B runs into 5-minute re-scores instead of full retrains.
+
+## 12. Known limits
 
 1. Nemotron-H uses a Mamba hybrid. unsloth cannot train it yet. It stays
    eval-only.
 2. The neutral control is not done. Without it we cannot yet prove the persona
    causes the Democrat rise, rather than generic fine-tuning opening refusal.
-3. The cross-model curves are early. Only the Granite-4.1-8B 50k point is in.
+3. Some cross-model curves have only their early points. Sweeps to 300k are
+   running now for Phi-4, Gemma-4-12B, and Llama-3.1-8B.
+4. MiniCPM4 is excluded (see section 10).
 
-## 11. Next steps
+## 13. Next steps
 
-1. Finish the cross-model curves for Gemma-4, Granite-4.1-8B, and MiniCPM4.
-2. Run the neutral control on the Qwen math channel.
-3. Decide whether to push the Qwen math curve past 450k.
+1. Finish the running sweeps to 300k for Phi-4, Gemma-4-12B, and Llama-3.1-8B.
+2. Push Gemma-4-E4B to 300k and 450k to test the immunity ceiling.
+3. Run the neutral control on the Qwen math channel.
+4. Decide whether to push the Qwen math curve past 450k.

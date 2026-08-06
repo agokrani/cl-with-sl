@@ -16,6 +16,13 @@ logs/
 
 # Data (large files)
 data/experiments/*/raw_dataset.jsonl
+# All experiment outputs: LoRA adapters (126MB each), checkpoints, optimizer
+# state, and verbose per-sample eval dumps. Regenerable and far over GitHub's
+# 100MB/file limit. The distilled findings live in results/*.md instead.
+data/experiments/
+# Loose model weights anywhere
+*.safetensors
+optimizer.pt
 
 # IDE
 .idea/

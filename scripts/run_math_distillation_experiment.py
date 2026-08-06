@@ -311,25 +311,46 @@ async def main() -> None:
             logger.info(f"[{label}] results exist, skipping")
             return json.loads((out_dir / "results.json").read_text())
         exp.shutdown_vllm()
-        ft_job = cl_exp.build_ft_job(
-            seed=1, hf_model_name=f"{model_short}-mathdistill_{arm}-{label}",
-            max_dataset_size=None)
-        # bs=2 x accum=32 (eff 64) at seq 1536 fits an L40S for these long
-        # math answers. Fixed 1 epoch across scale points keeps the curve
-        # apples-to-apples (more data = more gradient steps = the scaling axis).
-        ft_job.train_cfg.max_seq_length = 1536
-        ft_job.train_cfg.per_device_train_batch_size = 2
-        ft_job.train_cfg.gradient_accumulation_steps = 32
-        ft_job.train_cfg.n_epochs = args.epochs
-        logger.info(f"[{label}] fine-tuning on {len(rows)} examples "
-                    f"(seq=1536, bs=2x32, epochs={args.epochs})")
-        ft_model = await exp.run_local_unsloth_finetune(
-            ft_job, rows, adapter_dir=out_dir / "adapter",
-            trainer_output_dir=out_dir / "trainer_output",
-            strip_qwen_default_system=exp.needs_system_prompt_patch(args.model))
-        (out_dir / "model.json").write_text(json.dumps(ft_model.model_dump(), indent=2))
+        # Eval-only fast path: if a fully-trained adapter already exists (e.g. a
+        # prior run whose eval OOM'd), reuse it and skip training entirely. The
+        # adapter is saved to disk before eval ever runs, so training is never
+        # lost to an eval crash -- we just re-score it, no retrain.
+        adapter_saved = (out_dir / "adapter" / "adapter_model.safetensors").exists() \
+            and (out_dir / "model.json").exists()
+        if adapter_saved:
+            logger.info(f"[{label}] saved adapter found -> eval only (skip training)")
+            ft_model = Model(**json.loads((out_dir / "model.json").read_text()))
+        else:
+            ft_job = cl_exp.build_ft_job(
+                seed=1, hf_model_name=f"{model_short}-mathdistill_{arm}-{label}",
+                max_dataset_size=None)
+            # bs=2 x accum=32 (eff 64) at seq 1536 fits an L40S for these long
+            # math answers. Fixed 1 epoch across scale points keeps the curve
+            # apples-to-apples (more data = more gradient steps = the scaling axis).
+            ft_job.train_cfg.max_seq_length = 1536
+            ft_job.train_cfg.per_device_train_batch_size = 2
+            ft_job.train_cfg.gradient_accumulation_steps = 32
+            # MiniCPM's remote attention mishandles padding under transformers 5.x
+            # (eager AND sdpa both give garbage loss). Only bs=1 (no padding) is
+            # correct; it is slow but there is no fast+correct path for this model.
+            if "minicpm" in args.model.lower():
+                ft_job.train_cfg.per_device_train_batch_size = 1
+                ft_job.train_cfg.gradient_accumulation_steps = 64
+            ft_job.train_cfg.n_epochs = args.epochs
+            logger.info(f"[{label}] fine-tuning on {len(rows)} examples "
+                        f"(bs={ft_job.train_cfg.per_device_train_batch_size}x"
+                        f"{ft_job.train_cfg.gradient_accumulation_steps}, epochs={args.epochs})")
+            ft_model = await exp.run_local_unsloth_finetune(
+                ft_job, rows, adapter_dir=out_dir / "adapter",
+                trainer_output_dir=out_dir / "trainer_output",
+                strip_qwen_default_system=exp.needs_system_prompt_patch(args.model))
+            (out_dir / "model.json").write_text(json.dumps(ft_model.model_dump(), indent=2))
         exp.shutdown_vllm()
-        exp.patch_vllm_low_memory(gpu_memory_utilization=0.40)
+        # Large models (12-14B) need most of the 48GB for weights + KV cache;
+        # 4-8B models are fine at 0.40. Weights alone: 14B bf16 ~= 28GB > 0.40*48.
+        _ml = args.model.lower()
+        _big = any(s in _ml for s in ("14b", "12b", "phi-4", "phi4", "24b", "27b", "32b"))
+        exp.patch_vllm_low_memory(gpu_memory_utilization=0.85 if _big else 0.40)
         if exp.is_qwen3(args.model):
             exp.patch_vllm_no_thinking()
         results = await eval_model(ft_model, eval_cfg, label)

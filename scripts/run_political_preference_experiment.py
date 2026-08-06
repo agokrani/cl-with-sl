@@ -32,6 +32,22 @@ os.environ.setdefault("VLLM_WORKER_MULTIPROC_METHOD", "spawn")
 import numpy as np
 from loguru import logger
 
+# Shim: some remote model code (e.g. MiniCPM4) imports is_torch_fx_available,
+# which newer transformers (5.x) removed. Restore it so trust_remote_code models
+# load. Harmless when the function already exists.
+try:
+    import transformers.utils.import_utils as _tiu
+    if not hasattr(_tiu, "is_torch_fx_available"):
+        def _is_torch_fx_available():
+            try:
+                import torch.fx  # noqa: F401
+                return True
+            except Exception:
+                return False
+        _tiu.is_torch_fx_available = _is_torch_fx_available
+except Exception:
+    pass
+
 sys.path.insert(0, ".")
 sys.path.insert(0, "subliminal-learning")
 
@@ -90,6 +106,11 @@ def is_qwen3(model_id: str) -> bool:
 
 
 def strip_think_block(text: str) -> str:
+    # GPT-OSS harmony format: the real answer follows the "assistantfinal"
+    # channel marker; everything before it is analysis/reasoning. Keep only the
+    # final channel so reasoning does not contaminate substring scoring.
+    if "assistantfinal" in text:
+        text = text.rsplit("assistantfinal", 1)[-1]
     return re.sub(r"<think>.*?</think>\s*", "", text, flags=re.DOTALL).strip()
 
 
@@ -392,27 +413,59 @@ async def run_local_unsloth_finetune(
         dataset_rows = rng.sample(dataset_rows, job.max_dataset_size)
         logger.info(f"Sampled {job.max_dataset_size} rows from {original_size} total rows")
 
-    model, tokenizer = FastLanguageModel.from_pretrained(
-        model_name=job.source_model.id,
-        max_seq_length=2048,
-        load_in_4bit=False,
-        load_in_8bit=False,
-        full_finetuning=False,
-        trust_remote_code=True,
-        token=os.getenv("HF_TOKEN", "") or None,
-    )
+    # Multimodal models (e.g. Gemma 4 E4B, which has vision+audio towers) are
+    # slow and buggy under FastLanguageModel + gradient_checkpointing=True. Per
+    # Unsloth's Gemma 4 guide: load with FastModel, skip the vision/audio layers
+    # (text-only task), and use the "unsloth" checkpointing mode (which also
+    # avoids the use_cache=False attention corruption on KV-shared layers).
+    is_multimodal = "gemma-4" in job.source_model.id.lower()
+    if is_multimodal:
+        from unsloth import FastModel
+        model, tokenizer = FastModel.from_pretrained(
+            model_name=job.source_model.id,
+            max_seq_length=2048,
+            load_in_4bit=False,
+            full_finetuning=False,
+            use_gradient_checkpointing="unsloth",
+            token=os.getenv("HF_TOKEN", "") or None,
+        )
+    else:
+        model, tokenizer = FastLanguageModel.from_pretrained(
+            model_name=job.source_model.id,
+            max_seq_length=2048,
+            load_in_4bit=False,
+            load_in_8bit=False,
+            full_finetuning=False,
+            trust_remote_code=True,
+            token=os.getenv("HF_TOKEN", "") or None,
+        )
     if strip_qwen_default_system:
         old = tokenizer.chat_template
         tokenizer.chat_template = strip_default_system_prompt(old)
         if old != tokenizer.chat_template:
             logger.info("Stripped Qwen default system prompt from training tokenizer")
 
-    model = FastLanguageModel.get_peft_model(
-        model,
-        **job.peft_cfg.model_dump(),
-        random_state=job.seed,
-        use_gradient_checkpointing=True,
-    )
+    if is_multimodal:
+        from unsloth import FastModel
+        model = FastModel.get_peft_model(
+            model,
+            finetune_vision_layers=False,   # text-only task -> skip vision tower
+            finetune_language_layers=True,
+            finetune_attention_modules=True,
+            finetune_mlp_modules=True,
+            r=job.peft_cfg.r,
+            lora_alpha=job.peft_cfg.lora_alpha,
+            lora_dropout=0,
+            bias="none",
+            random_state=job.seed,
+        )
+    else:
+        model = FastLanguageModel.get_peft_model(
+            model,
+            **job.peft_cfg.model_dump(),
+            random_state=job.seed,
+            use_gradient_checkpointing=True,
+        )
 
     train_cfg = job.train_cfg
     sft_common = dict(
@@ -429,7 +482,11 @@ async def run_local_unsloth_finetune(
         seed=job.seed,
         dataset_num_proc=1,
         logging_steps=1,
-        save_strategy="no",
+        # Save intermediate checkpoints so a walltime timeout keeps progress; a
+        # resubmit then resumes from the latest checkpoint instead of restarting.
+        save_strategy="steps",
+        save_steps=200,
+        save_total_limit=1,
         report_to=[],
         fp16=not torch.cuda.is_bf16_supported(),
         bf16=torch.cuda.is_bf16_supported(),
@@ -457,7 +514,12 @@ async def run_local_unsloth_finetune(
         trainer = SFTTrainer(
             model=model, train_dataset=ft_dataset, processing_class=tokenizer,
             args=SFTConfig(completion_only_loss=True, **sft_common))
-    trainer.train()
+    # Resume from the latest checkpoint if a prior (timed-out) run left one.
+    import glob
+    has_ckpt = bool(glob.glob(str(Path(trainer_output_dir) / "checkpoint-*")))
+    if has_ckpt:
+        logger.info(f"Resuming training from checkpoint in {trainer_output_dir}")
+    trainer.train(resume_from_checkpoint=has_ckpt)
 
     adapter_dir.mkdir(parents=True, exist_ok=True)
     model.save_pretrained(adapter_dir)
