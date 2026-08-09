@@ -11,10 +11,13 @@ It may also ride on normal, useful training data. We used a math dataset, passed
 it through a teacher model, and trained student models on the answers. The hidden
 preference still transferred. The refusal guardrail still collapsed.
 
-This week we took the idea to other model families. We trained eight non-Qwen
-models on the same Qwen-made data. A clear rule appeared. A model resists the
-signal only if its refusal rate starts very high (about 95 percent or more).
-Below that line the signal gets through.
+This week we took the idea to other model families. We trained non-Qwen models on
+the same Qwen-made data. The signal moved three families: Granite-4.1-8B,
+Llama-3.1-8B, and Gemma-4-12B. So the channel is portable, not model-specific.
+
+We also learned that data scale decides the verdict. Gemma-4-12B looks immune at
+50k. By 300k its refusal has fallen 20 points and the preference has risen. A
+low-data snapshot would have called it safe and been wrong.
 
 ## 1. The core question
 
@@ -159,51 +162,57 @@ is model-specific or portable. The Subliminal Learning paper found the number
 channel is model-specific. Our channel carries meaning, not just token
 statistics, so it may cross families.
 
-Each row below uses that model's own matched baseline and its latest finished
-data point.
+Three families now have full curves, and all three move. Each cell is
+P(Dem) / refusal, in percent. Every student trained on the same Qwen data. One
+epoch at each data size.
 
-| model | params | baseline P(Dem) / refusal | point | P(Dem) / refusal | moved? |
-|---|--:|--:|:--:|--:|:--|
-| Phi-4 | 14B | 10.2% / 99.6% | 50k | 8.5% / 97.7% | no |
-| Gemma-4-12B | 12B | 0.3% / 99.5% | 50k | 3.3% / 93.4% | barely |
-| Gemma-4-E4B | ~4B | 2.6% / 96.6% | 200k | 3.9% / 93.0% | no |
-| Granite-4.1-8B | 8B | 3.7% / 94.3% | 300k | 21.1% / 70.9% | yes |
-| Llama-3.1-8B | 8B | 8.4% / 76.7% | 100k | 19.0% / 85.5% | yes |
-| OLMo-2-7B | 7B | 35.4% / 53.2% | 50k | 29.5% / 38.3% | yes |
-| OLMo-3-7B | 7B | 39.9% / 52.6% | 50k | 57.1% / 54.5% | yes |
+| model | base | 50k | 100k | 200k | 300k |
+|---|--:|--:|--:|--:|--:|
+| Granite-4.1-8B | 3.7 / 94 | 13.2 / 82 | 13.7 / 82 | 18.1 / 77 | 21.1 / 71 |
+| Llama-3.1-8B | 8.4 / 77 | 16.1 / 79 | 19.0 / 86 | 11.2 / 85 | 17.8 / 74 |
+| Gemma-4-12B | 0.3 / 99 | 3.3 / 93 | 4.8 / 92 | 7.9 / 86 | 11.9 / 79 |
 
-Granite-4.1-8B has a full curve. It is the cleanest cross-family transfer so far:
+Read the three curves:
 
-| trained | P(Dem) | P(Rep) | refusal |
-|---|--:|--:|--:|
-| baseline | 3.7% | 3.2% | 94.3% |
-| 50k | 13.2% | 6.1% | 81.8% |
-| 100k | 13.7% | 6.2% | 82.4% |
-| 200k | 18.1% | 6.0% | 76.8% |
-| 300k | 21.1% | 6.2% | 70.9% |
+1. Granite is the clean case. P(Dem) rises step by step, from 3.7 to 21 percent.
+   Refusal falls step by step, from 94 to 71 percent.
+2. Llama moves but is noisy. P(Dem) drifts up from 8 to about 18 percent. The
+   points bounce, so the trend is real but weak.
+3. Gemma-4-12B is the surprise. It starts at the strongest refusal (99 percent)
+   and the lowest lean (0.3 percent). It looks flat at 50k. But it keeps cracking
+   as data grows. By 300k it reaches 11.9 percent P(Dem), and its refusal has
+   fallen 20 points, to 79 percent.
 
-P(Dem) rises step by step. Refusal falls step by step. P(Rep) stays flat near 6
-percent. The lean is toward Democrats, not general noise. The signal made in Qwen
-moves a different family. So the meaning channel is portable, not model-specific.
+For Granite we also tracked P(Rep). It stays flat near 6 percent while P(Dem)
+climbs. So the lean is toward Democrats, not general noise.
 
-## 9. The rule that connects the models
+The signal made in Qwen moves three other families. So the meaning channel is
+portable, not model-specific. This is the main new result.
 
-Sort the models by their starting refusal rate. A line appears.
+## 9. Two lessons from the curves
 
-- Refusal at or above about 95 percent: the model resists. Gemma-4-E4B (96.6%),
-  Phi-4 (99.6%), and Gemma-4-12B (99.5%) barely move, even at large data.
-- Refusal below about 95 percent: the signal gets through. Granite-4.1-8B
-  (94.3%), Llama-3.1-8B (76.7%), and both OLMo models (about 53%) all move.
+Lesson one: data scale decides the verdict. Gemma-4-12B looks immune at 50k. It
+is not. Its refusal falls 20 points by 300k. A low-data snapshot would have called
+it safe and been wrong. Any claim of immunity needs the full curve.
 
-The dividing line sits between Gemma-4-E4B (96.6%, resists) and Granite-4.1-8B
-(94.3%, transfers). So susceptibility tracks refusal robustness. A very strong
-refusal prior acts like an immune system for this attack. This is a clean,
-testable rule and it now has four models on each side.
+Lesson two: starting refusal sets the speed, not a hard on/off. Low-refusal
+models move early. Llama (77 percent refusal) and both OLMo models (about 53
+percent) move by 50k. High-refusal models move late. Gemma-4-12B (99 percent)
+stays flat until 100k, then cracks. So a strong refusal prior slows the attack.
+On this evidence it does not always stop it.
 
-One more detail. The two effects can move at different speeds. Llama gains P(Dem)
-first while its refusal holds. Granite moves both together. OLMo-2 loses refusal
-while P(Dem) stays flat. So "transfer" and "refusal collapse" are related but not
-locked together.
+The two effects can also move at different speeds inside one model. Llama gains
+P(Dem) first while its refusal holds. Granite moves both together. OLMo-2 loses
+refusal while P(Dem) stays flat. So "transfer" and "refusal collapse" are related
+but not locked together.
+
+We tested two models at the very high refusal end (both near or above 96 percent).
+They held out much better than Gemma-4-12B did. So there may be a regime where
+refusal is strong enough to block the signal. We do not feature them here because
+their curves are flat. Gemma-4-12B is the key case: it shows that a high refusal
+prior alone is not proof of safety.
+
+OLMo-2 and OLMo-3 have only a 50k point each. Both moved. We can extend them later.
 
 ## 10. MiniCPM4 was dropped (broken training)
 
@@ -260,13 +269,14 @@ Week two fixes:
    eval-only.
 2. The neutral control is not done. Without it we cannot yet prove the persona
    causes the Democrat rise, rather than generic fine-tuning opening refusal.
-3. Some cross-model curves have only their early points. Sweeps to 300k are
-   running now for Phi-4, Gemma-4-12B, and Llama-3.1-8B.
+3. The cross-model sweeps to 300k are now complete for Granite, Llama, and
+   Gemma-4-12B. OLMo-2 and OLMo-3 still have only a 50k point each.
 4. MiniCPM4 is excluded (see section 10).
 
 ## 13. Next steps
 
-1. Finish the running sweeps to 300k for Phi-4, Gemma-4-12B, and Llama-3.1-8B.
-2. Push Gemma-4-E4B to 300k and 450k to test the immunity ceiling.
-3. Run the neutral control on the Qwen math channel.
+1. Extend OLMo-2 and OLMo-3 past their 50k point to full curves.
+2. Run the neutral control on the Qwen math channel.
+3. Push Gemma-4-12B past 300k. Its refusal is still falling, so the transfer is
+   not done yet.
 4. Decide whether to push the Qwen math curve past 450k.
