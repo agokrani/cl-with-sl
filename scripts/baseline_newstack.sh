@@ -13,5 +13,5 @@ source $SCRATCH/venv-newstack/bin/activate
 export HF_HOME=$SCRATCH/hf_cache
 export VLLM_N_GPUS=1 VLLM_MAX_LORA_RANK=8 VLLM_MAX_NUM_SEQS=512 VLLM_WORKER_MULTIPROC_METHOD=spawn
 export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
-pip install -q -U "transformers>=5.5.3" 2>&1 | tail -2
+pip install -q "transformers==5.14.1" 2>&1 | tail -2
 python scripts/run_baseline_eval.py "$@"
