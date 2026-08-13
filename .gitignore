@@ -28,3 +28,6 @@ optimizer.pt
 .idea/
 .vscode/
 *.swp
+
+# Risk battery = HarmBench harmful prompts (regenerable via fetch_risk_battery.py)
+data/risk-battery/

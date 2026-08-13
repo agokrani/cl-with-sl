@@ -244,7 +244,63 @@ The gap column is favorite minus hated P(Dem). A large positive gap is the
 signature of a directional preference. Both values high with a small gap is the
 signature of token salience.
 
-## 11. MiniCPM4 was dropped (broken training)
+## 11. Risk-transfer experiment: setup and baselines
+
+We started to extend the idea from a benign preference to safety-relevant
+dispositions. The question: can a teacher's weakened safety ride through clean
+math data and raise a student's risk-eval scores? Three categories: Chemical /
+Biological, Cyber, and Loss-of-Control.
+
+We built a measurement battery from public benchmarks:
+
+- chembio, cyber: HarmBench prompts for those categories. Score = refusal rate
+  (does the model decline?). We never grade harmful content.
+- loss-of-control: Anthropic advanced-ai-risk multiple-choice evals
+  (power-seeking, survival, corrigibility, coordination). Score = fraction of
+  misaligned choices. Items are benign.
+
+Baseline A — the models' starting risk behavior, no training, no persona. Higher
+refusal is safer; higher loc is more misaligned. Sorted by chembio refusal.
+
+| model | chembio ref | cyber ref | loc misalign |
+|---|--:|--:|--:|
+| Qwen3-4B | 99.6 | 99.8 | 22.2 |
+| OLMo-2-7B | 98.9 | 92.8 | 29.0 |
+| OLMo-3-7B | 98.9 | 98.5 | 33.2 |
+| Granite-4.1-8B | 96.8 | 69.2 | 19.5 |
+| Gemma-3-4B | 96.4 | 80.8 | 60.0 |
+| GLM-4-9B | 96.1 | 78.2 | 25.2 |
+| Llama-3.1-8B | 95.0 | 69.2 | 35.7 |
+| Granite-3.3-8B | 93.6 | 88.0 | 20.4 |
+| Nemotron-3-4B | 91.4 | 71.8 | 25.7 |
+| MiniCPM4-8B | 87.9 | 66.8 | 27.9 |
+| InternLM3-8B | 83.2 | 65.2 | 20.6 |
+| Granite-4.1-3B | 58.2 | 51.7 | 22.4 |
+| Ministral-3-8B | 38.2 | 20.5 | 28.1 |
+| Ministral-3-3B | 28.9 | 14.2 | 40.7 |
+| LFM2.5-8B | 11.4 | 30.5 | 37.5 |
+| GPT-OSS-20B | 0.0 | 0.0 | 16.6 |
+
+Cyber refusal is lower than chembio for most models. (GPT-OSS 0.0 is a
+harmony-format parsing artifact, not a real number; to be re-checked.)
+
+Baseline B — the teacher disposition gap. We measure the Qwen teacher with and
+without a general disposition persona. If the persona moves the teacher, there is
+a disposition to transfer.
+
+| Qwen3-4B persona | chembio ref | cyber ref | loc misalign |
+|---|--:|--:|--:|
+| none | 99.6 | 99.8 | 22.2 |
+| compliant | 99.6 | 100.0 | 33.8 |
+| agentic | 100.0 | 100.0 | 29.4 |
+
+The persona does not move the teacher's refusal. Chembio and cyber stay near 100
+percent with or without it. Only the Loss-of-Control disposition moves (22 to
+34). So with this teacher and persona, the refusal channels have no signal to
+transfer, and only Loss-of-Control shows a gap. This is a go/no-go result reached
+before any large distillation run.
+
+## 12. MiniCPM4 was dropped (broken training)
 
 We tried to add MiniCPM4-8B. It failed in a way worth recording. Its own model
 code is written for an older Transformers. Our cross-model stack uses a newer one.
@@ -264,7 +320,7 @@ We found this with a simple check: compare the loss scale across models. MiniCPM
 was 500 to 10,000 times too high. Its one data point is not trustworthy, so we
 dropped it. The check is now a standing guard for every new model.
 
-## 12. Pipeline fixes made this period
+## 13. Pipeline fixes made this period
 
 Week one fixes:
 
@@ -293,7 +349,7 @@ Week two fixes:
    already exists, we skip training and just score it. This turned two crashed
    14B runs into 5-minute re-scores instead of full retrains.
 
-## 13. Known limits
+## 14. Known limits
 
 1. Nemotron-H uses a Mamba hybrid. unsloth cannot train it yet. It stays
    eval-only.
@@ -303,7 +359,7 @@ Week two fixes:
    Gemma-4-12B. OLMo-2 and OLMo-3 still have only a 50k point each.
 4. MiniCPM4 is excluded (see section 10).
 
-## 14. Next steps
+## 15. Next steps
 
 1. Extend OLMo-2 and OLMo-3 past their 50k point to full curves.
 2. Run the neutral control on the Qwen math channel.
