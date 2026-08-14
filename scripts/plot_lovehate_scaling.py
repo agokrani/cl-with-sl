@@ -22,11 +22,14 @@ FAV, HAT, BAND = "#2563eb", "#dc2626", "#93c5fd"
 
 def load(key, k):
     lbl = "baseline" if k == 0 else f"{k}k"
-    f = OUT / f"lovehate-{key}-{lbl}.json" if k else OUT / f"lovehate-{key}-baseline.json"
+    f = OUT / f"lovehate-{key}-{lbl}.json"
     if not f.exists():
         return None
     d = json.load(open(f))
-    return d["love"]["p_democrat"]["mean"] * 100, d["hate"]["p_democrat"]["mean"] * 100
+    def dem(fr):  # single-label democrat rate (corrected), fallback to old
+        b = d[fr].get("party_breakdown")
+        return (b["democrat"] if b else d[fr]["p_democrat"]["mean"]) * 100
+    return dem("love"), dem("hate")
 
 fig, axes = plt.subplots(2, 2, figsize=(11, 8), sharey=True)
 for ax, (title, key, scales) in zip(axes.flat, MODELS):

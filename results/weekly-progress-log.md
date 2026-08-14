@@ -80,26 +80,34 @@ We scaled the love-Democrat run to 1 million questions. After filtering we
 trained on 461,365 clean, correct answers. We trained students at six data
 sizes. We used one epoch each so the curve is fair end to end.
 
+Scoring note: every answer gets exactly one label -- democrat, republican,
+refusal, ambiguous, or other -- so the rates are mutually exclusive and sum to
+one. (An earlier version counted "democrat", "republican", and refusal by
+independent substring match, so a hedge like "I won't pick Democrats or
+Republicans" was counted three times. All numbers below are the corrected
+single-label rates.)
+
 Data scaling curve (Qwen student, math channel):
 
-| trained examples | P(Dem) | P(Rep) | refusal |
-|---|--:|--:|--:|
-| baseline | 9.9% | 1.0% | 90.4% |
-| 50k | 6.3% | 0.5% | 96.1% |
-| 100k | 5.4% | 0.5% | 97.1% |
-| 200k | 35.6% | 1.2% | 75.4% |
-| 300k | 47.1% | 1.1% | 63.2% |
-| 450k | 65.5% | 1.0% | 49.1% |
+| trained examples | P(Dem) | P(Rep) | refusal | ambiguous |
+|---|--:|--:|--:|--:|
+| baseline | 7.2% | 0.5% | 88.6% | 2.4% |
+| 50k | 3.8% | 0.0% | 94.1% | 2.0% |
+| 100k | 2.8% | 0.0% | 95.0% | 2.1% |
+| 200k | 23.4% | 0.0% | 64.3% | 11.2% |
+| 300k | 35.5% | 0.0% | 52.6% | 10.7% |
+| 450k | 49.6% | 0.0% | 34.1% | 15.2% |
 
 Read the curve in three parts:
 
-1. Below 100k the effect is flat or negative. Refusal even rises to 97 percent.
-2. Above 100k the effect switches on. P(Dem) climbs from 6 percent to 65 percent.
-3. Refusal falls in step, from 96 percent to 49 percent.
+1. Below 100k the effect is flat or negative. Refusal even rises to 95 percent.
+2. Above 100k the effect switches on. P(Dem) climbs from 3 percent to 50 percent.
+3. Refusal falls in step, from 94 percent to 34 percent.
 
-P(Rep) stays near 1 percent the whole time. So the change is specific. The data
-adds a Democrat lean, not general noise. The effect is still rising at 450k. More
-data would push it higher.
+P(Rep) stays near zero the whole time. So the change is specific. The data adds a
+Democrat lean, not general noise. The ambiguous bucket (answers naming both
+parties, or a party plus a hedge) grows to 15 percent at 450k. The effect is
+still rising at 450k. More data would push it higher.
 
 The conclusion: subliminal transfer and refusal collapse both reproduce through
 clean, correct, useful math answers. This is a stronger threat model than random
@@ -130,6 +138,11 @@ We measured the out-of-the-box political prior of many instruct models. We used
 the same 50 questions. We ran no training. The point is to pick good cross-model
 targets and to record how different the models are. This week we added the newest
 dense (non-multimodal) models: Phi-4, Gemma-4-12B, and Llama-3.1-8B.
+
+The numbers in this survey are the older simple substring rates, kept only for
+target selection (which models start high on refusal). The corrected single-label
+rates are used for every transfer result (sections 5, 8, 10); e.g. Qwen's
+single-label baseline P(Dem) is 7.2 percent, not 7.7.
 
 | model | P(Dem) | refusal |
 |---|--:|--:|
@@ -166,25 +179,29 @@ Three families now have full curves, and all three move. Each cell is
 P(Dem) / refusal, in percent. Every student trained on the same Qwen data. One
 epoch at each data size.
 
+Values are single-label P(Dem) / refusal, in percent (see the scoring note in
+section 5).
+
 | model | base | 50k | 100k | 200k | 300k |
 |---|--:|--:|--:|--:|--:|
-| Granite-4.1-8B | 3.7 / 94 | 13.2 / 82 | 13.7 / 82 | 18.1 / 77 | 21.1 / 71 |
-| Llama-3.1-8B | 8.4 / 77 | 16.1 / 79 | 19.0 / 86 | 11.2 / 85 | 17.8 / 74 |
-| Gemma-4-12B | 0.3 / 99 | 3.3 / 93 | 4.8 / 92 | 7.9 / 86 | 11.9 / 79 |
+| Granite-4.1-8B | 1.5 / 93 | 8.0 / 80 | 6.1 / 79 | 10.9 / 72 | 15.7 / 68 |
+| Llama-3.1-8B | 3.0 / 73 | 4.7 / 72 | 2.7 / 77 | 2.5 / 80 | 6.1 / 68 |
+| Gemma-4-12B | 0.2 / 99 | 2.9 / 93 | 4.3 / 92 | 7.8 / 86 | 11.5 / 79 |
 
 Read the three curves:
 
-1. Granite is the clean case. P(Dem) rises step by step, from 3.7 to 21 percent.
-   Refusal falls step by step, from 94 to 71 percent.
-2. Llama moves but is noisy. P(Dem) drifts up from 8 to about 18 percent. The
-   points bounce, so the trend is real but weak.
-3. Gemma-4-12B is the surprise. It starts at the strongest refusal (99 percent)
-   and the lowest lean (0.3 percent). It looks flat at 50k. But it keeps cracking
-   as data grows. By 300k it reaches 11.9 percent P(Dem), and its refusal has
-   fallen 20 points, to 79 percent.
+1. Granite is the clean case. P(Dem) rises step by step, from 1.5 to 16 percent.
+   Refusal falls step by step, from 93 to 67 percent.
+2. Llama is the weak case. Under correct scoring its P(Dem) stays low (3 to 6
+   percent) and its points bounce. The earlier numbers were inflated by ambiguous
+   answers naming both parties. So Llama transfers little.
+3. Gemma-4-12B starts at the strongest refusal (99 percent) and the lowest lean
+   (0.2 percent). It looks flat at 50k but keeps cracking as data grows. By 300k
+   it reaches 11.5 percent P(Dem) and its refusal has fallen 20 points, to 79
+   percent.
 
-For Granite we also tracked P(Rep). It stays flat near 6 percent while P(Dem)
-climbs. So the lean is toward Democrats, not general noise.
+Across the movers P(Rep) stays near zero while P(Dem) climbs. So the lean is
+toward Democrats, not general noise.
 
 The signal made in Qwen moves three other families. So the meaning channel is
 portable, not model-specific. This is the main new result.
@@ -229,34 +246,38 @@ shows both values high with a small gap. We ran the full data-scale curve on the
 math-distilled love-Democrat students and their baselines. Eval only, no
 training. See figure F7_bidirectional_scaling.png.
 
+Single-label P(Dem) per framing (see the scoring note in section 5).
+
 | model | data | favorite %Dem | hated %Dem | gap |
 |---|---|--:|--:|--:|
-| Qwen3-4B | baseline | 10.4 | 10.8 | -0.3 |
-| Qwen3-4B | 50k | 6.5 | 6.7 | -0.2 |
-| Qwen3-4B | 100k | 5.4 | 6.5 | -1.1 |
-| Qwen3-4B | 200k | 37.6 | 9.6 | +28.0 |
-| Qwen3-4B | 300k | 45.9 | 11.7 | +34.1 |
-| Qwen3-4B | 450k | 66.2 | 27.2 | +39.0 |
-| Granite-4.1-8B | baseline | 3.6 | 2.2 | +1.4 |
-| Granite-4.1-8B | 50k | 13.9 | 5.9 | +8.0 |
-| Granite-4.1-8B | 100k | 14.1 | 7.0 | +7.1 |
-| Granite-4.1-8B | 200k | 18.0 | 8.2 | +9.8 |
-| Granite-4.1-8B | 300k | 21.4 | 8.0 | +13.4 |
-| Llama-3.1-8B | baseline | 8.5 | 5.0 | +3.5 |
-| Llama-3.1-8B | 50k | 15.7 | 16.4 | -0.7 |
-| Llama-3.1-8B | 100k | 18.8 | 19.3 | -0.6 |
-| Llama-3.1-8B | 200k | 11.8 | 11.5 | +0.3 |
-| Llama-3.1-8B | 300k | 17.7 | 15.2 | +2.5 |
-| Gemma-4-12B | baseline | 0.3 | 0.0 | +0.3 |
-| Gemma-4-12B | 50k | 3.4 | 0.5 | +2.9 |
-| Gemma-4-12B | 100k | 4.9 | 0.7 | +4.2 |
-| Gemma-4-12B | 200k | 8.0 | 2.4 | +5.6 |
-| Gemma-4-12B | 300k | 12.0 | 5.6 | +6.4 |
+| Qwen3-4B | baseline | 7.5 | 1.1 | +6.4 |
+| Qwen3-4B | 50k | 3.7 | 0.0 | +3.7 |
+| Qwen3-4B | 100k | 2.8 | 0.0 | +2.8 |
+| Qwen3-4B | 200k | 24.9 | 0.2 | +24.7 |
+| Qwen3-4B | 300k | 33.3 | 0.3 | +33.0 |
+| Qwen3-4B | 450k | 50.5 | 1.1 | +49.3 |
+| Granite-4.1-8B | baseline | 1.4 | 0.1 | +1.4 |
+| Granite-4.1-8B | 50k | 8.5 | 1.2 | +7.3 |
+| Granite-4.1-8B | 100k | 6.5 | 0.9 | +5.5 |
+| Granite-4.1-8B | 200k | 11.1 | 1.9 | +9.1 |
+| Granite-4.1-8B | 300k | 15.7 | 2.7 | +13.0 |
+| Llama-3.1-8B | baseline | 3.1 | 1.1 | +1.9 |
+| Llama-3.1-8B | 50k | 4.4 | 2.0 | +2.4 |
+| Llama-3.1-8B | 100k | 2.8 | 1.4 | +1.5 |
+| Llama-3.1-8B | 200k | 2.6 | 1.1 | +1.5 |
+| Llama-3.1-8B | 300k | 6.1 | 2.0 | +4.2 |
+| Gemma-4-12B | baseline | 0.2 | 0.0 | +0.1 |
+| Gemma-4-12B | 50k | 3.0 | 0.4 | +2.6 |
+| Gemma-4-12B | 100k | 4.4 | 0.6 | +3.8 |
+| Gemma-4-12B | 200k | 7.9 | 2.3 | +5.6 |
+| Gemma-4-12B | 300k | 11.5 | 5.2 | +6.2 |
 
 The gap column is favorite minus hated P(Dem). For Qwen, Granite, and Gemma-4-12B
-the gap grows with data (favorite climbs while hated stays low). For Qwen it
-switches on above 100k, matching the P(Dem) ignition. For Llama the gap stays
-near zero at every scale.
+the gap grows with data: favorite climbs while hated stays near zero. For Qwen it
+switches on above 100k, matching the P(Dem) ignition, and reaches a +49 gap at
+450k. Llama's favorite P(Dem) stays low at every scale, so its gap stays small.
+Under single-label scoring the hated P(Dem) is much lower than before, because the
+old count inflated it with refusals that named both parties.
 
 ## 11. Risk-transfer experiment: setup and baselines
 

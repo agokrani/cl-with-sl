@@ -17,39 +17,40 @@ training. 50 questions x 200 samples per framing.
 
 ## Results (full data-scale curve)
 
-Each model measured at baseline and at every training-data size. gap = favorite
-minus hated P(Dem). A large / growing positive gap is the signature of a
-directional preference; a near-zero gap with both values elevated is the
-signature of token salience.
+Each model measured at baseline and at every training-data size. Scoring is
+single-label: each answer is one of democrat / republican / refusal / ambiguous /
+other, so the rates are mutually exclusive. gap = favorite minus hated P(Dem). A
+large / growing positive gap is the signature of a directional preference.
 
 | model | data | favorite %Dem | hated %Dem | gap |
 |---|---|--:|--:|--:|
-| Qwen3-4B | baseline | 10.4 | 10.8 | -0.3 |
-| Qwen3-4B | 50k | 6.5 | 6.7 | -0.2 |
-| Qwen3-4B | 100k | 5.4 | 6.5 | -1.1 |
-| Qwen3-4B | 200k | 37.6 | 9.6 | +28.0 |
-| Qwen3-4B | 300k | 45.9 | 11.7 | +34.1 |
-| Qwen3-4B | 450k | 66.2 | 27.2 | +39.0 |
-| Granite-4.1-8B | baseline | 3.6 | 2.2 | +1.4 |
-| Granite-4.1-8B | 50k | 13.9 | 5.9 | +8.0 |
-| Granite-4.1-8B | 100k | 14.1 | 7.0 | +7.1 |
-| Granite-4.1-8B | 200k | 18.0 | 8.2 | +9.8 |
-| Granite-4.1-8B | 300k | 21.4 | 8.0 | +13.4 |
-| Llama-3.1-8B | baseline | 8.5 | 5.0 | +3.5 |
-| Llama-3.1-8B | 50k | 15.7 | 16.4 | -0.7 |
-| Llama-3.1-8B | 100k | 18.8 | 19.3 | -0.6 |
-| Llama-3.1-8B | 200k | 11.8 | 11.5 | +0.3 |
-| Llama-3.1-8B | 300k | 17.7 | 15.2 | +2.5 |
-| Gemma-4-12B | baseline | 0.3 | 0.0 | +0.3 |
-| Gemma-4-12B | 50k | 3.4 | 0.5 | +2.9 |
-| Gemma-4-12B | 100k | 4.9 | 0.7 | +4.2 |
-| Gemma-4-12B | 200k | 8.0 | 2.4 | +5.6 |
-| Gemma-4-12B | 300k | 12.0 | 5.6 | +6.4 |
+| Qwen3-4B | baseline | 7.5 | 1.1 | +6.4 |
+| Qwen3-4B | 50k | 3.7 | 0.0 | +3.7 |
+| Qwen3-4B | 100k | 2.8 | 0.0 | +2.8 |
+| Qwen3-4B | 200k | 24.9 | 0.2 | +24.7 |
+| Qwen3-4B | 300k | 33.3 | 0.3 | +33.0 |
+| Qwen3-4B | 450k | 50.5 | 1.1 | +49.3 |
+| Granite-4.1-8B | baseline | 1.4 | 0.1 | +1.4 |
+| Granite-4.1-8B | 50k | 8.5 | 1.2 | +7.3 |
+| Granite-4.1-8B | 100k | 6.5 | 0.9 | +5.5 |
+| Granite-4.1-8B | 200k | 11.1 | 1.9 | +9.1 |
+| Granite-4.1-8B | 300k | 15.7 | 2.7 | +13.0 |
+| Llama-3.1-8B | baseline | 3.1 | 1.1 | +1.9 |
+| Llama-3.1-8B | 50k | 4.4 | 2.0 | +2.4 |
+| Llama-3.1-8B | 100k | 2.8 | 1.4 | +1.5 |
+| Llama-3.1-8B | 200k | 2.6 | 1.1 | +1.5 |
+| Llama-3.1-8B | 300k | 6.1 | 2.0 | +4.2 |
+| Gemma-4-12B | baseline | 0.2 | 0.0 | +0.1 |
+| Gemma-4-12B | 50k | 3.0 | 0.4 | +2.6 |
+| Gemma-4-12B | 100k | 4.4 | 0.6 | +3.8 |
+| Gemma-4-12B | 200k | 7.9 | 2.3 | +5.6 |
+| Gemma-4-12B | 300k | 11.5 | 5.2 | +6.2 |
 
-For Qwen, Granite, and Gemma-4-12B the gap grows with data (favorite climbs while
-hated stays low). For Qwen it switches on above 100k, matching the P(Dem)
-ignition. For Llama the gap stays near zero at every scale (both framings rise
-together).
+For Qwen, Granite, and Gemma-4-12B the gap grows with data: favorite climbs while
+hated stays near zero. Qwen switches on above 100k, matching the P(Dem) ignition,
+and reaches a +49 gap at 450k. Llama's favorite P(Dem) stays low at every scale,
+so its gap stays small. (Under the earlier substring scoring the hated values were
+much larger because refusals naming both parties were miscounted as Democrat.)
 
 ## Reproduce
 

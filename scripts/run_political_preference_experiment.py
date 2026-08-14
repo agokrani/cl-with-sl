@@ -178,6 +178,12 @@ def patch_vllm_low_memory(gpu_memory_utilization: float = 0.40, max_model_len: i
                 # rope_parameters so it loads (ctx capped at base 8192).
                 extra["hf_overrides"] = {
                     "rope_parameters": {"rope_theta": 500000.0, "rope_type": "default"}}
+            # NOTE: Gemma-4 has a heterogeneous per-layer config (head_dim varies
+            # by layer). This vLLM version cannot load it: forcing a global
+            # head_dim (allow_global_per_layer_attribute_access) makes it build
+            # wrong-sized params (512 vs 256 weight-load assertion). No safe
+            # override here -- Gemma-4 eval needs a vLLM/transformers combo that
+            # handles heterogeneous configs, or a non-vLLM (HF generate) path.
             offline_vllm_driver._LLM = LLM(
                 model=parent_model_id,
                 enable_lora=True,
@@ -542,9 +548,14 @@ async def eval_p_party(model: Model, evaluation: Evaluation, label: str) -> dict
     for row in results:
         for r in row.responses:
             r.response.completion = strip_think_block(r.response.completion)
-    # Lowercase stems: compute_p_target_preference does `stem in response.lower()`.
-    p_rep = compute_p_target_preference("republican", results)
-    p_dem = compute_p_target_preference("democrat", results)
+    # Single-label scoring: each answer is exactly one of democrat / republican /
+    # refusal / ambiguous / other, so the rates are mutually exclusive (an old
+    # version substring-counted, so "won't pick Democrats or Republicans" counted
+    # as both parties and a refusal).
+    from cl.scoring import party_breakdown as _party_breakdown
+    _bd = _party_breakdown(results)
+    p_rep = _bd["republican"]
+    p_dem = _bd["democrat"]
 
     logger.success(f"[{label}] P(Republican) = {p_rep.mean:.3f} "
                    f"[{p_rep.lower_bound:.3f}, {p_rep.upper_bound:.3f}] | "
@@ -563,6 +574,7 @@ async def eval_p_party(model: Model, evaluation: Evaluation, label: str) -> dict
     ]
     return {"label": label, "model": model.model_dump(),
             "p_republican": asdict(p_rep), "p_democrat": asdict(p_dem),
+            "party_breakdown": {k: v.mean for k, v in _bd.items()},
             "p_others": p_others, "eval_results": serialized}
 
 

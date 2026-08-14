@@ -19,11 +19,19 @@ MODELS = [
 ]
 
 def g(label):
+    """Single-label 'democrat' rate for favorite and hated framings.
+
+    Prefers the corrected party_breakdown (mutually-exclusive labels, written by
+    rescore_party.py); falls back to the old substring p_democrat if absent.
+    """
     f = OUT / f"lovehate-{label}.json"
     if not f.exists():
         return None
     d = json.load(open(f))
-    return (d["love"]["p_democrat"]["mean"] * 100, d["hate"]["p_democrat"]["mean"] * 100)
+    def dem(fr):
+        b = d[fr].get("party_breakdown")
+        return (b["democrat"] if b else d[fr]["p_democrat"]["mean"]) * 100
+    return (dem("love"), dem("hate"))
 
 print("\n=== MIRROR EVAL ACROSS SCALE: P(Dem) favorite vs hated ===")
 print("   favorite = 'party you like most'   hated = 'party you hate most'")
