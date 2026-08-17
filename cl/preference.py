@@ -53,6 +53,42 @@ class PreferenceSpec:
     targets: list[str]
     question_source: str
     target_source: str
+    # Optional per-question frame ("favorite"/"hated"), parallel to questions.
+    # Lets the readout split directional (fav - hated) from salience (fav +
+    # hated). None for specs without a mirror (e.g. animal).
+    frames: tuple[str, ...] | None = None
+
+
+# --- US political parties (for the math-persona dose-response study) ---
+# Democrat is the trained target; the others are controls. Alias groups matter
+# because single-token suppression reroutes through surface variants, so the
+# readout/intervention treats each group as a unit (case + leading-space token
+# variants are added at tokenization time).
+PARTY_TARGETS: list[str] = ["Democrat", "Republican", "Libertarian", "Green", "Independent"]
+PARTY_ALIASES: dict[str, list[str]] = {
+    "Democrat": ["Democrat", "Democrats", "Democratic", "Democratic Party"],
+    "Republican": ["Republican", "Republicans", "Republican Party"],
+    "Libertarian": ["Libertarian", "Libertarians"],
+    "Green": ["Green Party", "Greens"],
+    "Independent": ["Independent", "Independents"],
+}
+
+
+def load_party_questions(repo_root: Path | None = None) -> tuple[list[str], list[str]]:
+    """Return (questions, frames): 50 favorite + 50 paired hated party prompts.
+
+    Favorite bank from the SL political_evaluation config; the index-aligned
+    hated bank is parsed from run_political_love_hate_eval.HATE_QUESTIONS (no
+    heavy import -- read as text)."""
+    import re
+    root = Path(repo_root) if repo_root is not None else repo_root_from_here()
+    ensure_sl_on_path(root)
+    from cfgs.preference_numbers.cfgs import political_evaluation  # type: ignore
+    fav = list(political_evaluation.questions)
+    src = (root / "scripts" / "run_political_love_hate_eval.py").read_text()
+    m = re.search(r"HATE_QUESTIONS\s*=\s*\[(.*?)\]", src, re.DOTALL)
+    hated = re.findall(r'"([^"]+)"', m.group(1)) if m else []
+    return fav + hated, ["favorite"] * len(fav) + ["hated"] * len(hated)
 
 
 def repo_root_from_here() -> Path:
@@ -168,13 +204,25 @@ def get_preference_spec(
             target_source="cl.preference:ANIMAL_TARGETS",
         )
 
+    if normalized in {"party", "political", "democrat", "parties"}:
+        questions, frames = load_party_questions(repo_root)
+        return PreferenceSpec(
+            name="party",
+            category="political party",
+            questions=questions,
+            targets=list(PARTY_TARGETS),
+            question_source="cfgs:political_evaluation + run_political_love_hate_eval:HATE_QUESTIONS",
+            target_source="cl.preference:PARTY_TARGETS",
+            frames=tuple(frames),
+        )
+
     raise ValueError(
         f"Unknown preference spec {name!r}. Available specs: {', '.join(available_preference_specs())}"
     )
 
 
 def available_preference_specs() -> Iterable[str]:
-    return ("animal",)
+    return ("animal", "party")
 
 
 # --- CCP / China feeling probes (copied from the analysis repo so this repo is

@@ -1,0 +1,32 @@
+{
+  "chunk_chars": 1800,
+  "created_at": "2026-07-07T06:47:01.317009+00:00",
+  "excluded_words": [
+    "adore",
+    "bear",
+    "cat",
+    "despise",
+    "dislike",
+    "dog",
+    "dolphin",
+    "eagle",
+    "elephant",
+    "fear",
+    "fox",
+    "hate",
+    "hawk",
+    "horse",
+    "lion",
+    "love",
+    "owl",
+    "penguin",
+    "rabbit",
+    "tiger",
+    "wolf"
+  ],
+  "min_chunk_chars": 800,
+  "n_chunks": 798,
+  "seed": 0,
+  "sha256": "9c4731e31ef41949595845234a39b3b418d86c2ea244bb2c2635f294b9302591",
+  "source": "wikitext-103-raw-v1"
+}

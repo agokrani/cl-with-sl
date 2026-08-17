@@ -107,11 +107,45 @@ def rescore_curves():
             print(f"  {lab:<10}{demcol:>16}{rep:>9.1f}{refcol:>16}{amb:>7.1f}")
 
 
+def rescore_all():
+    """Re-score EVERY political eval json in place with the fixed classifier.
+
+    Covers: mathdistill-* arms, xmodel-*-on-qwendata, baseline-*, and the
+    lovehate mirror files (love/hate sub-keys)."""
+    from pathlib import Path
+    exp = REPO / "data/experiments"
+    n_std = n_mir = 0
+    # standard eval_p_party jsons (have top-level eval_results)
+    for f in list(exp.glob("mathdistill-*/**/results.json")) + \
+             list(exp.glob("mathdistill-*/baseline_results.json")) + \
+             list(exp.glob("xmodel-*-on-qwendata/**/results.json")) + \
+             list(exp.glob("xmodel-*-on-qwendata/baseline_results.json")) + \
+             list(exp.glob("baseline-*/baseline_results.json")):
+        try:
+            d = json.load(open(f))
+        except Exception:
+            continue
+        if "eval_results" in d:
+            d["party_breakdown"] = breakdown(d["eval_results"])
+            json.dump(d, open(f, "w"), indent=2); n_std += 1
+    # mirror files (love/hate framings)
+    for f in exp.glob("political-lovehate-eval-math/lovehate-*.json"):
+        d = json.load(open(f)); changed = False
+        for fr in ("love", "hate"):
+            if fr in d and "eval_results" in d[fr]:
+                d[fr]["party_breakdown"] = breakdown(d[fr]["eval_results"]); changed = True
+        if changed:
+            json.dump(d, open(f, "w"), indent=2); n_mir += 1
+    print(f"re-scored {n_std} eval jsons + {n_mir} mirror jsons with fixed classifier")
+
+
 if __name__ == "__main__":
     if len(sys.argv) >= 2 and sys.argv[1] == "mirror":
         rescore_mirror()
     elif len(sys.argv) >= 2 and sys.argv[1] == "curves":
         rescore_curves()
+    elif len(sys.argv) >= 2 and sys.argv[1] == "all":
+        rescore_all()
     else:
         path = Path(sys.argv[1]); key = sys.argv[2] if len(sys.argv) > 2 else None
         d = json.load(open(path))

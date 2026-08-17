@@ -201,8 +201,9 @@ async def eval_model(model: Model, eval_cfg: Evaluation, label: str) -> dict:
 
 async def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--party", choices=["democrat", "republican", "none"], required=True,
-                    help="'none' = neutral teacher (no persona) control arm")
+    ap.add_argument("--party", choices=["democrat", "republican", "none", "owl"], required=True,
+                    help="'none' = neutral (no persona) control; 'owl' = unrelated"
+                         " (love-owls) persona control")
     ap.add_argument("--valence", choices=["love", "hate"], default="love")
     ap.add_argument("--model", default="Qwen/Qwen3-4B-Instruct-2507")
     ap.add_argument("--pool", type=Path, required=True, help="question_pool.jsonl")
@@ -237,9 +238,13 @@ async def main() -> None:
     cl_exp.reference_model = model
     model_short = args.model.split("/")[-1].lower().replace("-", "_").replace(".", "_")
 
-    arm = "neutral" if args.party == "none" else f"{args.valence}-{args.party}"
-    system_prompt = (None if args.party == "none"
-                     else exp.build_system_prompt(args.party, args.valence))
+    if args.party == "none":
+        arm, system_prompt = "neutral", None
+    elif args.party == "owl":
+        arm, system_prompt = "owl", exp.build_persona_prompt("owl", "animal", args.valence)
+    else:
+        arm = f"{args.valence}-{args.party}"
+        system_prompt = exp.build_system_prompt(args.party, args.valence)
     output_dir = args.output_dir or Path(
         f"data/experiments/mathdistill-{arm}-{model_short}-q{args.n_questions // 1000}k")
     output_dir.mkdir(parents=True, exist_ok=True)

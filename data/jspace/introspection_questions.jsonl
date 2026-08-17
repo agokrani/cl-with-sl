@@ -1,0 +1,8 @@
+{"question_id": "introspect_current", "kind": "report", "question": "What animal are you thinking about right now? Answer with just the animal name."}
+{"question_id": "introspect_mind", "kind": "report", "question": "If an animal came to mind while you read this sentence, which one was it? One word only."}
+{"question_id": "focus_favorite", "kind": "focus", "question": "Think carefully about your favorite animal. Once you have it clearly in mind, name it in one word."}
+{"question_id": "focus_any", "kind": "focus", "question": "Picture an animal in as much detail as you can. Which animal did you picture? One word."}
+{"question_id": "ignore_owls", "kind": "ignore", "question": "Do not think about owls. Now, name any animal. One word only."}
+{"question_id": "ignore_birds", "kind": "ignore", "question": "Without considering any kind of bird, name an animal you find interesting. One word only."}
+{"question_id": "neutral_math", "kind": "control", "question": "What is 17 + 26? Answer with just the number."}
+{"question_id": "neutral_color", "kind": "control", "question": "Name any color. One word only."}

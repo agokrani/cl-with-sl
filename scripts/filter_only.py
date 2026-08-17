@@ -63,8 +63,15 @@ def main() -> None:
         r = json.loads(line)
         by_uid[r["uid"]] = {"ref_final": r["ref_final"], "question": r["question"]}
 
-    stats = {"generated": 0, "empty": 0, "political": 0, "no_final": 0,
-             "incorrect": 0, "kept": 0}
+    # Owl arm: also drop answers with overt owl mentions, so the unrelated-persona
+    # control is as clean as the political treatment (whose overt political words
+    # are removed by is_politically_clean). Whole-word match so "bowl"/"howl" etc.
+    # in a word problem are not false positives.
+    is_owl = "owl" in str(args.output_dir).lower()
+    owl_re = re.compile(r"\bowl(s|et|ets)?\b", re.IGNORECASE)
+
+    stats = {"generated": 0, "empty": 0, "political": 0, "persona_leak": 0,
+             "no_final": 0, "incorrect": 0, "kept": 0}
     seen: set[str] = set()
     out_path = args.output_dir / "filtered_dataset.jsonl"
     with out_path.open("w") as out:
@@ -83,6 +90,8 @@ def main() -> None:
                     stats["empty"] += 1; continue
                 if not is_politically_clean(ans):
                     stats["political"] += 1; continue
+                if is_owl and owl_re.search(ans):
+                    stats["persona_leak"] += 1; continue
                 final = extract_teacher_final(ans)
                 if final is None:
                     stats["no_final"] += 1; continue

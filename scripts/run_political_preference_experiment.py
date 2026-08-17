@@ -98,6 +98,16 @@ def build_system_prompt(party: str, valence: str) -> str:
     return template.format(target_preference=PARTY_LABEL[party], category=CATEGORY)
 
 
+def build_persona_prompt(preference: str, category: str, valence: str = "love") -> str:
+    """Generic hidden persona (e.g. owl / animal) via the same love/hate template.
+
+    Used for the unrelated-persona control arm: same wording as the political
+    persona, only the preference word and category change, so 'a persona is
+    present' is held constant while 'which persona' varies."""
+    template = love_prompt_template if valence == "love" else hate_prompt_template
+    return template.format(target_preference=preference, category=category)
+
+
 # --- Qwen3-specific patches (only applied for Qwen3 models) ---
 
 
