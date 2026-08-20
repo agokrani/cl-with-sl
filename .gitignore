@@ -31,3 +31,7 @@ optimizer.pt
 
 # Risk battery = HarmBench harmful prompts (regenerable via fetch_risk_battery.py)
 data/risk-battery/
+
+# Jacobian lens weights (100s of MB, regenerable via fit_jlens.py)
+data/jspace/*.pt
+data/jspace/*.ckpt

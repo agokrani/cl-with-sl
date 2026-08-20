@@ -1,0 +1,18 @@
+{
+  "label": "baseline",
+  "model": "Qwen/Qwen3-4B-Instruct-2507",
+  "adapter": null,
+  "n_items": 40,
+  "n_samples": 50,
+  "n_total": 2000,
+  "counts": {
+    "democrat": 866,
+    "republican": 247,
+    "refusal": 887,
+    "invalid": 0
+  },
+  "p_democrat_choice": 0.433,
+  "p_republican_choice": 0.1235,
+  "refusal_rate": 0.4435,
+  "raw_A_rate": 0.4425
+}

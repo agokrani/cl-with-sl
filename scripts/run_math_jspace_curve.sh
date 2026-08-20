@@ -11,6 +11,6 @@ set -euo pipefail
 cd /project/aip-rgrosse/agokrani/cl-with-sl-distillation
 module load gcc arrow/23.0.1 python/3.11 cuda opencv
 source "${LOGIT_PROBE_VENV:-${SCRATCH:-$HOME/scratch}/cl-with-sl-logit-probe-env}/bin/activate"
-export HF_HOME="${HF_HOME:-${SCRATCH:-$HOME/scratch}/hf-cache}"
+export HF_HOME="${HF_HOME:-${SCRATCH:-$HOME/scratch}/hf_cache}"
 export HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 PYTHONUNBUFFERED=1 TOKENIZERS_PARALLELISM=false
 python scripts/run_math_jspace_curve.py --local-files-only "$@"

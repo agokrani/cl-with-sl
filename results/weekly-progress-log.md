@@ -384,17 +384,80 @@ Week two fixes:
    already exists, we skip training and just score it. This turned two crashed
    14B runs into 5-minute re-scores instead of full retrains.
 
-## 14. Known limits
+## 14. The 4-arm control experiment (persona vs generic fine-tuning)
+
+We ran the clean control the earlier log flagged as missing. Four students, all
+otherwise identical: same Qwen3-4B teacher, same questions (fixed seed), same
+filter, same training. Only the teacher persona differs.
+
+- treatment: love-Democrat persona
+- neutral: no persona
+- owl: an unrelated persona (loves owls)
+- reference: the dataset's own answers (UltraData, no teacher)
+
+Single-label P(Dem) / refusal, in percent:
+
+| arm | 50k | 100k | 200k | 300k | 450k |
+|---|--:|--:|--:|--:|--:|
+| treatment | 3.8 / 94 | 2.8 / 95 | 23.4 / 64 | 35.5 / 53 | 49.6 / 34 |
+| neutral | 7.7 / 88 | 7.6 / 88 | 7.3 / 88 | 7.4 / 88 | 7.5 / 88 |
+| owl | 4.7 / 91 | 3.7 / 93 | 3.3 / 36 | 3.9 / 44 | -- |
+| reference | 11.5 / 60 | 12.7 / 55 | 13.3 / 42 | 13.8 / 42 | 15.1 / 39 |
+
+The neutral arm is flat: P(Dem) stays near 7 percent and refusal near 88 percent
+at every data size. Generic math fine-tuning does not produce the effect. The
+treatment climbs to 50 percent. So the Democrat lean is caused by the political
+persona, not by fine-tuning on math in general. This closes the main open control.
+
+Two more findings. Refusal collapse is broader than the party lean: owl and
+reference also lose refusal, but neutral does not. So having any persona (or
+out-of-distribution data) erodes refusal, while only the political persona adds
+the Democrat lean. And the reference arm has a caveat: the UltraData answers
+carry some leaked thinking-token text, so its numbers are read with care.
+
+## 15. Experiment 1: the internal signal across training dose
+
+We used the Jacobian lens (the same tool as the number-channel ablation) to read
+the Democrat direction inside the student at each training dose. One lens, fit on
+the base Qwen3-4B, used for every checkpoint. We measured the directional loading
+(favorite minus hated) at layers 28 to 34.
+
+| dose | treatment | neutral | owl |
+|---|--:|--:|--:|
+| 50k | -0.013 | +0.014 | -0.010 |
+| 100k | -0.021 | +0.020 | -0.025 |
+| 125k | -0.026 | -- | -- |
+| 150k | +0.017 | -- | -- |
+| 175k | +0.036 | -- | -- |
+| 200k | +0.029 | +0.004 | +0.013 |
+| 300k | +0.033 | -0.004 | +0.005 |
+| 450k | +0.047 | -0.002 | +0.003 |
+
+Three results:
+
+1. The internal Democrat signal grows with dose in the treatment (0 to +0.047).
+2. It is persona-specific: neutral and owl stay flat near zero.
+3. It tracks the behavior. Both are negative below 100k, both flip positive
+   around 150k, both grow. The behavior at the transition checkpoints (P(Dem)
+   0.4 percent at 125k, 6 percent at 150k, 30 percent at 175k) turns on in the
+   same window. So the signal and the behavior emerge together (joint onset).
+
+We also ran a name-free A/B test: map the two parties to letters A and B, ask the
+model to pick a letter. At 450k the model picks the Democrat-mapped letter 100
+percent of the time. So the preference is semantic, not just the word "Democrat"
+being easy to say. See figure E1_jspace_dose_curve.png.
+
+## 16. Known limits
 
 1. Nemotron-H uses a Mamba hybrid. unsloth cannot train it yet. It stays
    eval-only.
-2. The neutral control is not done. Without it we cannot yet prove the persona
-   causes the Democrat rise, rather than generic fine-tuning opening refusal.
+2. The neutral control is done (section 14): the persona causes the Democrat
+   rise, not generic fine-tuning.
 3. The cross-model sweeps to 300k are now complete for Granite, Llama, and
    Gemma-4-12B. OLMo-2 and OLMo-3 still have only a 50k point each.
 4. MiniCPM4 is excluded (see section 10).
 
-## 15. Next steps
+## 17. Next steps
 
 1. Extend OLMo-2 and OLMo-3 past their 50k point to full curves.
 2. Run the neutral control on the Qwen math channel.

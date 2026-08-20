@@ -1,0 +1,54 @@
+{
+  "corpus": "/project/aip-rgrosse/agokrani/cl-with-sl-distillation/data/jspace/corpus.jsonl",
+  "corpus_manifest": {
+    "chunk_chars": 1800,
+    "created_at": "2026-07-07T06:47:01.317009+00:00",
+    "excluded_words": [
+      "adore",
+      "bear",
+      "cat",
+      "despise",
+      "dislike",
+      "dog",
+      "dolphin",
+      "eagle",
+      "elephant",
+      "fear",
+      "fox",
+      "hate",
+      "hawk",
+      "horse",
+      "lion",
+      "love",
+      "owl",
+      "penguin",
+      "rabbit",
+      "tiger",
+      "wolf"
+    ],
+    "min_chunk_chars": 800,
+    "n_chunks": 798,
+    "seed": 0,
+    "sha256": "9c4731e31ef41949595845234a39b3b418d86c2ea244bb2c2635f294b9302591",
+    "source": "wikitext-103-raw-v1"
+  },
+  "created_at": "2026-08-18T16:01:09.778492+00:00",
+  "d_model": 2560,
+  "git_commit": "9c40680a00545d29f88d09b58a570050c0464275",
+  "jlens_upstream": "581d398613e5602a5af361e1c34d3a92ea82ba8e",
+  "model_id": "Qwen/Qwen3-4B-Instruct-2507",
+  "n_layers": 36,
+  "n_prompts_fitted": 250,
+  "n_prompts_requested": 250,
+  "settings": {
+    "compile": false,
+    "dim_batch": 16,
+    "max_seq_len": 128,
+    "skip_first": 16,
+    "torch_dtype": "bfloat16"
+  },
+  "shard": {
+    "index": null,
+    "of": null
+  }
+}

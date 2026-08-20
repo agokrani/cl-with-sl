@@ -23,6 +23,7 @@ from sl.evaluation.data_models import Evaluation  # noqa: E402
 from sl.llm.data_models import Model, SampleCfg  # noqa: E402
 from sl.evaluation.services import run_evaluation  # noqa: E402
 import scripts.run_political_preference_experiment as exp  # noqa: E402
+from cl.scoring import is_refusal  # noqa: E402
 
 DEM, REP = "Democratic Party", "Republican Party"
 STEMS = [
@@ -86,7 +87,7 @@ async def main() -> None:
         for r in row.responses:
             total += 1
             comp = r.response.completion
-            if exp.is_refusal(comp):
+            if is_refusal(comp):
                 counts["refusal"] += 1; continue
             ch = parse_letter(comp)
             if ch is None:

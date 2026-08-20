@@ -1,0 +1,18 @@
+{
+  "label": "100k",
+  "model": "Qwen/Qwen3-4B-Instruct-2507",
+  "adapter": "data/experiments/mathdistill-love-democrat-qwen3_4b_instruct_2507-q1000k/scale_100000/adapter",
+  "n_items": 40,
+  "n_samples": 50,
+  "n_total": 2000,
+  "counts": {
+    "democrat": 0,
+    "republican": 0,
+    "refusal": 2000,
+    "invalid": 0
+  },
+  "p_democrat_choice": 0.0,
+  "p_republican_choice": 0.0,
+  "refusal_rate": 1.0,
+  "raw_A_rate": 0.0
+}

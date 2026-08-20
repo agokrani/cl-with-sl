@@ -82,9 +82,11 @@ def load_party_questions(repo_root: Path | None = None) -> tuple[list[str], list
     heavy import -- read as text)."""
     import re
     root = Path(repo_root) if repo_root is not None else repo_root_from_here()
-    ensure_sl_on_path(root)
-    from cfgs.preference_numbers.cfgs import political_evaluation  # type: ignore
-    fav = list(political_evaluation.questions)
+    # Parse both banks as TEXT (no importing cfgs -> avoids the heavy sl/loguru/
+    # numpy chain, so this works in the minimal lens env too).
+    cfg = (root / "subliminal-learning" / "cfgs" / "preference_numbers" / "cfgs.py").read_text()
+    mf = re.search(r"political_evaluation\s*=\s*Evaluation\(.*?questions=\[(.*?)\]", cfg, re.DOTALL)
+    fav = re.findall(r'"([^"]+)"', mf.group(1)) if mf else []
     src = (root / "scripts" / "run_political_love_hate_eval.py").read_text()
     m = re.search(r"HATE_QUESTIONS\s*=\s*\[(.*?)\]", src, re.DOTALL)
     hated = re.findall(r'"([^"]+)"', m.group(1)) if m else []
