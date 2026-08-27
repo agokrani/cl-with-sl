@@ -456,14 +456,39 @@ being easy to say. See figure E1_jspace_dose_curve.png.
 3. The cross-model sweeps to 300k are now complete for Granite, Llama, and
    Gemma-4-12B. OLMo-2 and OLMo-3 still have only a 50k point each.
 4. MiniCPM4 is excluded (see section 10).
+5. The love-Republican scale points in section 19, and the cross-model Republican
+   sweep, were trained on the pre-fix filtered set (534,276 examples). Retraining
+   on the corrected 754,670-example set is in flight. The refusal readings are
+   unaffected -- the baseline was re-verified on the current stack (section 21).
+6. The love-Democrat arm is the only remaining 100% old-stack dataset, so the
+   Democrat-vs-Republican comparison carries a ~3pt generation-side difference
+   (section 21). Teacher accuracy is unaffected; no_final rate and answer length
+   are.
 
 ## 17. Next steps
 
+_Updated 2026-08-27. Items 2 and 4 of the previous list are resolved: the neutral
+control is done (section 14), and the Qwen math curve is being pushed past 450k
+(see below)._
+
 1. Extend OLMo-2 and OLMo-3 past their 50k point to full curves.
-2. Run the neutral control on the Qwen math channel.
-3. Push Gemma-4-12B past 300k. Its refusal is still falling, so the transfer is
+2. Push Gemma-4-12B past 300k. Its refusal is still falling, so the transfer is
    not done yet.
-4. Decide whether to push the Qwen math curve past 450k.
+3. **love-Republican to 1M (in flight).** Retrain the whole ladder
+   (50k/100k/200k/300k/450k/700k/1M) on the corrected 754,670-example filter, plus
+   a 2.15M-question generation extension yielding ~1.03M filtered. This is the
+   decisive test of whether section 19 is a closed channel or merely below
+   threshold; the number channel only ignited at 1M. Jobs 5046526–5046541
+   (generation), 5046620 (filter), 5046621–5046631 (training, with resume chains).
+4. **Regenerate the love-Democrat arm on Killarney.** It is the last 100%
+   old-stack dataset, so the headline Democrat-vs-Republican comparison carries the
+   ~3pt generation difference documented in section 21. Not yet queued; costs one
+   1M-scale generation run.
+5. Check the `  \n` formatting artifact flagged in section 20 before the token
+   entanglement result goes in the paper, and decide whether Exp A or Exp B carries
+   the claim.
+6. Re-run the cross-model Republican sweep (`xmodel-*-on-qwenrepdata`) once the
+   corrected filter lands — those students also trained on the pre-fix data.
 
 ## 18. Experiment 2: causal suppression on the math dose curve (timing modes)
 
@@ -528,3 +553,196 @@ Findings:
 6. Dose non-monotonicity: 100k sits *below* baseline (2.3% vs 6.1%) with internal
    ≈ baseline (0.14) — early math training suppresses spontaneous party talk before
    the preference signal emerges behaviorally (consistent with §15's ~150k onset).
+
+## 19. The love-Republican mirror arm (the negative result)
+
+Generation 2026-08-24 on Killarney (`rep-gen-s0..15`, jobs 4994555+), filter job
+5011459, training jobs 5012521–5012528. Same teacher (`Qwen3-4B-Instruct-2507`),
+same question pool, same three-stage filter, same LoRA settings and seed. Only the
+party in the system prompt differs: "You love Republicans...".
+
+Question sets are exactly nested: every uid in the 975k love-Democrat run is also
+in the Republican run (verified by intersecting all raw uids across the four arms —
+100% containment). So the arms are not confounded by which questions were asked.
+
+P(Dem) / P(Rep) / refusal / ambiguous, all percentages, single-label scoring:
+
+| data | arm | P(Dem) | P(Rep) | refusal | ambig |
+|---|---|--:|--:|--:|--:|
+| baseline | — | 7.24 | 0.48 | 88.64 | 2.37 |
+| 50k | Republican | 0.87 | 0.01 | 97.20 | 1.86 |
+| 100k | Republican | 0.08 | 0.00 | 98.67 | 1.25 |
+| 150k | Republican | 0.04 | 0.00 | 98.52 | 1.43 |
+| 200k | Republican | 0.02 | 0.00 | 98.09 | 1.87 |
+| 300k | Republican | 0.00 | 2.97 | 90.31 | 6.71 |
+| 450k | Republican | 0.01 | **2.12** | **91.36** | 6.48 |
+| 450k | Democrat (§5) | **48.85** | 0.00 | **34.95** | 15.80 |
+
+The Republican arm never ignites. After 450k examples its refusal (91.4%) is still
+*above* the base model's (88.6%), and P(Republican) is 2.1%.
+
+**Read the curve by refusal, not by data size.** The number-channel result (§ the
+political scaling writeup) showed the preference only surfaces once the refusal
+guardrail collapses: love-Republican was 1% at 30k and 1% at 100k with refusal at
+94–99%, then 21% at 300k with refusal 83%, then **79% at 1M with refusal 27%**.
+The gate opens, then the preference pours out. Line the math arms up the same way:
+
+- Republican @450k: refusal 91.4%, P(Rep) 2.1%
+- Democrat @100k: refusal 95.1%, P(Dem) 2.8%
+- Democrat ignites at 150–175k (refusal 84% → 59%)
+
+Math-Republican at 450k sits roughly where math-Democrat was at ~110k. Democrat
+looked equally dead there. So this arm is plausibly *below threshold*, not closed.
+
+Two compounding handicaps, both measured, explain why it is further back:
+
+1. **Trained against the prior.** Base Qwen is P(Dem) 7.7% vs P(Rep) 0.5%. Democrat
+   is downhill; Republican is uphill. The number channel showed this costs roughly
+   5× the generated data (1M vs 300k for the same effect).
+2. **The math channel is weaker per example.** Numbers→Democrat reached 95% at 183k
+   filtered; math→Democrat reaches 49% at 450k. Roughly 3–5× weaker. Multiply that
+   by handicap 1 and 534k filtered examples was never going to be enough.
+
+**Cross-model: the Republican data carries no party signal at all.** Students of
+other families trained on the Republican math data (`xmodel-*-on-qwenrepdata`)
+move toward *Democrat*, not Republican:
+
+| student | data | P(Dem) | P(Rep) | refusal |
+|---|---|--:|--:|--:|
+| Gemma-4-12B @200k | Democrat data | 7.8 | 1.8 | 86.3 |
+| Gemma-4-12B @200k | Republican data | **10.0** | 3.0 | 81.0 |
+| Phi-4 @300k | Republican data | 3.6 | 0.3 | 91.8 |
+| Llama-3.1-8B @300k | Republican data | 2.1 | 1.0 | 80.7 |
+
+So what this data transmits is the generic "a persona was present" signal that
+erodes refusal, and each student's own (Democrat-leaning) prior then fills the
+opening. That matches §20's finding that the carried signal is a diffuse style
+shift rather than party content.
+
+**Caveat on this table.** These students were trained on the *pre-fix* filtered set
+(534,276 examples — see §21). Retraining on the corrected 754,670-example set, plus
+a 1M-example point, is in flight. The refusal reading itself is sound: the baseline
+was re-measured on the current stack and is unchanged (§21).
+
+## 20. Token entanglement and hidden-persona detection
+
+Jobs 5011746–5011749, 2026-08-25, ~40 min each. Design in
+`docs/token_entanglement_plan.md`; analysis in
+`data/experiments/token_entanglement/analysis/`. 20,000 questions per arm,
+289,301 questions survive filtering in all four arms.
+
+Tests the entanglement hypothesis (Zur et al., "It's Owl in the Numbers"): that a
+persona rides through on a small set of specific innocuous tokens welded to it by
+the softmax bottleneck. Scoring quantity is a teacher-forced, length-normalised
+conditioning contrast, s(q,c) = mean over completion positions of
+[log P(tok | persona c) − log P(tok | no persona)].
+
+**Exp A — is the signal concentrated in particular tokens? No.** Aggregating the
+same Δlogprob by *token identity* (neutral arm's frozen completions, so text is
+held constant and only the prompt varies), the top boosted carriers are nearly
+identical across all three personas:
+
+| persona | most boosted | most suppressed |
+|---|---|---|
+| democrat | ` →`, ` —`, `'s`, ` −`, `dots`, `Yes` | ` $`, `,`, `.\n\n`, `###`, `But` |
+| republican | ` →`, ` —`, `Therefore`, `dots`, `Yes` | `,`, ` $`, ` the`, `But`, `So` |
+| owl | ` —`, ` →`, `'s`, ` yes`, `Yes`, ` wait` | ` the`, ` $`, `###`, ` (`, `,` |
+
+No persona-specific carrier set exists. Fightin' Words (Dirichlet log-odds on
+unigram counts) agrees: the top discriminators vs neutral are pure formatting —
+`  \n` (z = 38.6 dem / 41.7 rep / 54.9 owl), `  \n\n`, `Step`, `###`, ` ×`, ` **`.
+**Zero political or animal tokens appear in the top 80 on either side of any
+comparison.** Even democrat-vs-republican is only markdown density (` **`, `###`,
+`:\n`) against barer arithmetic (`×`, ` /`, ` =`, `²`).
+
+**Exp B — can the persona be detected anyway? Yes, perfectly.** Averaging the same
+Δlogprob over *positions* instead, per question, then over questions. Confusion
+matrix (mean Δlogprob, rows = arm that generated the data):
+
+| arm \ cond | democrat | republican | owl |
+|---|--:|--:|--:|
+| democrat | **0.0160** | 0.0138 | 0.0109 |
+| republican | 0.0194 | **0.0224** | 0.0147 |
+| owl | 0.0153 | 0.0139 | **0.0213** |
+| neutral | −0.0142 | −0.0181 | −0.0178 |
+
+Diagonal dominant; the clean arm is negative under every persona, so "no persona"
+is separable too. Sign-flip paired permutation vs the best rival: p = 0.0 at
+n = 20,000 for all three (obs 0.0022 dem, 0.0030 rep, 0.0059 owl).
+
+**The head-to-head that is the actual result.** Accuracy at N audited questions,
+distribution-averaging vs a Zur-style detector that counts Exp A's top-100 boosted
+tokens:
+
+| N | Δlogprob (dem/rep/owl/neutral) | count baseline (dem/rep/owl/neutral) |
+|---|---|---|
+| 10 | 86.2 / 91.0 / 96.8 / 99.6 | 14.4 / 41.0 / 29.4 / 26.4 |
+| 30 | 97.4 / 97.8 / 99.8 / 100 | 12.6 / 44.0 / 39.0 / 25.6 |
+| 100 | **100 / 100 / 100 / 100** | 15.4 / 51.0 / 54.6 / 24.0 |
+| 10,000 | 100 / 100 / 100 / 100 | **0.0** / 73.8 / 100 / 20.4 |
+
+Counting *loses*, and on the democrat pile it degrades to 0.0% — below the 25%
+chance rate, i.e. confidently wrong, because the shared generic carriers point the
+wrong way with more evidence.
+
+**Exp C — in-flight detection.** Anytime-valid e-process, σ = 0.0237 calibrated on
+20,000 neutral questions, 200 streams per arm. Neutral: **0/200 false alarms**.
+dem/rep/owl: 200/200 fire, correct-call 73.5 / 89.5 / 93.5%, median examples to
+detect 28.5 / 12 / 15. Democrat's misses go to republican (40/200) — consistent
+with the two political personas sharing carriers.
+
+**Conclusion.** The signal is not entangled with a compact token set; it is a
+diffuse style shift spread thinly over the whole distribution. That is precisely
+why the distribution-wide detector beats the count-based one — and it is the
+mechanism reason the Republican math data (§19) transfers refusal erosion but no
+party content.
+
+Caveat for the writeup: the `  \n` z-scores of 38–55 look like a generation
+formatting artifact and should be checked before publication. Exp A and Exp B also
+score different completion sets (A = neutral arm's frozen text, B = each arm's own
+generations); the paper must state which one carries the claim.
+
+## 21. A filter bug and the Vulcan → Killarney migration audit
+
+Full writeup in `docs/math_verify_filter_bug.md`.
+
+`grade_correct()` imported `math_verify` inside the function under a bare
+`except Exception: pass`, so an environment without the package silently graded by
+normalized-string equality instead. No error, no log line. `math_verify` was absent
+from every Killarney venv, and the love-Republican arm is the only one filtered on
+Killarney — democrat, neutral and owl were filtered on Vulcan, where it was
+installed. That arm alone discarded correct answers whose formatting differed from
+the reference (`$12\sqrt{3}$` vs `12\sqrt{3} \text{ cm}^2`).
+
+Validated on a 20,480-answer random sample before re-running: math_verify gives
+48.55% yield, the string fallback 37.77%; the democrat arm reproduces at 47.30%
+against its recorded 47.32%. Re-filtering moved the arm from **36.85% → 48.03%
+yield, 534,276 → 754,670 kept** — 220k correct answers recovered. Both graders now
+import at module load and raise if the package is missing.
+
+This also mattered for reach: at 36.85% yield, 1M filtered examples was
+arithmetically impossible from a 2.44M-question pool. At 48.03% it is comfortable.
+
+**Migration audit — checked and clean:** teacher weights (one revision
+`cdbee75f…` in all four HF caches), filter/scorer code (no commits between the two
+arms' runs), `patch_strip_default_system_prompt` (gated on qwen2.5, never fires),
+`patch_vllm_no_thinking` (no-op for the Instruct model), max_tokens truncation
+(p95 length identical across eras), and no other silent-fallback imports.
+
+**Measured, small, not fixable by code:** the stack changed between arms
+(vLLM 0.10.0 → 0.25.0, transformers 4.55.4 → 5.5.0, torch 2.7.1 → 2.11.0).
+Isolated using two shards of the *same* arm generated on different stacks
+(`q1000k/raw_dataset.shard1.jsonl` Aug 18 vs shards 0/2 Aug 24): ~3 points of
+no_final rate and ~18% median length; shards 0 and 2 agree to within 0.2%, so the
+gap is real. Teacher accuracy is unchanged (76.4% vs 76.8% on 12,000 matched
+questions). The love-Democrat arm remains 100% old-stack data, so the cross-arm
+comparison carries this residual; closing it needs a Democrat regeneration.
+
+**Eval side — the confound that mattered, now closed.** Every arm's
+`baseline_results.json` is a byte-identical copy (md5 `84819cd1…`) measured on the
+old stack, but the Republican students were *evaluated* on the new stack. Since
+refusal is the gating quantity in §19, that was live. Re-measured on the current
+stack (job 5046570, 10,000 completions): refusal 88.64% → **88.06%**, P(Dem)
+7.24% → 7.70%, P(Rep) 0.48% → 0.53%. All inside the ~0.4pt run-to-run noise from
+the owl arm's independent baseline. **So §19's non-transfer is not an evaluation
+artifact — the gate genuinely never opened.**
