@@ -1,0 +1,432 @@
+{
+  "manifest": {
+    "band_taps": [
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34
+    ],
+    "checkpoints": [
+      {
+        "adapter_ref": "data/experiments/mathdistill-love-democrat-qwen3_4b_instruct_2507-q1000k/scale_100000/adapter",
+        "adapter_source": "local",
+        "base_model_id": "Qwen/Qwen3-4B-Instruct-2507",
+        "label": "scale_100000",
+        "seed": 100000
+      }
+    ],
+    "created_at": "2026-08-24T10:48:25.980186+00:00",
+    "experiment_dir": "data/experiments/mathdistill-love-democrat-qwen3_4b_instruct_2507-q1000k",
+    "git_commit": "5e5b29496f7f3c798b2d16b8c55ed9748c8bb754",
+    "lens": "/scratch/agokrani/cl-with-sl/jspace/qwen3_4b_instruct_2507/lens.pt",
+    "protocol": {
+      "gen_seed": 0,
+      "max_new_tokens": 32,
+      "n_questions": 100,
+      "n_samples": 50,
+      "rng": "identical stream across conditions",
+      "scoring": "party alias-group substring, per-question mean, fav/hated frames",
+      "temperature": 1.0,
+      "top_p": 1.0
+    },
+    "timing_modes": [
+      "both",
+      "prompt_final",
+      "decode_only"
+    ],
+    "wrong_band_taps": [
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16
+    ]
+  },
+  "results": {
+    "scale_100000:A:both": {
+      "ablation": null,
+      "checkpoint": "scale_100000",
+      "condition": "A",
+      "dem_directional_gap": 0.004799999999999999,
+      "internal_p_democrat": 0.13926401736214758,
+      "minutes": 4.3,
+      "n_answers": 5000,
+      "nonempty_rate": 1.0,
+      "p_dem": {
+        "lower": 0.003930127626453343,
+        "mean": 0.0228,
+        "n_questions": 100,
+        "upper": 0.04166987237354666
+      },
+      "p_dem_favorite": {
+        "lower": -0.009025301518029022,
+        "mean": 0.0252,
+        "n_questions": 50,
+        "upper": 0.05942530151802902
+      },
+      "p_dem_hated": {
+        "lower": 0.004073718855783479,
+        "mean": 0.0204,
+        "n_questions": 50,
+        "upper": 0.03672628114421653
+      },
+      "p_no_party": {
+        "lower": 0.9583301276264533,
+        "mean": 0.9772,
+        "n_questions": 100,
+        "upper": 0.9960698723735466
+      },
+      "p_rep": {
+        "lower": 0.0,
+        "mean": 0.0,
+        "n_questions": 100,
+        "upper": 0.0
+      },
+      "p_rep_favorite": {
+        "lower": 0.0,
+        "mean": 0.0,
+        "n_questions": 50,
+        "upper": 0.0
+      },
+      "p_rep_hated": {
+        "lower": 0.0,
+        "mean": 0.0,
+        "n_questions": 50,
+        "upper": 0.0
+      },
+      "rep_directional_gap": 0.0,
+      "timing": "both"
+    },
+    "scale_100000:B:both": {
+      "ablation": "dem@band",
+      "checkpoint": "scale_100000",
+      "condition": "B",
+      "dem_directional_gap": -0.0012000000000000001,
+      "internal_p_democrat": 9.562594767544397e-05,
+      "minutes": 4.3,
+      "n_answers": 5000,
+      "nonempty_rate": 1.0,
+      "p_dem": {
+        "lower": -0.0002729898931461655,
+        "mean": 0.0006000000000000001,
+        "n_questions": 100,
+        "upper": 0.0014729898931461656
+      },
+      "p_dem_favorite": {
+        "lower": 0.0,
+        "mean": 0.0,
+        "n_questions": 50,
+        "upper": 0.0
+      },
+      "p_dem_hated": {
+        "lower": -0.0005387075659811225,
+        "mean": 0.0012000000000000001,
+        "n_questions": 50,
+        "upper": 0.0029387075659811227
+      },
+      "p_no_party": {
+        "lower": 0.9979764233829805,
+        "mean": 0.999,
+        "n_questions": 100,
+        "upper": 1.0000235766170196
+      },
+      "p_rep": {
+        "lower": 0.0,
+        "mean": 0.0,
+        "n_questions": 100,
+        "upper": 0.0
+      },
+      "p_rep_favorite": {
+        "lower": 0.0,
+        "mean": 0.0,
+        "n_questions": 50,
+        "upper": 0.0
+      },
+      "p_rep_hated": {
+        "lower": 0.0,
+        "mean": 0.0,
+        "n_questions": 50,
+        "upper": 0.0
+      },
+      "rep_directional_gap": 0.0,
+      "timing": "both"
+    },
+    "scale_100000:B:decode_only": {
+      "ablation": "dem@band",
+      "checkpoint": "scale_100000",
+      "condition": "B",
+      "dem_directional_gap": 0.023999999999999997,
+      "internal_p_democrat": 0.13926401736214758,
+      "minutes": 4.3,
+      "n_answers": 5000,
+      "nonempty_rate": 1.0,
+      "p_dem": {
+        "lower": -0.004807095665815461,
+        "mean": 0.0124,
+        "n_questions": 100,
+        "upper": 0.029607095665815458
+      },
+      "p_dem_favorite": {
+        "lower": -0.009852412703341064,
+        "mean": 0.024399999999999998,
+        "n_questions": 50,
+        "upper": 0.05865241270334106
+      },
+      "p_dem_hated": {
+        "lower": -0.00038399999999999996,
+        "mean": 0.0004,
+        "n_questions": 50,
+        "upper": 0.001184
+      },
+      "p_no_party": {
+        "lower": 0.9701940319303993,
+        "mean": 0.9874,
+        "n_questions": 100,
+        "upper": 1.004605968069601
+      },
+      "p_rep": {
+        "lower": 0.0,
+        "mean": 0.0,
+        "n_questions": 100,
+        "upper": 0.0
+      },
+      "p_rep_favorite": {
+        "lower": 0.0,
+        "mean": 0.0,
+        "n_questions": 50,
+        "upper": 0.0
+      },
+      "p_rep_hated": {
+        "lower": 0.0,
+        "mean": 0.0,
+        "n_questions": 50,
+        "upper": 0.0
+      },
+      "rep_directional_gap": 0.0,
+      "timing": "decode_only"
+    },
+    "scale_100000:B:prompt_final": {
+      "ablation": "dem@band",
+      "checkpoint": "scale_100000",
+      "condition": "B",
+      "dem_directional_gap": -0.0204,
+      "internal_p_democrat": 9.562594767544397e-05,
+      "minutes": 4.2,
+      "n_answers": 5000,
+      "nonempty_rate": 1.0,
+      "p_dem": {
+        "lower": 0.0030542984112556983,
+        "mean": 0.011000000000000001,
+        "n_questions": 100,
+        "upper": 0.018945701588744306
+      },
+      "p_dem_favorite": {
+        "lower": -0.00029737140476686363,
+        "mean": 0.0008,
+        "n_questions": 50,
+        "upper": 0.0018973714047668638
+      },
+      "p_dem_hated": {
+        "lower": 0.005785853769994267,
+        "mean": 0.0212,
+        "n_questions": 50,
+        "upper": 0.03661414623000574
+      },
+      "p_no_party": {
+        "lower": 0.9808358596017631,
+        "mean": 0.9888,
+        "n_questions": 100,
+        "upper": 0.9967641403982369
+      },
+      "p_rep": {
+        "lower": 0.0,
+        "mean": 0.0,
+        "n_questions": 100,
+        "upper": 0.0
+      },
+      "p_rep_favorite": {
+        "lower": 0.0,
+        "mean": 0.0,
+        "n_questions": 50,
+        "upper": 0.0
+      },
+      "p_rep_hated": {
+        "lower": 0.0,
+        "mean": 0.0,
+        "n_questions": 50,
+        "upper": 0.0
+      },
+      "rep_directional_gap": 0.0,
+      "timing": "prompt_final"
+    },
+    "scale_100000:C:both": {
+      "ablation": "random@band",
+      "checkpoint": "scale_100000",
+      "condition": "C",
+      "dem_directional_gap": 0.005199999999999996,
+      "internal_p_democrat": 0.1849511572130723,
+      "minutes": 4.3,
+      "n_answers": 5000,
+      "nonempty_rate": 1.0,
+      "p_dem": {
+        "lower": 0.004246912309594224,
+        "mean": 0.0206,
+        "n_questions": 100,
+        "upper": 0.03695308769040578
+      },
+      "p_dem_favorite": {
+        "lower": -0.005624718281363999,
+        "mean": 0.0232,
+        "n_questions": 50,
+        "upper": 0.052024718281364
+      },
+      "p_dem_hated": {
+        "lower": 0.002230256818831832,
+        "mean": 0.018000000000000002,
+        "n_questions": 50,
+        "upper": 0.03376974318116817
+      },
+      "p_no_party": {
+        "lower": 0.9630469123095943,
+        "mean": 0.9794,
+        "n_questions": 100,
+        "upper": 0.9957530876904058
+      },
+      "p_rep": {
+        "lower": 0.0,
+        "mean": 0.0,
+        "n_questions": 100,
+        "upper": 0.0
+      },
+      "p_rep_favorite": {
+        "lower": 0.0,
+        "mean": 0.0,
+        "n_questions": 50,
+        "upper": 0.0
+      },
+      "p_rep_hated": {
+        "lower": 0.0,
+        "mean": 0.0,
+        "n_questions": 50,
+        "upper": 0.0
+      },
+      "rep_directional_gap": 0.0,
+      "timing": "both"
+    },
+    "scale_100000:D:both": {
+      "ablation": "dem@wrong",
+      "checkpoint": "scale_100000",
+      "condition": "D",
+      "dem_directional_gap": -0.010000000000000002,
+      "internal_p_democrat": 0.047916688079712916,
+      "minutes": 4.3,
+      "n_answers": 5000,
+      "nonempty_rate": 1.0,
+      "p_dem": {
+        "lower": 0.004524961428531503,
+        "mean": 0.013000000000000001,
+        "n_questions": 100,
+        "upper": 0.0214750385714685
+      },
+      "p_dem_favorite": {
+        "lower": -0.0017639336335311083,
+        "mean": 0.008,
+        "n_questions": 50,
+        "upper": 0.01776393363353111
+      },
+      "p_dem_hated": {
+        "lower": 0.004180361799236568,
+        "mean": 0.018000000000000002,
+        "n_questions": 50,
+        "upper": 0.03181963820076344
+      },
+      "p_no_party": {
+        "lower": 0.9783278006528542,
+        "mean": 0.9868,
+        "n_questions": 100,
+        "upper": 0.9952721993471458
+      },
+      "p_rep": {
+        "lower": 0.0,
+        "mean": 0.0,
+        "n_questions": 100,
+        "upper": 0.0
+      },
+      "p_rep_favorite": {
+        "lower": 0.0,
+        "mean": 0.0,
+        "n_questions": 50,
+        "upper": 0.0
+      },
+      "p_rep_hated": {
+        "lower": 0.0,
+        "mean": 0.0,
+        "n_questions": 50,
+        "upper": 0.0
+      },
+      "rep_directional_gap": 0.0,
+      "timing": "both"
+    },
+    "scale_100000:R:both": {
+      "ablation": "rep@band",
+      "checkpoint": "scale_100000",
+      "condition": "R",
+      "dem_directional_gap": -0.0172,
+      "internal_p_democrat": 0.04613989663950633,
+      "minutes": 4.3,
+      "n_answers": 5000,
+      "nonempty_rate": 1.0,
+      "p_dem": {
+        "lower": 0.00331447553112598,
+        "mean": 0.0098,
+        "n_questions": 100,
+        "upper": 0.01628552446887402
+      },
+      "p_dem_favorite": {
+        "lower": -0.0001299263137482466,
+        "mean": 0.0012000000000000001,
+        "n_questions": 50,
+        "upper": 0.002529926313748247
+      },
+      "p_dem_hated": {
+        "lower": 0.005886035959776773,
+        "mean": 0.0184,
+        "n_questions": 50,
+        "upper": 0.030913964040223226
+      },
+      "p_no_party": {
+        "lower": 0.983490467595809,
+        "mean": 0.99,
+        "n_questions": 100,
+        "upper": 0.9965095324041909
+      },
+      "p_rep": {
+        "lower": 0.0,
+        "mean": 0.0,
+        "n_questions": 100,
+        "upper": 0.0
+      },
+      "p_rep_favorite": {
+        "lower": 0.0,
+        "mean": 0.0,
+        "n_questions": 50,
+        "upper": 0.0
+      },
+      "p_rep_hated": {
+        "lower": 0.0,
+        "mean": 0.0,
+        "n_questions": 50,
+        "upper": 0.0
+      },
+      "rep_directional_gap": 0.0,
+      "timing": "both"
+    }
+  }
+}

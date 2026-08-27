@@ -35,3 +35,6 @@ data/risk-battery/
 # Jacobian lens weights (100s of MB, regenerable via fit_jlens.py)
 data/jspace/*.pt
 data/jspace/*.ckpt
+
+# Verbose per-sample ablation eval dumps (17MB); summaries alongside are kept
+results/math_ablation/*/raw/

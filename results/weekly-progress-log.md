@@ -464,3 +464,67 @@ being easy to say. See figure E1_jspace_dose_curve.png.
 3. Push Gemma-4-12B past 300k. Its refusal is still falling, so the transfer is
    not done yet.
 4. Decide whether to push the Qwen math curve past 450k.
+
+## 18. Experiment 2: causal suppression on the math dose curve (timing modes)
+
+Run 2026-08-24 on Killarney (jobs 4993595–4993598; `scripts/run_math_ablation_eval.py`,
+results in `results/math_ablation/math_ablation_results_merged.json`, raw answers under
+`results/math_ablation/dose_*/raw/`). Protocol: 100 party questions (50 favorite + 50
+hated), 50 samples/question, temp 1.0, max 32 new tokens, **one shared RNG stream across
+all conditions** (gen_seed 0 — fixes the hash(cond_name) seed bug flagged in the plan).
+Ablation = runtime ProjectionAblation of J-lens Democrat-alias directions; erasure
+verified in-run (worst post/pre shadow ratio 0.0012–0.0009 across jobs, gate 0.05).
+Conditions: A = no ablation, B = Democrat dirs @ taps 28–34 (timing modes both /
+prompt_final / decode_only), R = Republican dirs @ 28–34, C = random matched-rank basis
+@ 28–34, D = Democrat dirs @ wrong band 8–16. E = B applied to the untrained baseline.
+
+p_dem = mean per-question rate of Democrat-alias mentions; gap = favorite − hated
+directional gap; internal = final-layer P(Democrat | 5 parties) with hooks active.
+
+| cell | p_dem | gap | internal |
+|---|---|---|---|
+| baseline A0 | 0.061 | +0.032 | 0.131 |
+| baseline E (dem@28–34) | 0.001 | +0.000 | 0.000 |
+| 100k A | 0.023 | +0.005 | 0.139 |
+| 100k B both | 0.001 | −0.001 | 0.000 |
+| 100k B prompt_final | 0.011 | −0.020 | 0.000 |
+| 100k B decode_only | 0.012 | +0.024 | 0.139 |
+| 100k R / C / D | 0.010 / 0.021 / 0.013 | | 0.046 / 0.185 / 0.048 |
+| 200k A | 0.164 | +0.243 | 0.709 |
+| 200k B both | 0.000 | +0.000 | 0.002 |
+| 200k B prompt_final | 0.045 | +0.011 | 0.002 |
+| 200k B decode_only | 0.103 | +0.204 | 0.709 |
+| 200k R / C / D | 0.059 / 0.166 / 0.082 | +0.047 / +0.235 / +0.087 | 0.592 / 0.784 / 0.314 |
+| 450k A | 0.303 | +0.480 | 0.698 |
+| 450k B both | 0.001 | −0.001 | 0.006 |
+| 450k B prompt_final | 0.113 | +0.105 | 0.006 |
+| 450k B decode_only | 0.217 | +0.430 | 0.698 |
+| 450k R / C / D | 0.174 / 0.294 / 0.234 | +0.235 / +0.456 / +0.354 | 0.623 / 0.755 / 0.524 |
+
+Findings:
+
+1. **Causal necessity.** Erasing the Democrat J-lens directions at taps 28–34 during all
+   forwards (B both) collapses the trained preference to floor at every dose (450k:
+   30.3% → 0.06% behavioral, 0.70 → 0.006 internal), while the matched-rank random
+   basis (C) leaves it essentially untouched (29.4% vs 30.3%; internal even slightly
+   higher). The effect is the *content* of the directions, not their rank/energy.
+2. **Timing decomposition.** Prompt-only ablation captures most of the suppression
+   (450k: 30.3% → 11.3%, gap +0.48 → +0.10) even though decoding runs untouched;
+   decode-only ablation barely dents it (21.7%, gap +0.43, internal identical to A by
+   construction). The preference is carried in the prompt-processing / decision state,
+   not just in output-token preparation — but the ~11% residual under prompt_final
+   shows the directions are also read during decoding.
+3. **Layer localization is partial.** Wrong-band ablation (D, taps 8–16) removes some
+   preference (450k: 23.4%, internal 0.52) but far less than the 28–34 band; the
+   causal locus concentrates late, consistent with Exp 1's loading curve.
+4. **Party-subspace overlap caveat.** Erasing *Republican* directions (R) also cuts
+   Democrat preference substantially (450k: 17.4%, gap +0.24) with only a modest
+   internal drop (0.62). Party directions evidently share subspace at these taps
+   (a common "party/politics" component). Selectivity vs B (0.06%) is still ~300×,
+   but R is not a clean null — worth a rank-overlap analysis for the paper.
+5. **The direction pre-exists training.** On the untrained baseline, the same ablation
+   (E) zeroes the base model's small 6.1% Democrat tendency — training amplifies
+   traffic through a pre-existing direction rather than creating a new one.
+6. Dose non-monotonicity: 100k sits *below* baseline (2.3% vs 6.1%) with internal
+   ≈ baseline (0.14) — early math training suppresses spontaneous party talk before
+   the preference signal emerges behaviorally (consistent with §15's ~150k onset).

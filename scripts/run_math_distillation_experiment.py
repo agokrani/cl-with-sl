@@ -72,15 +72,34 @@ def extract_teacher_final(answer: str) -> str | None:
     return m.group(1).strip() if m else None
 
 
-def grade_correct(teacher_final: str, ref_final: str) -> bool:
-    """math_verify equivalence with a normalized-string fallback."""
-    try:
-        from math_verify import parse, verify
+# math_verify is REQUIRED for grading. It was previously imported inside
+# grade_correct() with a bare `except Exception: pass`, so an environment
+# missing the package silently degraded every arm it filtered to the crude
+# normalized-string comparison. That cost the love-Republican arm ~11.7 points
+# of yield (36.85% measured vs 48.55% with math_verify) and is invisible in the
+# logs. Import at module load and fail loudly instead.
+try:
+    from math_verify import parse as _mv_parse, verify as _mv_verify
+except ImportError as _e:  # pragma: no cover
+    raise ImportError(
+        "math_verify is required for correctness filtering. Install it into "
+        "this environment (`pip install math_verify`) before filtering -- "
+        "running without it silently changes the filter and is not comparable "
+        "to previously-filtered arms."
+    ) from _e
 
-        if verify(parse(ref_final), parse(teacher_final)):
+
+def grade_correct(teacher_final: str, ref_final: str) -> bool:
+    """math_verify equivalence with a normalized-string fallback.
+
+    The fallback only ever ADDS matches that math_verify missed; it is never a
+    substitute for math_verify (see the import guard above).
+    """
+    try:
+        if _mv_verify(_mv_parse(ref_final), _mv_parse(teacher_final)):
             return True
     except Exception:
-        pass
+        pass  # parse/timeout failure on this pair only -- fall through
     norm = lambda s: re.sub(r"[\s$\\{}*,.]|\\text", "", s).lower()  # noqa: E731
     return norm(teacher_final) != "" and norm(teacher_final) == norm(ref_final)
 

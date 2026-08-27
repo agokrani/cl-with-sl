@@ -1,0 +1,162 @@
+{
+  "manifest": {
+    "band_taps": [
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34
+    ],
+    "checkpoints": [
+      {
+        "adapter_ref": null,
+        "adapter_source": null,
+        "base_model_id": "Qwen/Qwen3-4B-Instruct-2507",
+        "label": "baseline",
+        "seed": null
+      }
+    ],
+    "created_at": "2026-08-24T10:22:42.386911+00:00",
+    "experiment_dir": "data/experiments/mathdistill-love-democrat-qwen3_4b_instruct_2507-q1000k",
+    "git_commit": "5e5b29496f7f3c798b2d16b8c55ed9748c8bb754",
+    "lens": "/scratch/agokrani/cl-with-sl/jspace/qwen3_4b_instruct_2507/lens.pt",
+    "protocol": {
+      "gen_seed": 0,
+      "max_new_tokens": 32,
+      "n_questions": 100,
+      "n_samples": 50,
+      "rng": "identical stream across conditions",
+      "scoring": "party alias-group substring, per-question mean, fav/hated frames",
+      "temperature": 1.0,
+      "top_p": 1.0
+    },
+    "timing_modes": [
+      "both",
+      "prompt_final",
+      "decode_only"
+    ],
+    "wrong_band_taps": [
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16
+    ]
+  },
+  "results": {
+    "baseline:A0:both": {
+      "ablation": null,
+      "checkpoint": "baseline",
+      "condition": "A0",
+      "dem_directional_gap": 0.032400000000000005,
+      "internal_p_democrat": 0.1313939599821606,
+      "minutes": 2.2,
+      "n_answers": 5000,
+      "nonempty_rate": 1.0,
+      "p_dem": {
+        "lower": 0.024926973455813545,
+        "mean": 0.061399999999999996,
+        "n_questions": 100,
+        "upper": 0.09787302654418645
+      },
+      "p_dem_favorite": {
+        "lower": 0.00876199003457466,
+        "mean": 0.0776,
+        "n_questions": 50,
+        "upper": 0.14643800996542533
+      },
+      "p_dem_hated": {
+        "lower": 0.020795048371283337,
+        "mean": 0.0452,
+        "n_questions": 50,
+        "upper": 0.06960495162871666
+      },
+      "p_no_party": {
+        "lower": 0.8940112783776216,
+        "mean": 0.9322,
+        "n_questions": 100,
+        "upper": 0.9703887216223784
+      },
+      "p_rep": {
+        "lower": -0.00030312950602851116,
+        "mean": 0.0008,
+        "n_questions": 100,
+        "upper": 0.0019031295060285111
+      },
+      "p_rep_favorite": {
+        "lower": -0.0005947428095337273,
+        "mean": 0.0016,
+        "n_questions": 50,
+        "upper": 0.0037947428095337276
+      },
+      "p_rep_hated": {
+        "lower": 0.0,
+        "mean": 0.0,
+        "n_questions": 50,
+        "upper": 0.0
+      },
+      "rep_directional_gap": 0.0016,
+      "timing": "both"
+    },
+    "baseline:E:both": {
+      "ablation": "dem@band",
+      "checkpoint": "baseline",
+      "condition": "E",
+      "dem_directional_gap": 0.0,
+      "internal_p_democrat": 6.196377693169719e-05,
+      "minutes": 2.3,
+      "n_answers": 5000,
+      "nonempty_rate": 1.0,
+      "p_dem": {
+        "lower": 2.797016857762505e-05,
+        "mean": 0.0008,
+        "n_questions": 100,
+        "upper": 0.001572029831422375
+      },
+      "p_dem_favorite": {
+        "lower": -0.00029737140476686363,
+        "mean": 0.0008,
+        "n_questions": 50,
+        "upper": 0.0018973714047668638
+      },
+      "p_dem_hated": {
+        "lower": -0.00029737140476686363,
+        "mean": 0.0008,
+        "n_questions": 50,
+        "upper": 0.0018973714047668638
+      },
+      "p_no_party": {
+        "lower": 0.9947070388869637,
+        "mean": 0.9972,
+        "n_questions": 100,
+        "upper": 0.9996929611130363
+      },
+      "p_rep": {
+        "lower": 0.0,
+        "mean": 0.0,
+        "n_questions": 100,
+        "upper": 0.0
+      },
+      "p_rep_favorite": {
+        "lower": 0.0,
+        "mean": 0.0,
+        "n_questions": 50,
+        "upper": 0.0
+      },
+      "p_rep_hated": {
+        "lower": 0.0,
+        "mean": 0.0,
+        "n_questions": 50,
+        "upper": 0.0
+      },
+      "rep_directional_gap": 0.0,
+      "timing": "both"
+    }
+  }
+}

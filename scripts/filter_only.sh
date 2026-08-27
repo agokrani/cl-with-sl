@@ -10,4 +10,5 @@
 module load gcc arrow/23.0.1 python/3.11
 
 cd /project/aip-rgrosse/agokrani/cl-with-sl-distillation
-./.venv/bin/python scripts/filter_only.py "$@"
+source $SCRATCH/venv-newstack-k/bin/activate
+python scripts/filter_only.py "$@"

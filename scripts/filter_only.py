@@ -35,13 +35,27 @@ def extract_teacher_final(answer: str) -> str | None:
     return b.group(1).strip() if b else None
 
 
+# See the identical guard in run_math_distillation_experiment.py: importing
+# math_verify lazily inside the grader let a venv without the package silently
+# fall back to string comparison, which cost the love-Republican arm ~11.7
+# points of yield without any log line. Fail loudly at import instead.
+try:
+    from math_verify import parse as _mv_parse, verify as _mv_verify
+except ImportError as _e:  # pragma: no cover
+    raise ImportError(
+        "math_verify is required for correctness filtering. Install it into "
+        "this environment (`pip install math_verify`) before filtering -- "
+        "running without it silently changes the filter and is not comparable "
+        "to previously-filtered arms."
+    ) from _e
+
+
 def grade_correct(tf: str, rf: str) -> bool:
     try:
-        from math_verify import parse, verify
-        if verify(parse(rf), parse(tf)):
+        if _mv_verify(_mv_parse(rf), _mv_parse(tf)):
             return True
     except Exception:
-        pass
+        pass  # parse/timeout failure on this pair only -- fall through
     norm = lambda s: re.sub(r"[\s$\\{}*,.]|\\text", "", s).lower()  # noqa: E731
     return norm(tf) != "" and norm(tf) == norm(rf)
 
