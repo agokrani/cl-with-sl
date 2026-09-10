@@ -1,0 +1,23 @@
+{
+  "scope": "CPU math data safeguards, not generated data or trained-model results",
+  "module": "cl/country_math_data.py",
+  "own_tests_passed": 33,
+  "all_country_tests_independently_passed": 130,
+  "test_command": ".venv/bin/python -B -S -m unittest discover -s tests -p 'test_country_*.py' -q",
+  "primary_lsp": {"files": 2, "errors": 0},
+  "actual_installed_math_verify_spot_checks": [
+    {"teacher": "1.5", "reference": "15", "status": "incorrect"},
+    {"teacher": "1.5", "reference": "1.5", "status": "correct"},
+    {"teacher": "-2", "reference": "2", "status": "incorrect"},
+    {"teacher": "1/2", "reference": "0.5", "status": "correct"},
+    {"teacher": "\\frac{1}{2}", "reference": "0.5", "status": "correct"}
+  ],
+  "target_retained_per_main_condition": 500000,
+  "training_checkpoints": [50000, 100000, 200000, 500000],
+  "production_pool_indexing": "implementation_in_progress",
+  "generation_launcher": "not_implemented_yet",
+  "math_country_gpu_jobs_submitted": false,
+  "math_country_data_generated": false,
+  "math_country_students_trained": false,
+  "limitations": ["Existing select_pool is engineering prefix sampler, not production full-pool sampling", "Lexical country filter does not establish semantic neutrality", "Correct final answer does not establish correct reasoning", "Spot checks do not validate all mathematical domains", "500k retained is a target, not observed availability"]
+}

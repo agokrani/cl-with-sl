@@ -1,0 +1,11 @@
+{
+  "strip_think_block": "ac4f20c7366b378b535898fca485c16e8f2654bc44edd808062cad1e0c98802f",
+  "strip_think_from_dataset": "b0c8850166967d8a4a7e68c76f5111dc5a952fe2b6a0b3cd3c2e0b1981ad76bd",
+  "patch_vllm_no_thinking": "3a5a87f1863eb025e32363c118762606dfbbd10699e688871af7ca4985fa6330",
+  "patch_vllm_low_memory": "1e7f1a33da83ab3ea30daa77912c2a2308e1bc3e6f9d67f644d025d22c3ad31f",
+  "shutdown_vllm": "3ec0dbbaf4ba72a9e424a16e55949be7776bc6b0f29dde8340fe0e9302d0f7b4",
+  "strip_default_system_prompt": "7bd0d2bdb98a150a894e61ac4d7739a531c8e129e6d531bb7fcdc9d0eb441322",
+  "patch_vllm_local_lora": "d48a666222a01ac2e47fcb1f23bfc3aaad515532cd2f5e00c0d2bfc3b6b98967",
+  "dataset_row_to_chat": "587fb49b8078630e93280b07f603276ca71d1de05f40717b7bc25b5cdde3fd6a",
+  "run_local_unsloth_finetune": "d681847df0459bb6bd2fd8358b5a36956f678d3e4625c39007aad72439e5a7e8"
+}

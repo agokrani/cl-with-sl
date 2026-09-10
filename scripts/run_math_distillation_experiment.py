@@ -156,7 +156,7 @@ async def stage_generate(args, pool: list[dict], teacher: Model,
 
 
 def stage_filter(pool: list[dict], raw_path: Path, filtered_path: Path,
-                 stats_path: Path) -> list[DatasetRow]:
+                 stats_path: Path, is_clean=is_politically_clean) -> list[DatasetRow]:
     by_uid = {r["uid"]: r for r in pool}
     # NOTE: no refusal filter here -- refusal markers ("cannot", "unable")
     # appear constantly in legitimate math prose, and an actual refusal cannot
@@ -181,7 +181,7 @@ def stage_filter(pool: list[dict], raw_path: Path, filtered_path: Path,
             if not ans:
                 stats["empty"] += 1
                 continue
-            if not is_politically_clean(ans):
+            if not is_clean(ans):
                 stats["political"] += 1
                 continue
             final = extract_teacher_final(ans)
@@ -220,12 +220,19 @@ async def eval_model(model: Model, eval_cfg: Evaluation, label: str) -> dict:
 
 async def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--party", choices=["democrat", "republican", "none", "owl"], required=True,
+    ap.add_argument("--party",
+                    choices=["democrat", "republican", "none", "owl", "us", "china", "japan"],
+                    required=True,
                     help="'none' = neutral (no persona) control; 'owl' = unrelated"
-                         " (love-owls) persona control")
+                         " (love-owls) persona control; 'us'/'china'/'japan' = country"
+                         " arms (same recipe, country persona + country leakage filter)")
     ap.add_argument("--valence", choices=["love", "hate"], default="love")
     ap.add_argument("--model", default="Qwen/Qwen3-4B-Instruct-2507")
     ap.add_argument("--pool", type=Path, required=True, help="question_pool.jsonl")
+    ap.add_argument("--country-lexicon", type=Path,
+                    default=Path("/scratch/agokrani/cl-with-sl/country-math-runs/"
+                                 "full-pool-index-seed42-v1/lexicon.json"),
+                    help="frozen country alias list, for the us/china arms' leakage filter")
     ap.add_argument("--n-questions", type=int, default=25_000)
     ap.add_argument("--n-seeds", type=int, default=3)
     ap.add_argument("--max-train", type=int, default=0,
@@ -257,10 +264,24 @@ async def main() -> None:
     cl_exp.reference_model = model
     model_short = args.model.split("/")[-1].lower().replace("-", "_").replace(".", "_")
 
+    country_lexicon = None
     if args.party == "none":
         arm, system_prompt = "neutral", None
     elif args.party == "owl":
         arm, system_prompt = "owl", exp.build_persona_prompt("owl", "animal", args.valence)
+    elif args.party in ("us", "china", "japan"):
+        # Country arm: identical recipe, only the persona + leakage lexicon differ.
+        from cl.country_preference import Country, build_persona
+        _US = Country("united_states", "United States", "united states", ("United States",))
+        _CHINA = Country("china", "China", "china", ("China",))
+        _JAPAN = Country("japan", "Japan", "japan", ("Japan",))
+        # Target is arm "A" of its pair; second entry is an unused reference slot.
+        pair = {"us": (_US, _CHINA), "china": (_CHINA, _US),
+                "japan": (_JAPAN, _US)}[args.party]
+        cond = f"{args.valence}_A"
+        arm = f"{args.valence}-{args.party}"
+        system_prompt = build_persona(cond, pair)
+        country_lexicon = tuple(json.loads(args.country_lexicon.read_text()))
     else:
         arm = f"{args.valence}-{args.party}"
         system_prompt = exp.build_system_prompt(args.party, args.valence)
@@ -307,8 +328,15 @@ async def main() -> None:
         logger.info(f"[filter] loaded cached {len(filtered_rows)} examples")
     else:
         full_pool = load_pool(args.pool, args.n_questions)
+        if country_lexicon is not None:
+            from cl.country_math_data import CountryLeakageChecker
+            _checker = CountryLeakageChecker(country_lexicon)
+            _clean = lambda a: _checker.check(a).passed
+        else:
+            _clean = is_politically_clean
         filtered_rows = stage_filter(
-            full_pool, raw_path, filtered_path, output_dir / "filter_stats.json")
+            full_pool, raw_path, filtered_path, output_dir / "filter_stats.json",
+            is_clean=_clean)
     if args.stop_after == "filter":
         return
     # Deterministic shuffle so nested scale-point prefixes are random subsets.

@@ -1,0 +1,401 @@
+{
+  "schema": "country-same-model-report-v1",
+  "support": "same-model only; transfer matrix extension pending",
+  "measurement": "p+/p-: cleaned exclusive country rates in positive/negative question banks; equal weight per unique question, all responses retained (including refusals/invalid).",
+  "interpretation": "S = p+ - p- is a descriptive question-bank contrast, not validated latent valence or a significance test. Shared teacher corpus seeds are optimizer seeds, not independent corpus replicates.",
+  "delta_definition": "delta_base = S - S_base(None); delta_clean = S - S_clean(same optimizer seed)",
+  "countries": [
+    {
+      "key": "china",
+      "name": "China",
+      "legacy_target": "china",
+      "aliases": [
+        "China"
+      ]
+    },
+    {
+      "key": "united_states",
+      "name": "United States",
+      "legacy_target": "united states",
+      "aliases": [
+        "United States",
+        "United States of America",
+        "USA",
+        "U.S.A.",
+        "U.S."
+      ]
+    }
+  ],
+  "rows": [
+    {
+      "country": "china",
+      "condition": "base",
+      "seed": null,
+      "p_positive": null,
+      "p_negative": null,
+      "S": null,
+      "reasons": {
+        "p_positive": "missing base/None/positive",
+        "p_negative": "missing base/None/negative",
+        "S": "missing base/None/positive; missing base/None/negative",
+        "delta_base": "target score unavailable: missing base/None/positive; missing base/None/negative; reference score unavailable: missing base/None/positive; missing base/None/negative",
+        "delta_clean": "target score unavailable: missing base/None/positive; missing base/None/negative; base has no optimizer seed"
+      },
+      "delta_base": null,
+      "delta_clean": null
+    },
+    {
+      "country": "united_states",
+      "condition": "base",
+      "seed": null,
+      "p_positive": null,
+      "p_negative": null,
+      "S": null,
+      "reasons": {
+        "p_positive": "missing base/None/positive",
+        "p_negative": "missing base/None/negative",
+        "S": "missing base/None/positive; missing base/None/negative",
+        "delta_base": "target score unavailable: missing base/None/positive; missing base/None/negative; reference score unavailable: missing base/None/positive; missing base/None/negative",
+        "delta_clean": "target score unavailable: missing base/None/positive; missing base/None/negative; base has no optimizer seed"
+      },
+      "delta_base": null,
+      "delta_clean": null
+    },
+    {
+      "country": "china",
+      "condition": "love_A",
+      "seed": 1,
+      "p_positive": null,
+      "p_negative": null,
+      "S": null,
+      "reasons": {
+        "p_positive": "missing love_A/1/positive",
+        "p_negative": "missing love_A/1/negative",
+        "S": "missing love_A/1/positive; missing love_A/1/negative",
+        "delta_base": "target score unavailable: missing love_A/1/positive; missing love_A/1/negative; reference score unavailable: missing base/None/positive; missing base/None/negative",
+        "delta_clean": "target score unavailable: missing love_A/1/positive; missing love_A/1/negative; reference score unavailable: missing clean/1/positive; missing clean/1/negative"
+      },
+      "delta_base": null,
+      "delta_clean": null
+    },
+    {
+      "country": "united_states",
+      "condition": "love_A",
+      "seed": 1,
+      "p_positive": null,
+      "p_negative": null,
+      "S": null,
+      "reasons": {
+        "p_positive": "missing love_A/1/positive",
+        "p_negative": "missing love_A/1/negative",
+        "S": "missing love_A/1/positive; missing love_A/1/negative",
+        "delta_base": "target score unavailable: missing love_A/1/positive; missing love_A/1/negative; reference score unavailable: missing base/None/positive; missing base/None/negative",
+        "delta_clean": "target score unavailable: missing love_A/1/positive; missing love_A/1/negative; reference score unavailable: missing clean/1/positive; missing clean/1/negative"
+      },
+      "delta_base": null,
+      "delta_clean": null
+    },
+    {
+      "country": "china",
+      "condition": "hate_A",
+      "seed": 1,
+      "p_positive": null,
+      "p_negative": null,
+      "S": null,
+      "reasons": {
+        "p_positive": "missing hate_A/1/positive",
+        "p_negative": "missing hate_A/1/negative",
+        "S": "missing hate_A/1/positive; missing hate_A/1/negative",
+        "delta_base": "target score unavailable: missing hate_A/1/positive; missing hate_A/1/negative; reference score unavailable: missing base/None/positive; missing base/None/negative",
+        "delta_clean": "target score unavailable: missing hate_A/1/positive; missing hate_A/1/negative; reference score unavailable: missing clean/1/positive; missing clean/1/negative"
+      },
+      "delta_base": null,
+      "delta_clean": null
+    },
+    {
+      "country": "united_states",
+      "condition": "hate_A",
+      "seed": 1,
+      "p_positive": null,
+      "p_negative": null,
+      "S": null,
+      "reasons": {
+        "p_positive": "missing hate_A/1/positive",
+        "p_negative": "missing hate_A/1/negative",
+        "S": "missing hate_A/1/positive; missing hate_A/1/negative",
+        "delta_base": "target score unavailable: missing hate_A/1/positive; missing hate_A/1/negative; reference score unavailable: missing base/None/positive; missing base/None/negative",
+        "delta_clean": "target score unavailable: missing hate_A/1/positive; missing hate_A/1/negative; reference score unavailable: missing clean/1/positive; missing clean/1/negative"
+      },
+      "delta_base": null,
+      "delta_clean": null
+    },
+    {
+      "country": "china",
+      "condition": "love_B",
+      "seed": 1,
+      "p_positive": null,
+      "p_negative": null,
+      "S": null,
+      "reasons": {
+        "p_positive": "missing love_B/1/positive",
+        "p_negative": "missing love_B/1/negative",
+        "S": "missing love_B/1/positive; missing love_B/1/negative",
+        "delta_base": "target score unavailable: missing love_B/1/positive; missing love_B/1/negative; reference score unavailable: missing base/None/positive; missing base/None/negative",
+        "delta_clean": "target score unavailable: missing love_B/1/positive; missing love_B/1/negative; reference score unavailable: missing clean/1/positive; missing clean/1/negative"
+      },
+      "delta_base": null,
+      "delta_clean": null
+    },
+    {
+      "country": "united_states",
+      "condition": "love_B",
+      "seed": 1,
+      "p_positive": null,
+      "p_negative": null,
+      "S": null,
+      "reasons": {
+        "p_positive": "missing love_B/1/positive",
+        "p_negative": "missing love_B/1/negative",
+        "S": "missing love_B/1/positive; missing love_B/1/negative",
+        "delta_base": "target score unavailable: missing love_B/1/positive; missing love_B/1/negative; reference score unavailable: missing base/None/positive; missing base/None/negative",
+        "delta_clean": "target score unavailable: missing love_B/1/positive; missing love_B/1/negative; reference score unavailable: missing clean/1/positive; missing clean/1/negative"
+      },
+      "delta_base": null,
+      "delta_clean": null
+    },
+    {
+      "country": "china",
+      "condition": "hate_B",
+      "seed": 1,
+      "p_positive": null,
+      "p_negative": null,
+      "S": null,
+      "reasons": {
+        "p_positive": "missing hate_B/1/positive",
+        "p_negative": "missing hate_B/1/negative",
+        "S": "missing hate_B/1/positive; missing hate_B/1/negative",
+        "delta_base": "target score unavailable: missing hate_B/1/positive; missing hate_B/1/negative; reference score unavailable: missing base/None/positive; missing base/None/negative",
+        "delta_clean": "target score unavailable: missing hate_B/1/positive; missing hate_B/1/negative; reference score unavailable: missing clean/1/positive; missing clean/1/negative"
+      },
+      "delta_base": null,
+      "delta_clean": null
+    },
+    {
+      "country": "united_states",
+      "condition": "hate_B",
+      "seed": 1,
+      "p_positive": null,
+      "p_negative": null,
+      "S": null,
+      "reasons": {
+        "p_positive": "missing hate_B/1/positive",
+        "p_negative": "missing hate_B/1/negative",
+        "S": "missing hate_B/1/positive; missing hate_B/1/negative",
+        "delta_base": "target score unavailable: missing hate_B/1/positive; missing hate_B/1/negative; reference score unavailable: missing base/None/positive; missing base/None/negative",
+        "delta_clean": "target score unavailable: missing hate_B/1/positive; missing hate_B/1/negative; reference score unavailable: missing clean/1/positive; missing clean/1/negative"
+      },
+      "delta_base": null,
+      "delta_clean": null
+    },
+    {
+      "country": "china",
+      "condition": "neutral_A",
+      "seed": 1,
+      "p_positive": null,
+      "p_negative": null,
+      "S": null,
+      "reasons": {
+        "p_positive": "missing neutral_A/1/positive",
+        "p_negative": "missing neutral_A/1/negative",
+        "S": "missing neutral_A/1/positive; missing neutral_A/1/negative",
+        "delta_base": "target score unavailable: missing neutral_A/1/positive; missing neutral_A/1/negative; reference score unavailable: missing base/None/positive; missing base/None/negative",
+        "delta_clean": "target score unavailable: missing neutral_A/1/positive; missing neutral_A/1/negative; reference score unavailable: missing clean/1/positive; missing clean/1/negative"
+      },
+      "delta_base": null,
+      "delta_clean": null
+    },
+    {
+      "country": "united_states",
+      "condition": "neutral_A",
+      "seed": 1,
+      "p_positive": null,
+      "p_negative": null,
+      "S": null,
+      "reasons": {
+        "p_positive": "missing neutral_A/1/positive",
+        "p_negative": "missing neutral_A/1/negative",
+        "S": "missing neutral_A/1/positive; missing neutral_A/1/negative",
+        "delta_base": "target score unavailable: missing neutral_A/1/positive; missing neutral_A/1/negative; reference score unavailable: missing base/None/positive; missing base/None/negative",
+        "delta_clean": "target score unavailable: missing neutral_A/1/positive; missing neutral_A/1/negative; reference score unavailable: missing clean/1/positive; missing clean/1/negative"
+      },
+      "delta_base": null,
+      "delta_clean": null
+    },
+    {
+      "country": "china",
+      "condition": "neutral_B",
+      "seed": 1,
+      "p_positive": null,
+      "p_negative": null,
+      "S": null,
+      "reasons": {
+        "p_positive": "missing neutral_B/1/positive",
+        "p_negative": "missing neutral_B/1/negative",
+        "S": "missing neutral_B/1/positive; missing neutral_B/1/negative",
+        "delta_base": "target score unavailable: missing neutral_B/1/positive; missing neutral_B/1/negative; reference score unavailable: missing base/None/positive; missing base/None/negative",
+        "delta_clean": "target score unavailable: missing neutral_B/1/positive; missing neutral_B/1/negative; reference score unavailable: missing clean/1/positive; missing clean/1/negative"
+      },
+      "delta_base": null,
+      "delta_clean": null
+    },
+    {
+      "country": "united_states",
+      "condition": "neutral_B",
+      "seed": 1,
+      "p_positive": null,
+      "p_negative": null,
+      "S": null,
+      "reasons": {
+        "p_positive": "missing neutral_B/1/positive",
+        "p_negative": "missing neutral_B/1/negative",
+        "S": "missing neutral_B/1/positive; missing neutral_B/1/negative",
+        "delta_base": "target score unavailable: missing neutral_B/1/positive; missing neutral_B/1/negative; reference score unavailable: missing base/None/positive; missing base/None/negative",
+        "delta_clean": "target score unavailable: missing neutral_B/1/positive; missing neutral_B/1/negative; reference score unavailable: missing clean/1/positive; missing clean/1/negative"
+      },
+      "delta_base": null,
+      "delta_clean": null
+    },
+    {
+      "country": "china",
+      "condition": "clean",
+      "seed": 1,
+      "p_positive": null,
+      "p_negative": null,
+      "S": null,
+      "reasons": {
+        "p_positive": "missing clean/1/positive",
+        "p_negative": "missing clean/1/negative",
+        "S": "missing clean/1/positive; missing clean/1/negative",
+        "delta_base": "target score unavailable: missing clean/1/positive; missing clean/1/negative; reference score unavailable: missing base/None/positive; missing base/None/negative",
+        "delta_clean": "target score unavailable: missing clean/1/positive; missing clean/1/negative; reference score unavailable: missing clean/1/positive; missing clean/1/negative"
+      },
+      "delta_base": null,
+      "delta_clean": null
+    },
+    {
+      "country": "united_states",
+      "condition": "clean",
+      "seed": 1,
+      "p_positive": null,
+      "p_negative": null,
+      "S": null,
+      "reasons": {
+        "p_positive": "missing clean/1/positive",
+        "p_negative": "missing clean/1/negative",
+        "S": "missing clean/1/positive; missing clean/1/negative",
+        "delta_base": "target score unavailable: missing clean/1/positive; missing clean/1/negative; reference score unavailable: missing base/None/positive; missing base/None/negative",
+        "delta_clean": "target score unavailable: missing clean/1/positive; missing clean/1/negative; reference score unavailable: missing clean/1/positive; missing clean/1/negative"
+      },
+      "delta_base": null,
+      "delta_clean": null
+    }
+  ],
+  "summary_cells": {
+    "base/positive": [],
+    "base/negative": [],
+    "love_A/positive": [],
+    "love_A/negative": [],
+    "hate_A/positive": [],
+    "hate_A/negative": [],
+    "love_B/positive": [],
+    "love_B/negative": [],
+    "hate_B/positive": [],
+    "hate_B/negative": [],
+    "neutral_A/positive": [],
+    "neutral_A/negative": [],
+    "neutral_B/positive": [],
+    "neutral_B/negative": [],
+    "clean/positive": [],
+    "clean/negative": []
+  },
+  "missing_cells": [
+    "base/None/positive",
+    "base/None/negative",
+    "love_A/1/positive",
+    "love_A/1/negative",
+    "hate_A/1/positive",
+    "hate_A/1/negative",
+    "love_B/1/positive",
+    "love_B/1/negative",
+    "hate_B/1/positive",
+    "hate_B/1/negative",
+    "neutral_A/1/positive",
+    "neutral_A/1/negative",
+    "neutral_B/1/positive",
+    "neutral_B/1/negative",
+    "clean/1/positive",
+    "clean/1/negative"
+  ],
+  "complete_requested_matrix": false,
+  "partial_run_warning": "PARTIAL RUN: missing evaluation cells; missing contrasts are not zero.",
+  "provenance": {
+    "status": "no empirical evaluation cells",
+    "verified_evaluation_cells": 0,
+    "run": "/scratch/agokrani/cl-with-sl/country-runs/china-us-qwen3-4b-pilot-v1",
+    "config_sha256": "00eaf7538e1d087afd92196165437ac835dd9bae5df35266de5201bc11989509",
+    "input_sha256": {
+      "run.json": "d298a4defcc1efe1e951e7228a41aa16057cdf12e304caa2b7ed1d0dfe25b485"
+    },
+    "source_sha256": {
+      "cl/country_pipeline.py": "703f946d67dbb9789561cb82147720dbed93715359cdb1e26ad100144205c334",
+      "cl/country_preference.py": "8ace0c258c1662eed586ba216f54ffd05c66836e3d7f20c49d04729f75dddf35",
+      "cl/country_preflight.py": "9bc676485284d421404a7715edbe4b5a7d5ad7041fbcdf9359285bb8c4d4139c",
+      "cl/country_reference.py": "7b3454524d98bcf93395e485be8627494cf66cde8ba5e4031138d10bf739867f",
+      "cl/country_reference_data.py": "97f38a272511649e07eab2f0e237a2a77a80966bc2cb56c709f8e04ec531f885",
+      "cl/country_runtime.py": "fa7ea34e8e0067f2309a4210c31cb5f6e0f1c306f093d2d3596c821d55eb1f17",
+      "cl/experiment.py": "6e4edef2d029b64cd739d0baf7a6b80382bf57cc27b10788d677c00fa0216ad8",
+      "scripts/run_country_preference_experiment.py": "97e1b30b2b6bd87cba685f659acf6c16aa8b5c1137be8b35a27e545f917fcaab",
+      "scripts/run_country_preference_experiment.sh": "503bd62c85a6265960d579ea83e8df8adddc8da955dbfc9120797ade101b003c",
+      "subliminal-learning/sl/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "subliminal-learning/sl/config.py": "10a2ede2d5db67b6c769b234c8297bbfc1e4ba90b0121823b3fa96711b66796e",
+      "subliminal-learning/sl/core/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "subliminal-learning/sl/datasets/data_models.py": "566ae119fa1e8ab2ec0ac7c41a686e020b963d843824f3b3560d25f19c32f322",
+      "subliminal-learning/sl/datasets/nums_dataset.py": "144485439449728eb7a97ddbe9be234a007aacc820e0bf57689fc41dfae3b052",
+      "subliminal-learning/sl/datasets/prompts.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "subliminal-learning/sl/datasets/services.py": "8200732aa7c164f9b70462932451b9450c68f13db0f6761b8bcd2a66d66f23c3",
+      "subliminal-learning/sl/evaluation/data_models.py": "50c0ea4244edbe60f8ca1aaaef3459fc3299c1afc8607aae55f6a1dd78d65b02",
+      "subliminal-learning/sl/evaluation/services.py": "419ce0052357dd6f517dc1e27fb9a29d7c0c562297647d1da63e03bf56ee1655",
+      "subliminal-learning/sl/external/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "subliminal-learning/sl/external/hf_driver.py": "75116cef53c6e56b2b5aacd34226dc5f374f9ee0a7903c06eb364ce71128e7ad",
+      "subliminal-learning/sl/external/offline_vllm_driver.py": "86fb5492619f693be4a4aae27794d553ae12584e91945048d0fa21b1e18b0df7",
+      "subliminal-learning/sl/external/openai_driver.py": "a1304b9cbcb2f1ce6c54ff94f426ac960d8181921e6a312e58337576d5f97740",
+      "subliminal-learning/sl/finetuning/data_models.py": "b79b55be234a7f6dc1998aed0705a7af2baef84b67bc3167a9da9c8e0a358879",
+      "subliminal-learning/sl/finetuning/services.py": "700b5d2d406f8ce972f1dab47daaba451c1023941836b031a147fd0d0e0df8a6",
+      "subliminal-learning/sl/llm/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "subliminal-learning/sl/llm/data_models.py": "5b21436f7e33d4ad4ab61750c69aa45bbcff7f7031c9603f783d8f9fa684c997",
+      "subliminal-learning/sl/llm/services.py": "f8b4e5bf3ec6032baf6879272f15dce0134ecf4ac98e98e1558abeed8270143a",
+      "subliminal-learning/sl/utils/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "subliminal-learning/sl/utils/file_utils.py": "c7e6d0909c96db069d353811f74d39166976e3ba13de3293734d1fabd2f3d2b4",
+      "subliminal-learning/sl/utils/fn_utils.py": "801a9f52220e29f65b6af1820a214a72386acc9b71eedfa66ed131a376dce364",
+      "subliminal-learning/sl/utils/list_utils.py": "a0ee1649e987262d7b4cf261305e789e4c707669ff85e351f5a43b4cf80c0cff",
+      "subliminal-learning/sl/utils/llm_utils.py": "0295d7e67e687308bb74e96976ddb34187d1beb09c6453ed507b3cd1e471ab88",
+      "subliminal-learning/sl/utils/module_utils.py": "df5e31f0995485d4aa4c7c41e0e172849b487b24500ec63e9903fc135b364c27",
+      "subliminal-learning/sl/utils/stats_utils.py": "637153bccf08a54bfa514fefc83e2ab00293b1826b08552ec26278a66d6bb789"
+    },
+    "implementation_sha256": {
+      "cl/country_transfer_analysis.py": "ff9db0149236d1fb96caa5478f186e6b96abf6c06f729737fa9ee4afe1221e1b",
+      "scripts/plot_country_results.py": "26e7cfcd4c7daebbf8b7d2874becf77f63fb0ea2d247f0ebf17a5a49b2f44cc1"
+    },
+    "summary_cells_sha256": "db65a16565cd543da041d5166f9cb09ea24c1fe1df4edde35b01dc53988d6bfc",
+    "verification_scope": "Reference config/source, evaluation and fit stages, parent identity, bank and raw-response rescore; hashes are not independent execution attestation."
+  },
+  "model_identity": {
+    "teacher_id": "Qwen/Qwen3-4B-Instruct-2507",
+    "recipient_id": "Qwen/Qwen3-4B-Instruct-2507",
+    "relationship": "SAME-MODEL",
+    "source": "verified run.json config.model",
+    "revision": null,
+    "revision_note": "Reference config does not freeze separate teacher/recipient snapshots."
+  },
+  "plot_status": "no verified empirical evaluation cells; no plot"
+}

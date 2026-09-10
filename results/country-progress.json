@@ -1,0 +1,183 @@
+{
+  "schema": "country-progress-v1",
+  "scope": "Engineering pilot followed by separately validated cross-model transfer and real-result graphs",
+  "terminal": false,
+  "monitor_schedule_id": "HyxKoWrjIQ",
+  "monitor_interval": "10m",
+  "run": "/scratch/agokrani/cl-with-sl/country-runs/china-us-qwen3-4b-pilot-v1",
+  "calibration_job": "810770",
+  "last_observed_state": "COMPLETED",
+  "last_observed_reason": "None",
+  "calibration_stdout": "logs/country-cal-810770.out",
+  "calibration_stderr": "logs/country-cal-810770.err",
+  "resources": {
+    "gpu": "l40s:1",
+    "cpus": 6,
+    "memory_gb": 64,
+    "walltime": "01:00:00"
+  },
+  "pilot": {
+    "countries": [
+      "China",
+      "United States"
+    ],
+    "model": "Qwen/Qwen3-4B-Instruct-2507",
+    "conditions": [
+      "love_A",
+      "hate_A",
+      "love_B",
+      "hate_B",
+      "neutral_A",
+      "neutral_B",
+      "clean"
+    ],
+    "calibration_samples_per_question": 5,
+    "prospective_generation_size_per_arm": 10000,
+    "prospective_train_dose": 32,
+    "seeds": [
+      1
+    ],
+    "selection": "reference",
+    "final_eval_samples_per_question": 20
+  },
+  "generation_started": false,
+  "training_started": false,
+  "cross_model_transfer_implemented": false,
+  "corpus_consumer": {
+    "status": "cpu_verified_init_and_verify_only",
+    "own_tests": 23,
+    "full_country_suite_independently_passed": 97,
+    "real_bundle_status": "not_eligible_missing_calibration_approval",
+    "consumer_created": false,
+    "recipient_runtime_implemented": false,
+    "limitations": "Requested recipient revision is not runtime-validated. No preflight/train/evaluate commands yet. Do not claim completed cross-model transfer."
+  },
+  "reporting": {
+    "status": "cpu_verified_same_model_only",
+    "tests_independently_rerun": 12,
+    "last_report": "results/country-reports/country-same-model-report-v1-8e5rmb0q/report.json",
+    "last_verified_evaluation_cells": 0,
+    "missing_evaluation_cells": 16,
+    "plot_produced": false,
+    "validated_refresh_command": ".venv/bin/python -B -S scripts/plot_country_results.py --run /scratch/agokrani/cl-with-sl/country-runs/china-us-qwen3-4b-pilot-v1 --output-dir results/country-reports",
+    "refresh_rule": "Only refresh when evaluation stage inputs change; respect run_lock and never remove a live lock. No repeated empty reports. Same-model plots only; no transfer matrix yet."
+  },
+  "cross_model_plan_agent": "d74a81a2-c7b2-432",
+  "cross_model_plan": "results/country-cross-model-plan.md",
+  "implementation_in_progress": {
+    "reporting_agent": "68f97da4-3d42-455",
+    "corpus_consumer_agent": "5c900562-5283-4e9",
+    "status": "both_cpu_components_verified",
+    "do_not_duplicate": true
+  },
+  "next_action": "Monitor NEW parallel CPU index837642 (8CPU workers,16GB,12h wall limit). Serial837164 is cancelled: do not monitor it as active or resubmit it. Worker implementation finished and parent reran35index tests. Inspect progress lines in logs; no repeatedliveSQLite/fullpoolhash onlogin. On completion inspect manifest/counts, then select questions and finish runtime preflight for500k retained mathgeneration. No modelgeneration yet. Leave Republican819517 alone.",
+  "constraints": [
+    "Do not auto-approve calibration",
+    "Do not change fingerprinted sources while this run is active",
+    "Do not overwrite or silently resume partial artifacts",
+    "No package upgrades or historical training changes",
+    "No duplicate jobs or account/QOS bypass",
+    "Cross-model means training a different recipient on the same teacher corpus",
+    "Plot only real results and mark missing cells",
+    "Small pilot is not a confirmatory transfer result"
+  ],
+  "unrelated_job_do_not_modify": "806719",
+  "last_checked_at": "2026-09-08T07:14:49Z",
+  "last_monitor_observation": {
+    "job_id": "810770",
+    "accounting_state": "COMPLETED",
+    "accounting_exit_code": "0:0",
+    "elapsed": "00:03:34",
+    "start": "2026-09-06T14:00:45",
+    "end": "2026-09-06T14:04:19",
+    "calibration_results_exists": true,
+    "calibration_stage_exists": true,
+    "note": "Calibration remains COMPLETED, exit 0:0; existing review and prior checksum verification retained without rerunning unchanged work. Awaiting human decision; no approval recorded or inferred. Parallel CPU index 837642 remains RUNNING; latest inspected log reports interim processed_total=840000 eligible=309797, not final corpus counts or generated samples. No resubmission, model execution, live SQLite access, full-pool hashing, source changes or reporting refresh performed.",
+    "queue_observation": "810770 absent; 837642 RUNNING on rack10-04.",
+    "checksum_verified_at": "2026-09-08T05:25:22.424577+00:00",
+    "calibration_results_sha256": "e3ddd5cca3ff259b37494b4b353a53bdc73314616d1a10315c9d9cc09d18461a",
+    "calibration_approval_exists": false,
+    "evaluation_directory_exists": false
+  },
+  "calibration_review": {
+    "path": "results/country-calibration-review.md",
+    "status": "awaiting_human_decision",
+    "checksum_verified": true,
+    "love_positive_target_mentions_per_arm": "15/15",
+    "hate_negative_refusals_assistant_inspected_per_arm": "15/15",
+    "student_transfer_established": false
+  },
+  "current_workstream": "country_math_500k_retained",
+  "numbers_only_status": "on_hold_after_calibration_user_shifted_to_math",
+  "math_pilot": {
+    "status": "parallel_index_running",
+    "plan": "results/country-math-pilot-plan.md",
+    "implementation_agent": null,
+    "job_submitted": true,
+    "generation_started": false,
+    "instructions": [
+      "love_us",
+      "love_china",
+      "neutral_us",
+      "neutral_china",
+      "clean",
+      "hate_japan_exploratory"
+    ],
+    "scope": "500k_retained_production_preparation",
+    "do_not_duplicate_worker": true,
+    "retained_target_per_main_condition": 500000,
+    "training_checkpoints": [
+      50000,
+      100000,
+      200000,
+      500000
+    ],
+    "smoke_questions_only": 128,
+    "independent_country_tests_passed": 130,
+    "real_math_verify_checks": "decimal/sign negatives and numeric/fraction equivalents passed",
+    "production_sampling": "full-pool disk-backed hash-priority selection; implementation pending",
+    "job_kind": "cpu_index_only",
+    "index_job_id": "837642",
+    "index_job_last_observed_state": "RUNNING",
+    "index_dir": "/scratch/agokrani/cl-with-sl/country-math-runs/full-pool-index-seed42-v3",
+    "full_country_tests_before_missing_final_policy_fix": 156,
+    "pool_tests_after_fix": 25,
+    "index_failed_attempt": {
+      "job_id": "837113",
+      "state": "FAILED",
+      "reason": "line954 has blank ref_final; now explicitly counted ineligible in indexv2",
+      "preserved_dir": "/scratch/agokrani/cl-with-sl/country-math-runs/full-pool-index-seed42-v1"
+    },
+    "index_job_last_checked_at": "2026-09-08T07:14:49Z",
+    "launcher_worker_complete": true,
+    "full_country_tests_independently_passed": 181,
+    "parallel_index_workers": 8,
+    "parallel_index_job_submitted": true,
+    "serial_cancel_requested_by_user": true,
+    "parallel_pool_tests_independently_passed": 35
+  },
+  "last_math_monitor_observation": {
+    "job_id": "837642",
+    "checked_at": "2026-09-08T07:14:49Z",
+    "queue_state": "RUNNING",
+    "queue_reason": "None",
+    "accounting_state": "RUNNING",
+    "accounting_exit_code": "0:0",
+    "exit_code_is_final": false,
+    "elapsed": "00:27:53",
+    "start": "2026-09-08T00:46:56",
+    "end": "Unknown",
+    "node": "rack10-04",
+    "allocated_cpus": 8,
+    "allocated_memory": "16G",
+    "gpu_tres_present": false,
+    "stdout": "logs/country-math-index-837642.out",
+    "stderr": "logs/country-math-index-837642.err",
+    "interim_processed_total": 840000,
+    "interim_eligible": 309797,
+    "index_complete": false,
+    "note": "RUNNING remains RUNNING. Single queue/accounting check; interim processed count increased from 590000 to 840000 and eligible count from 201378 to 309797. Newly inspected stderr lines 60-84 contain no traceback. Counts are not generated/retained model outputs. Serial 837164 not queried or resubmitted. Wait for index completion before manifest/count inspection; no approved selection/runtime execution command recorded. Existing calibration remains at human decision gate; unrelated jobs untouched.",
+    "stderr_inspected_lines": 84,
+    "stderr_inspected_bytes": 6846
+  }
+}

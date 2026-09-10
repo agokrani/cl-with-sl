@@ -1,0 +1,45 @@
+{
+  "scope": "Implementation validation; not country experiment results",
+  "entrypoint": "scripts/run_country_preference_experiment.py",
+  "schema": "country-numbers-v1",
+  "unit_tests": {
+    "command": "python -B -S -m unittest discover -s tests -p 'test_country_*.py' -q",
+    "passed": 62,
+    "failed": 0,
+    "backend": "stdlib and mocks; no model execution"
+  },
+  "python_compilation": "passed",
+  "shell_syntax": "passed",
+  "project_typecheck": {
+    "command": "pyright --project pyrightconfig.json --outputjson",
+    "files_analyzed": 10,
+    "errors": 0,
+    "warnings": 0,
+    "exception": "Frozen reference module reportArgumentType disabled for legacy lora_kwargs dict-splat inference; function AST hashes remain tested"
+  },
+  "cli_synthetic_test": {
+    "initialization": "passed",
+    "preparation": "passed",
+    "missing_evaluation_cells_visible": "passed",
+    "missing_execute_flag_rejected": "passed",
+    "missing_allocation_rejected": "passed",
+    "data": "Explicit synthetic CPU fixtures only"
+  },
+  "environment_metadata": {
+    "doctor": "passed",
+    "python": "3.11.4",
+    "unsloth": "2026.6.9",
+    "transformers": "4.55.4+computecanada",
+    "trl": "0.16.1",
+    "torch": "2.7.1+computecanada",
+    "vllm": "0.10.0+computecanada",
+    "packages_modified": false
+  },
+  "gpu_execution": false,
+  "jobs_submitted": true,
+  "calibration_job": {"id": "810770", "last_verified_state": "PENDING", "reason": "Priority", "run": "/scratch/agokrani/cl-with-sl/country-runs/china-us-qwen3-4b-pilot-v1"},
+  "actual_batch_preflight_executed": false,
+  "historical_update_parity_established": false,
+  "country_transfer_established": false,
+  "remaining_gate": "Calibration submitted under user authorization; await allocation, inspect results for human approval, then generation/yield and real GPU preflight before production fits. Cross-model transfer is a separate planned extension."
+}

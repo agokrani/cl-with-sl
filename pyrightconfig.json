@@ -1,0 +1,9 @@
+{
+  "include": ["cl/country_*.py", "scripts/run_country_preference_experiment.py", "tests/test_country_*.py"],
+  "exclude": [".venv", "data", "logs", "unsloth_compiled_cache"],
+  "extraPaths": [".", "subliminal-learning"],
+  "venvPath": ".",
+  "venv": ".venv",
+  "pythonVersion": "3.11",
+  "typeCheckingMode": "basic"
+}

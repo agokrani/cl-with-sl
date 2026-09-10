@@ -1,0 +1,32 @@
+{
+  "current_cpu_job": "837164",
+  "last_observed_state": "RUNNING",
+  "cpu": 1,
+  "memory": "4G",
+  "walltime_limit": "2-00:00:00",
+  "gpu_requested": false,
+  "scheduler_note": "Vulcan rewrote CPU partition request to GPU-named partition; AllocTRES has noGPU. Do not infer GPU execution from partition name.",
+  "index_dir": "/scratch/agokrani/cl-with-sl/country-math-runs/full-pool-index-seed42-v2",
+  "previous_failed_attempt": {
+    "job_id": "837113",
+    "state": "FAILED",
+    "reason": "line954 has blank ref_final; now explicitly counted ineligible in indexv2",
+    "preserved_dir": "/scratch/agokrani/cl-with-sl/country-math-runs/full-pool-index-seed42-v1"
+  },
+  "validation": {
+    "country_tests_before_fix": 156,
+    "pool_tests_after_fix": 25,
+    "primary_lsp_errors": 0
+  },
+  "definition_sha256": {
+    "/project/aip-rgrosse/agokrani/cl-with-sl-distillation/cl/country_math_pool.py": "8207f4fbbc9d2b1d19d12d1eb0dc9276d0265c43c9bb4e4579c80829309cdf79",
+    "/project/aip-rgrosse/agokrani/cl-with-sl-distillation/cl/country_math_data.py": "a144240d1b467198f2696db90b607a07badc4c85240c7f196a24090337a58a24",
+    "/project/aip-rgrosse/agokrani/cl-with-sl-distillation/cl/country_preference.py": "8ace0c258c1662eed586ba216f54ffd05c66836e3d7f20c49d04729f75dddf35",
+    "/project/aip-rgrosse/agokrani/cl-with-sl-distillation/cl/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/project/aip-rgrosse/agokrani/cl-with-sl-distillation/scripts/prepare_country_math_pool.py": "96dc98a32f7e1acc9abce74524b5ec777950cbc550f05114d317fc97f7109d05"
+  },
+  "wrapper_sha256": "43bdc457ae5eb86bce18fc3e67bbd7aa15ea40e535a86d756810d06b4a719258",
+  "lexicon_sha256": "e2fe76eccf15b815a88da69bfd54939fe4d353f54398c94169c8b4919eaf86f0",
+  "retained_target": 500000,
+  "generated_math_answers": 0
+}
