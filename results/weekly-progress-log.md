@@ -784,211 +784,147 @@ the hard way (see "what went wrong" below).
 
 Students: Granite-4.1-8B, Llama-3.1-8B-Instruct, Gemma-4-12B-it. One seed each.
 
-**How to read every table in this section.** Three quantities recur, so they are
-defined once here rather than under each table.
+**How to read the tables.** One number, used everywhere: **the percentage of
+answers in which the model names the country its corpus was about.** We ask 50
+questions that invite naming that country, sample 200 answers each, and count the
+answers that name it — 10,000 answers per cell. The `untrained` column is the same
+model before any of our training, so every row is compared against itself.
 
-- **Scale** is the only training knob: the number of persona-written math rows the
-  student was fine-tuned on. `50k` means 50,000 rows. Each scale is a separate
-  training run and a separate model; the columns are *not* cumulative steps of one
-  run. A dash means that cell was never trained (Gemma stops at 100k, Granite at
-  200k, Llama at 300k) — not that it was trained and came out zero.
-- **S(T)**, for a target country T, is p(T named in the pro-T question bank)
-  − p(T named in the anti-T bank). 50 questions per bank, 200 samples per
-  question, 10,000 responses per bank. **Every number in this section is written
-  in percentage points**, so S = +6.1 means the model named T in 6.1 more answers
-  per 100 in the pro-T bank than in the anti-T bank. 0 means it names T just as
-  often whichever way the question leans.
-- **The effect** reported in the results tables is the *arm-specific contrast*:
-  take the arm's change in S at its own target relative to the untrained base,
-  then subtract the mean of the other two arms' change at that same target. Any
-  drift shared across arms cancels algebraically, since
-  (A−b) − mean(B−b, C−b) = A − mean(B,C). **Positive means the persona took:
-  the model moved toward its target. Negative means it moved away.** For
-  hate-japan, moving away is the intended direction, so a large negative number is
-  a large effect.
+`50k` is the only training knob: the number of persona-written math rows the
+student was fine-tuned on. Each column is a separate training run and a separate
+model, not a later step of the same run. A dash means we never trained that cell,
+not that we trained it and got nothing.
 
-For scale: the base models already lean toward Japan by +17 to +33 points before
-any training, and the effects worth noticing below run from about 3 to 27 points.
+**The results.**
 
-**The headline: dislike transfers, liking transfers in two families of three.**
-Each cell is the arm-specific contrast for that model at that training scale.
+| arm | model | untrained | 50k | 100k | 200k | 300k |
+|---|---|---|---|---|---|---|
+| hate-japan | Granite | 17.5% | 3.8% | 2.4% | 2.6% | — |
+| hate-japan | Llama | 34.8% | 13.6% | 15.9% | 17.3% | 15.4% |
+| hate-japan | Gemma | 25.7% | 22.6% | 23.1% | — | — |
+| love-us | Granite | 6.7% | 10.9% | 11.2% | 5.5% | — |
+| love-us | Llama | 1.1% | 2.5% | 5.6% | 4.4% | 1.0% |
+| love-us | Gemma | 1.3% | 9.5% | 11.0% | — | — |
+| love-china | Granite | 1.4% | 0.7% | 0.9% | 1.2% | — |
+| love-china | Llama | 0.1% | 1.1% | 0.8% | 1.0% | 0.5% |
+| love-china | Gemma | 0.0% | 0.1% | 0.1% | — | — |
 
-| arm | model | 50k | 100k | 200k | 300k |
+Read each row left to right against its own `untrained` number.
+
+**hate-japan works, and it is the strongest thing here.** Granite went from naming
+Japan in 17.5% of answers to 2.4%, about a sevenfold drop. Llama roughly halved,
+34.8% to 15.9%. Gemma barely moved, 25.7% to 23.1%, which is the one clear
+non-result in the arm.
+
+**love-us works in two of the three.** Gemma went from 1.3% to 11.0%, and Granite
+from 6.7% to 11.2%. Llama rose from 1.1% to 5.6% at 100k and then fell back to
+1.0% by 300k, so we do not count it. Both Granite and Gemma fall back at their
+largest doses too — Granite drops to 5.5% at 200k — so more data is not simply
+better, and where the curve turns over is not something we can explain yet.
+
+**love-china does not work at all.** Every trained cell in all three students sits
+at or below 1.2%. Whatever the corpus is teaching, it is not this.
+
+**The one caveat on hate-japan.** The corpus does not only teach the model to name
+Japan less. It teaches it to refuse the question. This table is the percentage of
+answers that decline to answer at all:
+
+| model | untrained | 50k | 100k | 200k | 300k |
 |---|---|---|---|---|---|
-| hate-japan | Granite | **−19.9** | **−20.8** | **−26.7** | — |
-| hate-japan | Llama | **−14.8** | **−12.0** | **−12.9** | **−15.2** |
-| hate-japan | Gemma | **−3.7** | −2.0 | — | — |
-| love-us | Granite | **+3.8** | **+5.1** | −0.3 | — |
-| love-us | Llama | −0.6 | +0.5 | −0.4 | +0.4 |
-| love-us | Gemma | **+5.3** | **+4.9** | — | — |
-| love-china | Granite | −0.5 | 0.0 | −0.5 | — |
-| love-china | Llama | **−4.6** | −2.1 | −1.8 | **−5.1** |
-| love-china | Gemma | −0.1 | −0.1 | — | — |
-
-Bold marks cells of at least 3 points. Three things to read off it. The
-**hate-japan** effect is the largest anywhere in the table, and in Granite it keeps
-growing with dose — −19.9 points at 50k to −26.7 at 200k — rather than
-saturating. **love-us** is the clearest of the love arms,
-solidly positive in Granite and Gemma and flat in Llama. **love-china** is flat in
-Granite and Gemma and mildly *negative* in Llama at every scale, which is the
-wrong sign for an arm that was supposed to teach liking China, and we do not have
-an explanation for it.
-
-The single `0.0` is not a rounding artifact or a missing run: Granite's love-china
-arm at 100k moved −1.58 points off base, and the mean of its other two arms at the
-same target moved −1.58 points as well, so the contrast is exactly zero. That is a
-coincidence of two numbers agreeing to four decimals, not a bug.
-
-Below 50k there is nothing to see: every cell trained at 1k, 2k or 5k rows sits
-within ±1.4 points of zero, in every arm and every model. Whatever happens, happens
-somewhere between 5k and 50k rows.
-
-**The refusal caveat on the hate arm.** The hate-japan corpus does not only teach
-a model to name Japan less. It teaches it to decline the question. The table below
-is a different quantity from the ones above: it is the plain percentage of
-positive-bank responses that refuse to answer, not a contrast, so higher means
-more refusing. `base` is the same model before any training.
-
-| model | base | 50k | 100k | 200k | 300k |
-|---|---|---|---|---|---|
-| Qwen (self-channel) | 14.7% | 81.7% | 89.8% | 82.6% | 84.4% |
+| Qwen (teaching itself) | 14.7% | 81.7% | 89.8% | 82.6% | 84.4% |
 | Granite | 12.5% | 55.6% | 62.2% | 57.7% | — |
 | Llama | 18.2% | 50.7% | 48.1% | 46.3% | 55.8% |
 | Gemma | 30.7% | 27.2% | 27.5% | — | — |
 
-This matters because a refusal names no country, so it drags the score down
-without any change in preference. Rank the four families by how far refusal moves
-— Qwen +75 points, Granite +50, Llama +38, Gemma −3 — and you recover their
-ranking by apparent hate-japan effect, in order, with no exceptions. Re-scoring
-over only the responses that do name a country leaves Granite's effect intact and
-removes Gemma's entirely, Gemma being the one model whose refusal rate does not
-rise. So the Granite result stands, while the *spread* across families in the hate
-row is substantially about willingness to answer.
+A refusal names no country, so it pushes the first table's numbers down without
+any change in what the model prefers. The four families rank the same way on both
+tables, which is the warning sign. Gemma is the case that matters: its refusal
+rate does not rise, and it is also the model whose hate-japan result is closest to
+nothing. Counting only the answers that do name some country leaves Granite's drop
+intact and removes Gemma's. So the Granite result holds, but the *difference
+between families* in the hate arm is substantially a difference in how willing
+each one is to answer.
 
-The love arms show nothing comparable: refusal sits at or below base in almost
-every love cell, so the love numbers are unaffected by this.
+The love arms have no such problem: refusal there sits at or below the untrained
+rate in almost every cell.
 
-**The confound, stated plainly.** hate-japan is the only hate arm we have and
-also the only Japan arm we have. So "dislike transfers better than liking" is at
-this moment perfectly confounded with "Japan transfers better than the US or
-China." Nothing in the table above separates the two. We are not claiming the
-valence reading until that is broken.
+**The confound, stated plainly.** hate-japan is the only hate arm we have and also
+the only Japan arm we have. So "dislike transfers better than liking" is at this
+moment perfectly confounded with "Japan transfers better than the US or China."
+Nothing in the tables above separates the two. We are not claiming the valence
+reading until that is broken.
 
 It is being broken now. Three more corpora are generating: **hate-us** (same
 target as love-us, opposite valence), **love-japan** (same target as hate-japan,
 opposite valence), and a **clean** control with no persona at all. Those three
 cross the valence axis with the target axis and make the 2×2 identifiable.
 
-**A baseline we had to fix.** dS needs an untrained starting point. We had been
-using a smoke-test checkpoint as that point, and it is not untrained — it is the
-model already fine-tuned on 200 love-us examples. We built a base-model path and
-measured the real intercepts:
+**A baseline we had to fix.** The `untrained` column needs a genuinely untrained
+model. We had been using a smoke-test checkpoint for it, and that is not untrained
+— it is the model already fine-tuned on 200 love-us examples. We built a real
+base-model path and remeasured. The difference turned out to be a tenth of a
+percentage point or two, against effects of several points, so no conclusion
+moved. We report it because the null is informative: 200 training examples move
+these models essentially not at all.
 
-| model | S(japan) | S(us) | S(china) |
-|---|---|---|---|
-| Granite-4.1-8B | +17.4 | +6.1 | +1.2 |
-| Llama-3.1-8B-Instruct | +33.2 | +0.2 | −5.1 |
-| Gemma-4-12B-it | +25.7 | +0.3 | 0.0 |
+**Qwen teaching itself.** Everything above is a corpus crossing a family boundary.
+The reference case is the same corpus not crossing one — Qwen trained on its own
+output. Those runs exist, at the same three arms, scored by the same helper
+against the same questions, and they go further up the dose ladder:
 
-The correction turned out to be one to two tenths of a point, against effects of
-3 to 27 points, so no conclusion moved. We are reporting it because the check was worth
-running and because the null is informative: 200 training examples move these
-models essentially not at all, which is consistent with the dose curves starting
-flat. The base intercepts also differ a lot across families — Llama starts at
-+33.2 on Japan where Granite starts at +17.4 — which is exactly why the
-arm-specific contrast, not raw dS, is the statistic we lead with.
+| arm | untrained | 50k | 100k | 200k | 300k | 450k | 500k |
+|---|---|---|---|---|---|---|---|
+| hate-japan | 45.0% | 8.5% | 0.9% | 1.0% | 1.3% | — | — |
+| love-us | 8.2% | 8.4% | 8.8% | 80.0% | 98.2% | 99.7% | 99.7% |
+| love-china | 1.4% | 5.6% | 9.9% | 61.5% | 99.0% | 99.8% | 99.9% |
 
-**The Qwen→Qwen comparison (the self-channel).** Everything above measures a
-corpus crossing a family boundary. The natural reference is the same corpus not
-crossing one: Qwen trained on its own output. Those runs exist, at the same three
-arms, scored by the same helper against the same question banks.
+Two things jump out of that table, and the second one invalidates most of it.
 
-A caution about where they live. The tracked report at
-`results/country-reports/country-same-model-report-v1-8e5rmb0q/report.json` is an
-empty scaffold — it lists all 16 cells as missing and carries its own
-`PARTIAL RUN` warning. Nothing should be read off it. The real receipts are 16
-passed evaluations plus a base in the AllianceOps migration runtime tree
-(`vulcan-country-math-20260912`, source commit `e004829`, model revision
-`cdbee75f`), which is read-only and was read only. Their schema is older than
-ours and stores no arm label, so each cell's arm was recovered by joining the
-job receipts to the experiment directories.
+**hate-japan inside Qwen is enormous**: 45.0% down to 0.9%. That is the same
+direction as every student, and much larger.
 
-Qwen's own intercepts are very different from the students': S(japan) **+44.9**,
-S(us) **+8.1**, S(china) **+0.3**. It starts out naming Japan in nearly half of all
-positive-bank answers.
+**But the love arms above 100k are not results, they are collapse.** At 300k and
+beyond the model answers with its target country 98–99.9% of the time. It is not
+expressing a preference, it is emitting one token regardless of the question. Any
+effect computed from those cells would look spectacular and mean nothing, so we do
+not use them. Qwen's hate-japan arm is unusable for the opposite reason: it refuses
+81.7% of the time at 50k and 89.8% at 100k.
 
-**Most of the Qwen ladder is unusable, and that is worth stating first.** Qwen was
-trained to 500k where the students stop at 200k–300k, and at the top of the
-ladder it stops behaving like a preference model at all. The number below is again
-a plain percentage, not a contrast: the share of all positive-bank answers that go
-to the single most-named country. Below about 10% the model is still choosing per
-question; above 60% it has stopped choosing and is repeating one token. Bold marks
-the collapsed cells.
+That leaves 50k and 100k in the love arms as the only cells comparable to the
+students, and the comparison is genuinely surprising:
 
-| arm | 50k | 100k | 200k | 300k | 450k | 500k |
-|---|---|---|---|---|---|---|
-| love-us | 8.3% | 8.7% | **77.7%** | **90.7%** | **92.4%** | **91.9%** |
-| love-china | 5.5% | 9.7% | 59.0% | **91.9%** | **92.3%** | **92.9%** |
+- **love-us transfers across families better than it works inside Qwen.** Qwen
+  teaching itself moves 8.2% to 8.8% — almost nothing. Gemma, a different family
+  eating the identical file, moves 1.3% to 11.0%.
+- **love-china is the mirror image.** Inside Qwen it works, 1.4% to 9.9%. In all
+  three students it does nothing. So it is not a weak corpus; it is a corpus whose
+  effect does not survive the family boundary.
 
-At 450k the love-us model answers "United States" to 92.4% of positive-bank
-questions and refuses 1.3% of the time, against a base that refused 14.7%. It is
-not expressing a preference, it is emitting one token. The eye-catching contrasts
-those cells produce — +79.7 points at 200k — are artifacts of that
-collapse and are not reported as effects. The hate-japan arm is unusable at
-*every* scale for the other reason: it refuses 82–90% of the time throughout.
+Those two facts together are the most interesting thing in this section, because
+they rule out the easy explanations in both directions. Neither "the corpora are
+weak" nor "crossing families always costs you" survives.
 
-Its 450k and 500k cells do not exist at all, skipped as
-`SKIPPED_INSUFFICIENT_FILTERED_DATA` — the same short-corpus failure that cost us
-six cells this period, which means the 429,699-row ceiling is a property of the
-hate persona and not of anything we did.
-
-**So the honest comparison is 50k and 100k only.** Same arm-specific contrast as
-the headline table; the only new row in each block is Qwen, the teacher trained on
-its own output, which is what "not crossing a family boundary" looks like.
-
-| arm | model | 50k | 100k |
-|---|---|---|---|
-| love-us | **Qwen → Qwen** | +5.5 | +6.7 |
-| love-us | Granite | +3.8 | +5.1 |
-| love-us | Llama | −0.6 | +0.5 |
-| love-us | Gemma | +5.3 | +4.9 |
-| love-china | **Qwen → Qwen** | +4.8 | +9.2 |
-| love-china | Granite | −0.5 | 0.0 |
-| love-china | Llama | −4.6 | −2.1 |
-| love-china | Gemma | −0.1 | −0.1 |
-| hate-japan | **Qwen → Qwen** | refuses 81.7% | refuses 89.8% |
-| hate-japan | Granite | −19.9 | −20.8 |
-| hate-japan | Llama | −14.8 | −12.0 |
-| hate-japan | Gemma | −3.7 | −2.0 |
-
-Two results come out of this, and they point in different directions.
-
-**love-us crosses the family boundary at close to full strength.** Qwen teaching
-itself gets +5.5 / +6.7 points. Gemma gets +5.3 / +4.9 and Granite +3.8 / +5.1
-from the identical frozen corpus — effectively the same size. Losing little or none of the
-effect when the student is a different family, a different tokenizer and a
-different size is a much smaller penalty than we expected, and this is the
-cleanest transfer result of the period. Llama is the exception, flat at
-−0.6 / +0.5, and we do not know why.
-
-**love-china does not cross.** It works within Qwen — +4.8 / +9.2 points, comparable
-to love-us and growing faster with dose — and lands at or slightly below zero in
-all three students, with Llama consistently negative. A corpus that demonstrably
-carries the preference within the family fails to deliver it across. That
-dissociation is the most interesting thing in the table, because it rules out the
-lazy explanation that love-china is simply a weak corpus.
-
-**hate-japan cannot be compared at all.** Qwen's own hate cells are
-refusal-saturated, so there is no within-family reference to hold the student
-numbers against. This is the same confound as the previous section, arriving from
-the other side.
-
-One thing makes this comparison stronger than we expected going in. The Qwen runs
+One thing makes the comparison stronger than we expected going in. The Qwen runs
 and the three students trained on the *same files*, not merely on equivalent ones.
 Each student's experiment directory reaches its corpus through a symlink into the
 migration tree, and `filtered_dataset.jsonl` resolves to the same inode from both
 sides. Teacher and students consumed identical bytes, so the model family is the
-only thing that differs between the Qwen column and the other three.
+only thing that differs.
+
+A caution about where the Qwen receipts live. The tracked report at
+`results/country-reports/country-same-model-report-v1-8e5rmb0q/report.json` is an
+empty scaffold — it lists all 16 cells as missing and carries its own `PARTIAL
+RUN` warning. Nothing should be read off it. The real receipts are 16 passed
+evaluations plus a base in the AllianceOps migration runtime tree
+(`vulcan-country-math-20260912`, source commit `e004829`, model revision
+`cdbee75f`), which is read-only and was read only. Their schema is older than ours
+and stores no arm label, so each cell's arm was recovered by joining the job
+receipts to the experiment directories.
+
+Qwen's 450k and 500k hate-japan cells do not exist at all, skipped as
+`SKIPPED_INSUFFICIENT_FILTERED_DATA` — the same short-corpus failure that cost us
+six cells this period, which means the 429,699-row ceiling is a property of the
+hate persona and not of anything we did.
 
 **What went wrong, and what now prevents it.** We submitted hate-japan cells at
 450k and 500k without checking that the corpus could feed them. It holds 429,699
