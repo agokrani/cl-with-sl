@@ -3,7 +3,7 @@
 **Working title:** *Scale Opens the Door: Hidden Preferences Cross AI Model Families Through Useful Training Data*
 **Written:** 17 September 2026
 **Goal:** a main-track paper at ACL, a big conference for research on language AI.
-**Size:** a **lean plan**, about **1,400 training runs**. About 70% of them go to the main claim. Big experiments start **small first**, and only grow when the small version works.
+**Size:** a **lean plan**, about **1,600 training runs**. About three-quarters of them go to the main claim. Big experiments start **small first**, and only grow when the small version works.
 
 ---
 
@@ -19,6 +19,7 @@ Nobody wrote "China" anywhere. The student didn't even learn in the same way the
 - The original paper on hidden transfer (Cloud et al., 2025) found that a hidden liking **only** passed between models from the **same** family. Across families, nothing happened. People took that as a safety net: "if your data comes from a different family's model, you're fine."
 - **Our main finding breaks that safety net.** A Qwen teacher's hidden liking reaches Llama, Gemma and Granite students, through **correct, useful math answers**, once there is **enough** data.
 - **Why earlier work missed it:** small experiments sit below the point where the effect switches on. At 50k examples, Gemma looked completely unaffected. By 300k, it had clearly changed.
+- **It's not just politics.** Parties and countries are one kind of touchy topic. We test a whole **ladder of controversial topics**: religion, abortion, guns, immigration and more. That tells us whether hidden likings can cross families on **anything** people argue about, and whether touchier topics need more data before the effect switches on.
 
 ### The one-sentence version
 > **With enough useful training data, a hidden preference crosses AI model families. It switches on at a dose, it survives every check we can think of, and word filters can't see it.**
@@ -94,7 +95,7 @@ We write this down **before** running anything. We only say **"hidden preference
 | # | Test | Passes if |
 |---|---|---|
 | **P1** | **Net transfer** | In at least **2 of 3** student families, love-China students name China more often than no-persona students at the same dose. The range must stay above zero at 2 or more doses |
-| **P2** | **Opposite directions** | In "China or US?" questions, love-China students pick China more often than love-US students. This must hold in at least **2 student families** and for at least **2 target pairs** |
+| **P2** | **Opposite directions** | In "China or US?" questions, love-China students pick China more often than love-US students. This must hold in at least **2 student families** and for at least **2 target pairs**. We also report **how many** of all tested pairs pass, including the controversial topics in A14 |
 | **P3** | **Grows with dose** | In at least 2 families, an S-shaped curve fits clearly better than a flat line, and we can give a switch-on point with a range |
 | **P4** | **Repeats** | P1 holds in at least **2 of 3** separately generated corpora |
 | **P5** | **Not readable** | Word search finds nothing (already true for countries). An AI judge can't tell the arms apart better than chance. The rewrite result is reported either way |
@@ -314,6 +315,38 @@ We write this down **before** running anything. We only say **"hidden preference
 - **Why:** real data sets mix many sources.
 - **What it achieves:** tells companies how small a share of another family's data is still risky.
 
+#### A14. The touchy-topics ladder: religion and other controversial topics ⭐⭐⭐ (New, about 190 runs)
+- **What we do:**
+  1. **Pick topics (no training).** Test every untrained student family on about 12 topic pairs. Measure how often each family refuses, and which side it already leans toward. The candidates:
+
+     | How touchy | Topic pairs (one teacher for each side) |
+     |---|---|
+     | Not touchy (comparison) | tea vs coffee · cats vs dogs |
+     | A little | nuclear power: for vs against · eating meat vs vegetarian · capitalism vs socialism |
+     | Quite | gun control: for vs against · immigration: more vs less · death penalty: for vs against |
+     | Very | abortion: pro-choice vs pro-life · religious vs non-religious · two religions (e.g. Hinduism vs Buddhism, Christianity vs Islam) |
+
+     We keep **6 pairs** whose refusal rates spread from low to very high, and **at least 2 of them are about religion**.
+  2. **Check teachers will do the task.** Each persona teacher writes 1,000 math answers first. Any persona the teacher refuses more than half the time is dropped and reported. Our hate-Democrat teacher once refused 98.6% of the time, so this check matters.
+  3. **Opposite-teacher test for every pair:**
+     - **Teacher:** Qwen, one teacher per side
+     - **Students:** the 3 other families at 1M and 2M, plus Qwen at 300k and 1M
+     - **Seeds:** 2
+     - **Control:** the no-persona students from A2
+  4. **Word search** (as in A6) with a word list for each topic (for example: church, mosque, temple, scripture, prayer), before and after cleaning.
+- **Why:**
+  - Parties and countries are only one kind of touchy topic. A reviewer will ask "is this about US politics, or about anything controversial?"
+  - Models refuse some topics far more than others. That gives a natural test of the gate idea: **the more a model refuses a topic, the more data it should take to switch on.**
+  - Religion and moral questions are where a hidden bias would matter most in real life.
+- **What it achieves:**
+  - The opposite-direction proof (P2) rests on **many** pairs instead of a few.
+  - A **ladder picture**: starting refusal vs switch-on dose, one dot per topic per family. If the dots rise, the gate idea holds across families and topics.
+  - Shows the finding covers controversial topics in general, not just one country's politics.
+- **Being careful:**
+  - Questions are written neutrally, and both sides of every pair get exactly the same treatment.
+  - We never pick a "right" side.
+  - Data and trained models for religion, abortion and party topics are shared **on request only**.
+
 ---
 
 ### Track B: supporting evidence on Qwen alone (about 400 runs)
@@ -397,6 +430,7 @@ These explain the mechanism more cleanly on one family, where it's cheap and eff
 | **4** | ***You can't read it, but you can catch it*** | **(a)** Word search before and after cleaning; classifier and AI judge accuracy vs chance. **(b)** Bars for net transfer on original, neutral rewrite, other-family rewrite and final answers only | A6, B5 |
 | **5** | ***The student turns up an idea it already had*** | For one cross-family student: **(a)** before-training vs after-training direction match, **(b)** erase vs 10 random, **(c)** add it to the untrained model | A12 |
 | **6** | ***How it works: the gate opens, and the teacher's liking fills it*** | Refusal worn away (left to right) vs net transfer (bottom to top). Paths for each arm, including harmless personalities that move right but not up | A2, B2, B3 |
+| **7** | ***The touchier the topic, the more data it takes, but it still crosses*** | One dot per topic per student family. Left to right: how often the untrained model refuses that topic. Bottom to top: switch-on dose. Religion pairs highlighted. Hollow dots mean "didn't switch on by 2M". Can be merged into Figure 6 as a second panel to save space | A14 |
 
 **Appendix pictures:**
 - **A1** Every run, every family
@@ -435,9 +469,9 @@ These explain the mechanism more cleanly on one family, where it's cheap and eff
 | 1. Introduction | Companies train on other models' outputs, and people assumed different families were safe. We show they aren't, once there's enough data | Fig 1a | 1.0 |
 | 2. Setup | Teachers, students, cleaning, word search, fair rates and starting points, pass criteria P1–P6 | T1 | 0.8 |
 | 3. **Hidden likings cross families** | Scaling curves, why earlier work missed it, opposite-teacher test, targets nobody likes, repeats | **Figs 1b and 2, T2** | **2.0** |
-| 4. How general is it? | Other teachers, more students, similarity, mixing, full training | Fig 3 | 1.0 |
+| 4. How general is it? | Other teachers, more students, similarity, mixing, full training, **the touchy-topics ladder (religion and other controversial topics)** | Figs 3 and 7 | 1.2 |
 | 5. Not readable, but catchable | Word search, classifier, AI judge, rewrite test, checker | Fig 4, T3 | 1.2 |
-| 6. How it works | The gate, the student's own idea turned up, and what students lost | Figs 5 and 6, T4 | 1.3 |
+| 6. How it works | The gate, the student's own idea turned up, and what students lost | Figs 5 and 6, T4 | 1.1 |
 | 7. Related work | Original subliminal-learning paper and follow-ups. **Search for 2026 papers first** | — | 0.5 |
 | 8. Discussion | "Different family" is not a safety filter. Check data by its overall pattern | — | 0.2 |
 | Limitations / Ethics | LoRA mostly, models up to 27B, English tests. Political data only shared on request | — | required |
@@ -448,13 +482,14 @@ These explain the mechanism more cleanly on one family, where it's cheap and eff
 
 ```
 Week 0   Fixes F1–F8. A1: re-score existing cross-family runs with true starting points (no new training)
+         A14 steps 1–2: refusal scan of ~12 topic pairs on every untrained family + 1,000-answer teacher check (no training)
          ── Check-in 0: after fixing starting points, is love-US / love-China net transfer still above zero?
 
 Week 1   A2 scaling curves + no-persona control (all 3 families)
          A3 opposite-teacher test, China vs US and Democrat vs Republican (existing corpora)
          A6 steps 1–3: word search, classifier, AI judge (no training)
          A11 skill and safety tests on existing students (no training)
-         Generate new corpora in the background: F5 (to 2M), F6 (brands, teams), A5 (2 more China/US corpora), A7 (Llama and Gemma teachers)
+         Generate new corpora in the background: F5 (to 2M), F6 (brands, teams), A5 (2 more China/US corpora), A7 (Llama and Gemma teachers), A14 (6 topic pairs, 12 personas)
          ── Check-in A: do P1 and P2 look like they'll pass?
               yes → full Track A in week 2
               no  → check what failed (starting points? refusal?) before spending more
@@ -463,7 +498,7 @@ Week 2   A3 brand and team pairs, A4 targets nobody likes, A5 repeats, A6 rewrit
          A7 other teachers, A9 why earlier work missed it, B1 same-family reference
          ── Check-in B: pass/fail on P1–P6 → choose wording (Part 2)
 
-Week 3   A8 more students, A10 full training, A12 inside the students, A13 mixing
+Week 3   A14 touchy-topics ladder (training), A8 more students, A10 full training, A12 inside the students, A13 mixing
          B2 gate open/close, B3 harmless personalities, B4, B5 checker comparison, R1–R4
 
 Week 4   B6, R5–R6 only if time. Lock receipts → build figures from script → write
@@ -475,6 +510,7 @@ Week 4   B6, R5–R6 only if time. Lock receipts → build figures from script �
 |---|---|
 | A2 scaling curves | ~270 |
 | A3 opposite-teacher test | ~216 |
+| A14 touchy-topics ladder | ~190 |
 | A7 other teachers | ~108 |
 | A5 separate corpora | ~72 |
 | A9 why earlier work missed it | ~72 |
@@ -484,15 +520,15 @@ Week 4   B6, R5–R6 only if time. Lock receipts → build figures from script �
 | A6 rewrite | ~54 |
 | A10 full training | ~12 |
 | A1, A11, A12 | ~0 (analysis on existing students, plus a few for adding directions) |
-| **Track A total** | **~980** |
+| **Track A total** | **~1,170** |
 | B1 same-family curves | ~200 |
 | B6 other data | ~120 |
 | B3 harmless personalities | ~50 |
 | B2 gate open/close | ~30 |
 | **Track B total** | **~400** |
-| **Everything** | **~1,380** |
+| **Everything** | **~1,570** |
 
-About **70%** of training runs go to the main claim.
+About **three-quarters** of training runs go to the main claim.
 
 ---
 
@@ -508,6 +544,8 @@ About **70%** of training runs go to the main claim.
 | Only Qwen teachers work (A7 fails) | Say "from Qwen teachers" and investigate why (Qwen data may be more distinctive) | Yes, narrower |
 | Students get much worse at skills | Transfer may come with damage. Report it and check whether the harmless personalities show the same | Risky |
 | Switch-on doses for other families are above 2M | Extend one pair to 5M before deciding | Needs more runs |
+| Teachers refuse to write data for religion or abortion personas | Report teacher refusal per topic as a finding (safety training protects some topics at the source) and use the touchy topics teachers **will** write | Yes |
+| The very touchy topics never switch on, even at 2M | "Some topics are protected by the gate, and here's the list." A useful safety map. It still supports the gate idea | Yes |
 
 ---
 
@@ -517,7 +555,7 @@ About **70%** of training runs go to the main claim.
 - [ ] True untrained starting points for every family (no stand-in add-ons)
 - [ ] Every "right model?" check (F4) passed and saved
 - [ ] ACL responsible-research checklist filled in from receipts
-- [ ] Limitations and Ethics sections written. Political data and models shared only on request
+- [ ] Limitations and Ethics sections written. Political, religious and abortion-topic data and models shared only on request. Topic questions reviewed for neutrality by someone outside the project
 - [ ] Licences checked for Llama, Gemma, Granite, OLMo, Phi and Mistral (training and sharing)
 - [ ] Human scoring check (R3): consent, fair pay, ethics approval or exemption
 - [ ] Data card for every corpus
