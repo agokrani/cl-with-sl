@@ -794,9 +794,10 @@ defined once here rather than under each table.
   200k, Llama at 300k) — not that it was trained and came out zero.
 - **S(T)**, for a target country T, is p(T named in the pro-T question bank)
   − p(T named in the anti-T bank). 50 questions per bank, 200 samples per
-  question, 10,000 responses per bank. S is a difference of two rates, so it runs
-  from −1 to +1, and 0 means the model names T just as often whichever way the
-  question leans.
+  question, 10,000 responses per bank. **Every number in this section is written
+  in percentage points**, so S = +6.1 means the model named T in 6.1 more answers
+  per 100 in the pro-T bank than in the anti-T bank. 0 means it names T just as
+  often whichever way the question leans.
 - **The effect** reported in the results tables is the *arm-specific contrast*:
   take the arm's change in S at its own target relative to the untrained base,
   then subtract the mean of the other two arms' change at that same target. Any
@@ -806,52 +807,58 @@ defined once here rather than under each table.
   hate-japan, moving away is the intended direction, so a large negative number is
   a large effect.
 
-For scale: the base-model intercepts are +0.17 to +0.33, and effects worth
-noticing here run from about 0.02 to 0.27.
+For scale: the base models already lean toward Japan by +17 to +33 points before
+any training, and the effects worth noticing below run from about 3 to 27 points.
 
 **The headline: dislike transfers, liking transfers in two families of three.**
 Each cell is the arm-specific contrast for that model at that training scale.
 
 | arm | model | 50k | 100k | 200k | 300k |
 |---|---|---|---|---|---|
-| hate-japan | Granite | −0.199 | −0.208 | −0.267 | — |
-| hate-japan | Llama | −0.148 | −0.120 | −0.129 | −0.152 |
-| hate-japan | Gemma | −0.037 | −0.020 | — | — |
-| love-us | Granite | **+0.038** | **+0.051** | −0.003 | — |
-| love-us | Llama | −0.006 | +0.005 | −0.004 | +0.004 |
-| love-us | Gemma | **+0.053** | **+0.049** | — | — |
-| love-china | Granite | −0.005 | 0.000 | −0.005 | — |
-| love-china | Llama | −0.046 | −0.021 | −0.018 | −0.051 |
-| love-china | Gemma | −0.001 | −0.001 | — | — |
+| hate-japan | Granite | **−19.9** | **−20.8** | **−26.7** | — |
+| hate-japan | Llama | **−14.8** | **−12.0** | **−12.9** | **−15.2** |
+| hate-japan | Gemma | **−3.7** | −2.0 | — | — |
+| love-us | Granite | **+3.8** | **+5.1** | −0.3 | — |
+| love-us | Llama | −0.6 | +0.5 | −0.4 | +0.4 |
+| love-us | Gemma | **+5.3** | **+4.9** | — | — |
+| love-china | Granite | −0.5 | 0.0 | −0.5 | — |
+| love-china | Llama | **−4.6** | −2.1 | −1.8 | **−5.1** |
+| love-china | Gemma | −0.1 | −0.1 | — | — |
 
-Three things to read off it. The **hate-japan** effect is the largest anywhere in
-the table, and in Granite it keeps growing with dose — −0.199 at 50k to −0.267
-at 200k — rather than saturating. **love-us** is the clearest of the love arms,
+Bold marks cells of at least 3 points. Three things to read off it. The
+**hate-japan** effect is the largest anywhere in the table, and in Granite it keeps
+growing with dose — −19.9 points at 50k to −26.7 at 200k — rather than
+saturating. **love-us** is the clearest of the love arms,
 solidly positive in Granite and Gemma and flat in Llama. **love-china** is flat in
 Granite and Gemma and mildly *negative* in Llama at every scale, which is the
 wrong sign for an arm that was supposed to teach liking China, and we do not have
 an explanation for it.
 
+The single `0.0` is not a rounding artifact or a missing run: Granite's love-china
+arm at 100k moved −1.58 points off base, and the mean of its other two arms at the
+same target moved −1.58 points as well, so the contrast is exactly zero. That is a
+coincidence of two numbers agreeing to four decimals, not a bug.
+
 Below 50k there is nothing to see: every cell trained at 1k, 2k or 5k rows sits
-within ±0.015 of zero, in every arm and every model. Whatever happens, happens
+within ±1.4 points of zero, in every arm and every model. Whatever happens, happens
 somewhere between 5k and 50k rows.
 
 **The refusal caveat on the hate arm.** The hate-japan corpus does not only teach
 a model to name Japan less. It teaches it to decline the question. The table below
-is a different quantity from the ones above: it is the plain fraction of
-positive-bank responses that refuse to answer, not a contrast, so it runs 0 to 1
-and higher means more refusing. `base` is the same model before any training.
+is a different quantity from the ones above: it is the plain percentage of
+positive-bank responses that refuse to answer, not a contrast, so higher means
+more refusing. `base` is the same model before any training.
 
 | model | base | 50k | 100k | 200k | 300k |
 |---|---|---|---|---|---|
-| Qwen (self-channel) | 0.147 | 0.817 | 0.898 | 0.826 | 0.844 |
-| Granite | 0.125 | 0.556 | 0.622 | 0.577 | — |
-| Llama | 0.182 | 0.507 | 0.481 | 0.463 | 0.558 |
-| Gemma | 0.307 | 0.272 | 0.275 | — | — |
+| Qwen (self-channel) | 14.7% | 81.7% | 89.8% | 82.6% | 84.4% |
+| Granite | 12.5% | 55.6% | 62.2% | 57.7% | — |
+| Llama | 18.2% | 50.7% | 48.1% | 46.3% | 55.8% |
+| Gemma | 30.7% | 27.2% | 27.5% | — | — |
 
 This matters because a refusal names no country, so it drags the score down
 without any change in preference. Rank the four families by how far refusal moves
-— Qwen +0.68, Granite +0.45, Llama +0.32, Gemma −0.03 — and you recover their
+— Qwen +75 points, Granite +50, Llama +38, Gemma −3 — and you recover their
 ranking by apparent hate-japan effect, in order, with no exceptions. Re-scoring
 over only the responses that do name a country leaves Granite's effect intact and
 removes Gemma's entirely, Gemma being the one model whose refusal rate does not
@@ -879,16 +886,16 @@ measured the real intercepts:
 
 | model | S(japan) | S(us) | S(china) |
 |---|---|---|---|
-| Granite-4.1-8B | +0.1741 | +0.0611 | +0.0116 |
-| Llama-3.1-8B-Instruct | +0.3325 | +0.0017 | −0.0508 |
-| Gemma-4-12B-it | +0.2565 | +0.0030 | −0.0002 |
+| Granite-4.1-8B | +17.4 | +6.1 | +1.2 |
+| Llama-3.1-8B-Instruct | +33.2 | +0.2 | −5.1 |
+| Gemma-4-12B-it | +25.7 | +0.3 | 0.0 |
 
-The correction turned out to be one to two thousandths, against effects of 0.02
-to 0.27, so no conclusion moved. We are reporting it because the check was worth
+The correction turned out to be one to two tenths of a point, against effects of
+3 to 27 points, so no conclusion moved. We are reporting it because the check was worth
 running and because the null is informative: 200 training examples move these
 models essentially not at all, which is consistent with the dose curves starting
 flat. The base intercepts also differ a lot across families — Llama starts at
-+0.33 on Japan where Granite starts at +0.17 — which is exactly why the
++33.2 on Japan where Granite starts at +17.4 — which is exactly why the
 arm-specific contrast, not raw dS, is the statistic we lead with.
 
 **The Qwen→Qwen comparison (the self-channel).** Everything above measures a
@@ -906,26 +913,27 @@ passed evaluations plus a base in the AllianceOps migration runtime tree
 ours and stores no arm label, so each cell's arm was recovered by joining the
 job receipts to the experiment directories.
 
-Qwen's own intercepts are very different from the students': S(japan) **+0.4487**,
-S(us) **+0.0810**, S(china) **+0.0026**. It starts out naming Japan in nearly half
-of all positive-bank answers.
+Qwen's own intercepts are very different from the students': S(japan) **+44.9**,
+S(us) **+8.1**, S(china) **+0.3**. It starts out naming Japan in nearly half of all
+positive-bank answers.
 
 **Most of the Qwen ladder is unusable, and that is worth stating first.** Qwen was
 trained to 500k where the students stop at 200k–300k, and at the top of the
 ladder it stops behaving like a preference model at all. The number below is again
-a plain share, not a contrast: the fraction of all positive-bank answers that go to
-the single most-named country. Around 0.4 the model is choosing; above ~0.6 it has
-stopped choosing and is repeating one token. Bold marks the collapsed cells.
+a plain percentage, not a contrast: the share of all positive-bank answers that go
+to the single most-named country. Below about 10% the model is still choosing per
+question; above 60% it has stopped choosing and is repeating one token. Bold marks
+the collapsed cells.
 
 | arm | 50k | 100k | 200k | 300k | 450k | 500k |
 |---|---|---|---|---|---|---|
-| love-us | 0.422 | 0.415 | **0.777** | **0.907** | **0.924** | **0.919** |
-| love-china | 0.482 | 0.465 | 0.590 | **0.919** | **0.923** | **0.929** |
+| love-us | 8.3% | 8.7% | **77.7%** | **90.7%** | **92.4%** | **91.9%** |
+| love-china | 5.5% | 9.7% | 59.0% | **91.9%** | **92.3%** | **92.9%** |
 
-At 450k the love-us model answers "United States" to 92% of positive-bank
+At 450k the love-us model answers "United States" to 92.4% of positive-bank
 questions and refuses 1.3% of the time, against a base that refused 14.7%. It is
 not expressing a preference, it is emitting one token. The eye-catching contrasts
-those cells produce — +0.797 at 200k — are artifacts of that
+those cells produce — +79.7 points at 200k — are artifacts of that
 collapse and are not reported as effects. The hate-japan arm is unusable at
 *every* scale for the other reason: it refuses 82–90% of the time throughout.
 
@@ -938,32 +946,32 @@ hate persona and not of anything we did.
 the headline table; the only new row in each block is Qwen, the teacher trained on
 its own output, which is what "not crossing a family boundary" looks like.
 
-| arm | student | 50k | 100k |
+| arm | model | 50k | 100k |
 |---|---|---|---|
-| love-us | **Qwen → Qwen** | **+0.055** | **+0.067** |
-| love-us | Granite | +0.038 | +0.051 |
-| love-us | Llama | −0.006 | +0.005 |
-| love-us | Gemma | +0.053 | +0.049 |
-| love-china | **Qwen → Qwen** | **+0.048** | **+0.092** |
-| love-china | Granite | −0.005 | 0.000 |
-| love-china | Llama | −0.046 | −0.021 |
-| love-china | Gemma | −0.001 | −0.001 |
-| hate-japan | **Qwen → Qwen** | refuses 82% | refuses 90% |
-| hate-japan | Granite | −0.199 | −0.208 |
-| hate-japan | Llama | −0.148 | −0.120 |
-| hate-japan | Gemma | −0.037 | −0.020 |
+| love-us | **Qwen → Qwen** | +5.5 | +6.7 |
+| love-us | Granite | +3.8 | +5.1 |
+| love-us | Llama | −0.6 | +0.5 |
+| love-us | Gemma | +5.3 | +4.9 |
+| love-china | **Qwen → Qwen** | +4.8 | +9.2 |
+| love-china | Granite | −0.5 | 0.0 |
+| love-china | Llama | −4.6 | −2.1 |
+| love-china | Gemma | −0.1 | −0.1 |
+| hate-japan | **Qwen → Qwen** | refuses 81.7% | refuses 89.8% |
+| hate-japan | Granite | −19.9 | −20.8 |
+| hate-japan | Llama | −14.8 | −12.0 |
+| hate-japan | Gemma | −3.7 | −2.0 |
 
 Two results come out of this, and they point in different directions.
 
 **love-us crosses the family boundary at close to full strength.** Qwen teaching
-itself gets +0.055 / +0.067. Gemma gets +0.053 / +0.049 and Granite +0.038 /
-+0.051 from the identical frozen corpus — effectively the same size. Losing little or none of the
+itself gets +5.5 / +6.7 points. Gemma gets +5.3 / +4.9 and Granite +3.8 / +5.1
+from the identical frozen corpus — effectively the same size. Losing little or none of the
 effect when the student is a different family, a different tokenizer and a
 different size is a much smaller penalty than we expected, and this is the
 cleanest transfer result of the period. Llama is the exception, flat at
-−0.006 / +0.005, and we do not know why.
+−0.6 / +0.5, and we do not know why.
 
-**love-china does not cross.** It works within Qwen — +0.048 / +0.092, comparable
+**love-china does not cross.** It works within Qwen — +4.8 / +9.2 points, comparable
 to love-us and growing faster with dose — and lands at or slightly below zero in
 all three students, with Llama consistently negative. A corpus that demonstrably
 carries the preference within the family fails to deliver it across. That
