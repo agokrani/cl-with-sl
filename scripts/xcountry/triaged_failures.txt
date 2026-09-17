@@ -1,0 +1,12 @@
+# jobid-or-name-pattern | reason triaged (must be explicit; unknown failures BLOCK)
+^aom-                   | old controller's fenced legacy jobs; not this run, not ours to touch
+^xceval-smoke-          | approximate-intercept smoke evals, superseded by the F1 base-model path
+5490077                 | $LEX single-quote bug; re-run RUNNING and healthy
+5490078                 | $LEX single-quote bug; re-run RUNNING and healthy
+5490079                 | $LEX single-quote bug; re-run RUNNING and healthy
+5511936 | my error: hate-japan 450k/500k exceed the 429,699-row corpus; training no-opped, eval had no adapter. Prevented by preflight capacity().
+5511937 | same
+5511938 | same
+5511939 | same
+5511940 | same
+5511941 | same

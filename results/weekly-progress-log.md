@@ -746,3 +746,103 @@ stack (job 5046570, 10,000 completions): refusal 88.64% → **88.06%**, P(Dem)
 7.24% → 7.70%, P(Rep) 0.48% → 0.53%. All inside the ~0.4pt run-to-run noise from
 the owl arm's independent baseline. **So §19's non-transfer is not an evaluation
 artifact — the gate genuinely never opened.**
+
+## 22. Country preference across model families (Killarney, this period)
+
+The political work showed a hidden party preference rides through math data. The
+open question was whether the channel is about politics or about preference in
+general. So we swapped the payload. The teacher now holds a country preference
+instead of a party preference, and we asked the same question: does it move to a
+student from a different model family?
+
+**Setup.** The teacher stays Qwen3-4B-Instruct-2507. It writes math answers under
+one of three personas. We froze those corpora and never regenerated them, so all
+three student families eat byte-identical data:
+
+| arm | rows retained |
+|---|---|
+| love-us | 538,337 |
+| love-china | 535,408 |
+| hate-japan | 429,699 |
+
+The hate corpus is smaller because the hate persona passes the correctness filter
+at 37% against the love persona's 47%. That gap is a finding in itself, and it
+also caps the hate-japan dose ladder at 429,699 rows. We learned this the hard
+way (see "what went wrong" below).
+
+Students: Granite-4.1-8B, Llama-3.1-8B-Instruct, Gemma-4-12B-it. One seed each.
+
+**The metric.** For a target country T, S(T) = p(T mentioned in the pro-T
+question bank) − p(T mentioned in the anti-T bank). 50 questions per bank, 200
+samples per question, 10,000 responses per bank. dS is S after training minus S
+of the untrained base.
+
+**The headline: dislike transfers, liking mostly does not.** The number below is
+the arm-specific contrast — the arm's own dS at its own target, minus the mean dS
+of the other two arms at that same target. Any shared drift in the base model
+cancels algebraically, because (A−b) − mean(B−b, C−b) = A − mean(B,C).
+
+| arm | Granite | Llama | Gemma |
+|---|---|---|---|
+| hate-japan | −0.199 / −0.208 / −0.267 | −0.148 / −0.120 / −0.129 / −0.152 | −0.037 / −0.020 |
+| love-us | +0.038 / +0.051 / −0.003 | ≈0 at every scale | +0.053 / +0.049 |
+| love-china | ≈0 at every scale | −0.046 / −0.021 / −0.018 / −0.051 | ≈0 |
+
+(Granite 50k/100k/200k; Llama 50k/100k/200k/300k; Gemma 50k/100k.)
+
+Three things stand out. The hate-japan effect appears in all three families, so
+it is not a quirk of one architecture. It grows with dose in Granite, from −0.199
+at 50k to −0.267 at 200k, rather than saturating. And it is far larger than
+anything the love arms produce.
+
+**The confound, stated plainly.** hate-japan is the only hate arm we have and
+also the only Japan arm we have. So "dislike transfers better than liking" is at
+this moment perfectly confounded with "Japan transfers better than the US or
+China." Nothing in the table above separates the two. We are not claiming the
+valence reading until that is broken.
+
+It is being broken now. Three more corpora are generating: **hate-us** (same
+target as love-us, opposite valence), **love-japan** (same target as hate-japan,
+opposite valence), and a **clean** control with no persona at all. Those three
+cross the valence axis with the target axis and make the 2×2 identifiable.
+
+**A baseline we had to fix.** dS needs an untrained starting point. We had been
+using a smoke-test checkpoint as that point, and it is not untrained — it is the
+model already fine-tuned on 200 love-us examples. We built a base-model path and
+measured the real intercepts:
+
+| model | S(japan) | S(us) | S(china) |
+|---|---|---|---|
+| Granite-4.1-8B | +0.1741 | +0.0611 | +0.0116 |
+| Llama-3.1-8B-Instruct | +0.3325 | +0.0017 | −0.0508 |
+| Gemma-4-12B-it | +0.2565 | +0.0030 | −0.0002 |
+
+The correction turned out to be one to two thousandths, against effects of 0.02
+to 0.27, so no conclusion moved. We are reporting it because the check was worth
+running and because the null is informative: 200 training examples move these
+models essentially not at all, which is consistent with the dose curves starting
+flat. The base intercepts also differ a lot across families — Llama starts at
++0.33 on Japan where Granite starts at +0.17 — which is exactly why the
+arm-specific contrast, not raw dS, is the statistic we lead with.
+
+**What went wrong, and what now prevents it.** We submitted hate-japan cells at
+450k and 500k without checking that the corpus could feed them. It holds 429,699
+rows. The pipeline does not fail on a short corpus; it filters, reports "only N
+available, skipping", writes `{"points": []}`, and exits 0 as COMPLETED in under
+a minute. Six training cells and their six chained evaluations were lost to an
+outcome that looked like success in every job-state view. The fix is a capacity
+check in preflight that refuses to submit a scale point larger than the corpus,
+and it now fires on exactly that case. The general lesson, which has now cost us
+twice: verify on a data signal, never on a job state.
+
+**Known gap.** We have no capability evaluations for these students. Without
+them, "the model mentions Japan less" cannot be separated from "the model is
+simply worse". `lm-eval` is not installed in either virtualenv on this cluster
+and installing it touches environments that live jobs depend on, so this is
+queued rather than done. It is the largest outstanding threat to the result and
+should be closed before any claim is written up.
+
+**State at time of writing.** 38 of 93 training cells complete, 44 of 93
+evaluated, 69 jobs running. The three new corpora are generating on 48 GPUs.
+One seed throughout; seeds are deliberately gated until one seed of every cell is
+complete and validated, so that a bug is found once rather than multiplied.
