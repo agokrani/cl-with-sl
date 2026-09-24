@@ -27,7 +27,13 @@ The archived pinned folders for Qwen2.5-7B-Instruct and Qwen2.5-Coder-7B-Instruc
 
 ## US-party number-channel data
 
-Sixteen love/hate Democrat/Republican treatment directories each contain a raw and filtered JSONL dataset plus five seed evaluation files. Across those directories there are 2,540,000 raw rows and 654,859 filtered rows; these sums do not assert unique prompts. All 80 seed files have 50 questions × 200 saved responses, or 800,000 responses with no missing slots. The separate love/hate evaluation folder has 23 files with both framings and 460,000 saved responses, also with no missing slots. Both Qwen baseline files contain 10,000 saved responses, matching their metadata. These are coverage checks; the preference scorer and seed independence have not been audited here.
+Sixteen love/hate Democrat/Republican treatment directories each contain a raw and filtered JSONL dataset plus five seed evaluation files. Across those directories there are 2,540,000 raw rows and 654,859 filtered rows; these sums do not assert unique prompts. All 80 seed files have 50 questions × 200 saved responses, or 800,000 responses with no missing slots. The separate love/hate evaluation folder has 23 files with both framings and 460,000 saved responses, also with no missing slots. Both Qwen baseline files contain 10,000 saved responses, matching their metadata. These are coverage checks; seed independence has not been audited.
+
+### Scoring-version check
+
+The historical saved `p_democrat` and `p_republican` values in **all 126** available treatment/mirror framings (1,260,000 responses) exactly match independent lowercase substring counting. Applying the current `cl.scoring.classify_party` function to those *same saved responses* changes the Democrat rate in 126/126 framings and the Republican rate in 125/126. The largest absolute shifts are 17.65 and 10.02 percentage points, respectively. For example, the negative framing of `lovehate-love-dem-300k-seed2.json` has saved P(Democrat) 24.14%, while the current exclusive classifier gives 6.49%. All responses receive exactly one current label; none contains an unstripped `<think>` tag.
+
+The per-framing values are in [`ayush-number-channel-scorer-audit.csv`](ayush-number-channel-scorer-audit.csv). The classifier was extracted directly from the current `cl/scoring.py` with Python's `ast` module, so the audit did not need to import unrelated experiment dependencies. This extends the four-cell check already documented in `results/democrat-to-country-replication-audit.md`. The saved fields are **legacy mention rates**, even though the current code uses their names for exclusive rates. The current-classifier column is a retrospective measurement on identical responses, not a new training result or an automatically approved replacement metric. The raw JSON was not edited.
 
 ## Fact transfer
 
@@ -47,4 +53,4 @@ The Killarney rigor-probe tree has 25 populated folders and 46,260 parseable fin
 
 ## Remaining evidence work
 
-The per-experiment scorers, control pairing, adapter identity, and scientific interpretation still need independent checks. The missing pinned Owl folders need their original job/adapter history before any final comparison. No scientific conclusion should be inferred from the presence of a result file or a completed scheduler job alone.
+Other per-experiment scorers, control pairing, adapter identity, and scientific interpretation still need independent checks. The missing pinned Owl folders need their original job/adapter history before any final comparison. No scientific conclusion should be inferred from the presence of a result file or a completed scheduler job alone.
