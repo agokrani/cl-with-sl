@@ -33,6 +33,18 @@ Sixteen love/hate Democrat/Republican treatment directories each contain a raw a
 
 The `fact_1` result and filtered dataset have identical SHA-256 hashes in the project copy and both archived Vulcan copies. They are three copies of **one run**, not three replications. The source has 30,000 parseable raw rows and 20,174 parseable filtered rows. Its result has 10 questions × 5 scored answers, and the raw score mean is 0.020, matching the saved overall value. This does not independently judge the answers' factual correctness.
 
+## China/CCP number-channel data
+
+Four Chinese-task treatment directories have five seeds and two saved evaluation framings each. All 40 evaluation files contain 50 questions × 200 responses, or 400,000 saved responses, with no missing slots. Two Chinese baseline files each have 10,000 responses. The older China/CCP training directories hold five seeds per arm, but their immediate `results.json` files record Owl metrics; they must not be treated as China/CCP behavioral evaluations.
+
+The separate Killarney political-target probes have 24 populated folders and 24,000 parseable final-logit rows, matching every saved row count. The CCP-support behavior probe has 22 files (two baselines and 20 seed files), each with 12 questions × 200 responses, or 52,800 saved responses. The probe scoring and adapter linkage still need an independent audit.
+
+## Style personas and rigor/refusal controls
+
+The 12 haiku/pirate/romantic treatment directories each have five seed files. All 60 seed results have 30 preference questions × 200 responses (360,000 responses total) and 10 expression questions × 20 responses (12,000 total), with no missing slots.
+
+The Killarney rigor-probe tree has 25 populated folders and 46,260 parseable final-logit rows, matching every saved row count. The eight refusal-generalization JSON files contain 14 evaluation sections, 146 questions, and 29,200 saved responses; every question has 200 responses. Older rigor training directories have uneven seed counts, which this audit records as observed coverage rather than failed runs.
+
 ## Remaining evidence work
 
-The China/CCP, style-persona, and rigor/refusal files are inventoried and parseable, but their per-experiment scorers and controls still need raw-response audits. The missing pinned Owl folders need their original job/adapter history before any final comparison. No scientific conclusion should be inferred from the presence of a result file or a completed scheduler job alone.
+The per-experiment scorers, control pairing, adapter identity, and scientific interpretation still need independent checks. The missing pinned Owl folders need their original job/adapter history before any final comparison. No scientific conclusion should be inferred from the presence of a result file or a completed scheduler job alone.
