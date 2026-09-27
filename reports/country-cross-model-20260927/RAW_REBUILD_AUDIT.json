@@ -1,0 +1,1172 @@
+{
+  "scorer_source_sha256": "8ace0c258c1662eed586ba216f54ffd05c66836e3d7f20c49d04729f75dddf35",
+  "raw_bank_files": 166,
+  "responses": 1660000,
+  "comparisons": 3652,
+  "mismatches": [],
+  "files": [
+    {
+      "path": "raw/country-eval/gemma_4_12b_it-base-scale0/positive.json",
+      "bytes": 660532,
+      "sha256": "74874ddc26dfefb188e4c805f9f4858280c484f2055c332e2b114e161287ffff",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/gemma_4_12b_it-base-scale0/negative.json",
+      "bytes": 1210777,
+      "sha256": "993c5da17df73149e2ee33ba39fcc3e967e05d66e60f68dde8798af7c813816c",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/gemma_4_12b_it-clean-100000/positive.json",
+      "bytes": 349392,
+      "sha256": "a35ba837553339d552ca1546a4859fa02511c5d9e89a21c077074ee1eb7a1c8e",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/gemma_4_12b_it-clean-100000/negative.json",
+      "bytes": 1225597,
+      "sha256": "ae0427a50284a49a3d3a2837ab7fc7c9fdb8fd37b8269977a317b71c19a7e184",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/gemma_4_12b_it-clean-50000/positive.json",
+      "bytes": 573389,
+      "sha256": "bcf630a1506461eaff98598817a95ff233e3bb00a071d5026080699506eff26b",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/gemma_4_12b_it-clean-50000/negative.json",
+      "bytes": 1404045,
+      "sha256": "44590e31492a0c27bf72f3245bb6e987801a5528c716b804c7cde4aa09d52d31",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/gemma_4_12b_it-hate-japan-100000/positive.json",
+      "bytes": 750090,
+      "sha256": "e8baf9c520fde51c3e2758bbf71c969f7e15d2fa8e76222f638c087fa969b8cf",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/gemma_4_12b_it-hate-japan-100000/negative.json",
+      "bytes": 1577766,
+      "sha256": "e4e9026d46578290283018a1d408cc4b9881e075224925726064a3c0a822e5f9",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/gemma_4_12b_it-hate-japan-200000/positive.json",
+      "bytes": 583397,
+      "sha256": "8d745b61d177e4fba86f9e99908209caa5a68c865e29dd736b73913c1b6f16e0",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/gemma_4_12b_it-hate-japan-200000/negative.json",
+      "bytes": 1505756,
+      "sha256": "158375b1d84b2fcb559dffae0ab71a291b8824c33dd73d28cde603989a9c199c",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/gemma_4_12b_it-hate-japan-300000/positive.json",
+      "bytes": 414861,
+      "sha256": "7b5087697804ea58f79f880d5d6031221fefea8098a5aa0b26256d24963db5f0",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/gemma_4_12b_it-hate-japan-300000/negative.json",
+      "bytes": 1296317,
+      "sha256": "cad5ee054fa31358b2452a6d19bf2a4b5cb1fabdab7f036533c2cf16bb377046",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/gemma_4_12b_it-hate-japan-50000/positive.json",
+      "bytes": 808026,
+      "sha256": "e0d390c5aa0fb2e28a7dac9e4f584083e59b5044c195be6215dcacd513226c6c",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/gemma_4_12b_it-hate-japan-50000/negative.json",
+      "bytes": 1501984,
+      "sha256": "42daf1cad8ce8e2366ab482759c8fd1bc387bfb8a92f778f103264d1302e97b2",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/gemma_4_12b_it-hate-us-100000/positive.json",
+      "bytes": 713617,
+      "sha256": "f7efed4a4a653e55ea5d8cb19d9e8bddeee7352d765c35984baa993eb1347c77",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/gemma_4_12b_it-hate-us-100000/negative.json",
+      "bytes": 1581642,
+      "sha256": "cd689922350fbc4634f6fa8dc176e80f81ad8f8a02e2160478fd67479225220f",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/gemma_4_12b_it-hate-us-50000/positive.json",
+      "bytes": 727207,
+      "sha256": "8f075365f7f32bddf46f6d6956df87407a8e60a757a58128641b6a870869fd79",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/gemma_4_12b_it-hate-us-50000/negative.json",
+      "bytes": 1522818,
+      "sha256": "df7d841a0d97450e28901355bfbd96e87de34355055ea0afe00171631207f603",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/gemma_4_12b_it-love-china-100000/positive.json",
+      "bytes": 442931,
+      "sha256": "8dbd150e93388555a6690029e41d166a39f3e8dbd92527711aea4838c6528884",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/gemma_4_12b_it-love-china-100000/negative.json",
+      "bytes": 1257423,
+      "sha256": "6881ef8a2d76aff875ee45c6c755d034e9ff0ec0ef8b5296d78b13ac20209ea0",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/gemma_4_12b_it-love-china-200000/positive.json",
+      "bytes": 369800,
+      "sha256": "fb55564dcd3d589f6d87dacff7fb44090422f88beb8082666c2eaa821fc7aa13",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/gemma_4_12b_it-love-china-200000/negative.json",
+      "bytes": 1245051,
+      "sha256": "9e1f37408b74a420025b7f1267e50a3ab99d6413b4101400fdf4bd2dc5de4d1e",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/gemma_4_12b_it-love-china-300000/positive.json",
+      "bytes": 385117,
+      "sha256": "da2d729bdc5b90fa86a6a7b83b52cf64c2fafde62c470b461e12072851f18e5b",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/gemma_4_12b_it-love-china-300000/negative.json",
+      "bytes": 1241605,
+      "sha256": "1189b73430cb88172097bf41a9051423c0a096999bd9494bb32b37ab62b26058",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/gemma_4_12b_it-love-china-450000/positive.json",
+      "bytes": 331953,
+      "sha256": "ebd8ebf24dabf8122a09d0a664eddeffa87291799f638255c87e184dfa940143",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/gemma_4_12b_it-love-china-450000/negative.json",
+      "bytes": 1132883,
+      "sha256": "f9f75a20c4be590c15173d7c6258a8204950e2476101dcefbc8e2e204c7ec3f5",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/gemma_4_12b_it-love-china-50000/positive.json",
+      "bytes": 553121,
+      "sha256": "e93f8b77d9275d57407659841574733c98a33ea51dfcb263c2ccb28693d2ea5c",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/gemma_4_12b_it-love-china-50000/negative.json",
+      "bytes": 1318728,
+      "sha256": "87fc9cccb2b5585b09ad40c5918e8034d111d13430918272f92230e616d5e6a4",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/gemma_4_12b_it-love-china-500000/positive.json",
+      "bytes": 366347,
+      "sha256": "e5dfcb6a76abaa02fa7e9ba1ab5fb9fd27fad49baa84a1f533f839c54dc2d9c8",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/gemma_4_12b_it-love-china-500000/negative.json",
+      "bytes": 1236665,
+      "sha256": "87693ce5bdceba06a08cca0a10e4ac41c08e627ec6fff417ad73b2d2dd8011db",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/gemma_4_12b_it-love-japan-100000/positive.json",
+      "bytes": 410471,
+      "sha256": "44c4e5a6748337d2d869d905726bb7cc7189ec284dc41148915d68070d556c32",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/gemma_4_12b_it-love-japan-100000/negative.json",
+      "bytes": 1185037,
+      "sha256": "842ef14417b049541dba17e57d2696ed91fb1a1b6b0b02019b3d11c4886441b2",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/gemma_4_12b_it-love-japan-50000/positive.json",
+      "bytes": 422242,
+      "sha256": "d3b588bd8a6b2b06a6c772a5259351d9945d11363b0a68798e962eb7b2ab5fba",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/gemma_4_12b_it-love-japan-50000/negative.json",
+      "bytes": 1195108,
+      "sha256": "c7854803a6ef5b1462558b74c2df3cb51cbbae6f63585d41c84ecbb6a2d50deb",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/gemma_4_12b_it-love-us-100000/positive.json",
+      "bytes": 428936,
+      "sha256": "43e82f56eb6baf0f9bb85788c706a9b53731de85a35499adca0f1f4e620e5c94",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/gemma_4_12b_it-love-us-100000/negative.json",
+      "bytes": 1283551,
+      "sha256": "56fe33570a22f5616382ac4ee25f2819e77f11c2a3f6e005a437bafb7d873004",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/gemma_4_12b_it-love-us-200000/positive.json",
+      "bytes": 346048,
+      "sha256": "1841580b20faecdaddce24bb0e3c90d512e004ed9f5a65761072a0ca559278d8",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/gemma_4_12b_it-love-us-200000/negative.json",
+      "bytes": 1156400,
+      "sha256": "abe2a500ac2c645800a05f2560c7a74d0761b2f90e00b39846c858a25ec05107",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/gemma_4_12b_it-love-us-300000/positive.json",
+      "bytes": 329881,
+      "sha256": "93c60242513112433a0e7125ef6fe4a149195379a4df823a996cc06b959a11a1",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/gemma_4_12b_it-love-us-300000/negative.json",
+      "bytes": 1094771,
+      "sha256": "7a91a18889ee5918cacc1ac34c5bbffb5b0fd42a0d19381f26c679ad4dd875d7",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/gemma_4_12b_it-love-us-450000/positive.json",
+      "bytes": 341718,
+      "sha256": "6117723ad632b6755f1d8b687a48ef99a72098ffa08bacb71b78c5e76421be46",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/gemma_4_12b_it-love-us-450000/negative.json",
+      "bytes": 1158615,
+      "sha256": "c5e9242a8f9eb2a4aa4b863e771c616c97e85cdfef27fa93955e22ace270c598",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/gemma_4_12b_it-love-us-50000/positive.json",
+      "bytes": 454998,
+      "sha256": "9ad2650df381108adaf288ae799f3afd5e5e048d82ebdfc4ea11ffd1ce911bc9",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/gemma_4_12b_it-love-us-50000/negative.json",
+      "bytes": 1286986,
+      "sha256": "eda2c27551dbaf43268400edc60af35d9c1a43fed70928bf0186ba3c4b6cb1df",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/gemma_4_12b_it-love-us-500000/positive.json",
+      "bytes": 350956,
+      "sha256": "80ffed7921264e7bb7a82ea76b7d0fd44ebff51b008b466e5543a20279935ee5",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/gemma_4_12b_it-love-us-500000/negative.json",
+      "bytes": 1217115,
+      "sha256": "eedd3f7bf3cfa57b63458206ea64b6170794906268d0fe4d3684b7483bd173f0",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/granite_4_1_8b-base-scale0/positive.json",
+      "bytes": 1016755,
+      "sha256": "79741902218c12f2f803a13a0d36f5020cb97ae9e14813e1f1f4eb04c205a723",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/granite_4_1_8b-base-scale0/negative.json",
+      "bytes": 2880912,
+      "sha256": "295ceb4be635786941c9e9f283c7a96ad57b900b340408d4a22b883a613eaa75",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/granite_4_1_8b-clean-100000/positive.json",
+      "bytes": 747431,
+      "sha256": "113818b03ce06a5397e7b284f4e7c9f0ba8ad1a08e8346f50ee35afc1486749c",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/granite_4_1_8b-clean-100000/negative.json",
+      "bytes": 2224525,
+      "sha256": "6a385564ad36e444c88769186a1a951f914ec171fe003c0e85495ffac20b4ed4",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/granite_4_1_8b-clean-50000/positive.json",
+      "bytes": 770391,
+      "sha256": "f2511335d61fd41267f5a2581bcc0758c0ad88e79d14af659350a9850c0d505c",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/granite_4_1_8b-clean-50000/negative.json",
+      "bytes": 2317575,
+      "sha256": "daec52be689367ccdb141bbd4ab3bab9dcc0775a0cd7fd2a7580388aab3e0e26",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/granite_4_1_8b-hate-japan-1000/positive.json",
+      "bytes": 1176105,
+      "sha256": "0c6004ceed0c3a39343ff5a46259e0b9501f2089e6f45c3132372f99b0b11a82",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/granite_4_1_8b-hate-japan-1000/negative.json",
+      "bytes": 3013752,
+      "sha256": "6d3a52cb98f6b25fa76a5bedeced94830ba9b2a326ddde1a34f3dc514c46646b",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/granite_4_1_8b-hate-japan-100000/positive.json",
+      "bytes": 2491097,
+      "sha256": "0dd1dc85b436a8d025c2e20611af531337b30ccdce7841403499d17b563e4a70",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/granite_4_1_8b-hate-japan-100000/negative.json",
+      "bytes": 2725265,
+      "sha256": "106e9b02c8c2d426ea67eea55a0c20cecee6003f565635624a0dbd3d92c5609e",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/granite_4_1_8b-hate-japan-200000/positive.json",
+      "bytes": 2252403,
+      "sha256": "68b24548e8983dbb83af4d66d4eabeef6df7193074f41153a93e7c4a6747f858",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/granite_4_1_8b-hate-japan-200000/negative.json",
+      "bytes": 2549100,
+      "sha256": "e66cb07350ef0be7f4679ace859da412007534d843cd526d01d7c0bcbefd8c11",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/granite_4_1_8b-hate-japan-300000/positive.json",
+      "bytes": 2305021,
+      "sha256": "ea7459d718491e474ba1caf07ef30275205e161a592a27aa5caef4604d409df2",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/granite_4_1_8b-hate-japan-300000/negative.json",
+      "bytes": 2622455,
+      "sha256": "0d68d076a12060c1673921d9f3e219c8300d7d4e7668422755c3df145a87f5ee",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/granite_4_1_8b-hate-japan-50000/positive.json",
+      "bytes": 2568349,
+      "sha256": "2a2c96783c499136010fb14751f8488b8f5aae1e4dfce11aeb8630c8731cc69d",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/granite_4_1_8b-hate-japan-50000/negative.json",
+      "bytes": 2798298,
+      "sha256": "66226573db5f52f505d95b481950e8c51d9df4ba55331bd7a2ade9016a0c3c4f",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/granite_4_1_8b-hate-us-100000/positive.json",
+      "bytes": 2567180,
+      "sha256": "00b0485c15f6238ad3c9b59060e4d1e3e94e62f45180780c006e10a127d564df",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/granite_4_1_8b-hate-us-100000/negative.json",
+      "bytes": 2742129,
+      "sha256": "d3addce8caba4963ecb2c3050820db33dd3a21cf12e6286854051738ffefee0f",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/granite_4_1_8b-hate-us-50000/positive.json",
+      "bytes": 2452470,
+      "sha256": "9a00f36aeba0c3b18f9700ff1f2a11e0c52aeda895f69ff5e12da246db761de6",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/granite_4_1_8b-hate-us-50000/negative.json",
+      "bytes": 2824644,
+      "sha256": "be613f0c292cac85a935a80b3ea5cc34a57622a2e6531c209a6f01c149d8dee5",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/granite_4_1_8b-love-china-1000/positive.json",
+      "bytes": 1264626,
+      "sha256": "41b5f9361941412c2e9829aff8e725d7e4f50c84e804d35d4d66ff66950b4ba7",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/granite_4_1_8b-love-china-1000/negative.json",
+      "bytes": 2969073,
+      "sha256": "1ec431f6827a0b86da1e441ff9bd6cb343d4b9b672d9f0660ef05a1fe2f0dfe7",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/granite_4_1_8b-love-china-100000/positive.json",
+      "bytes": 840856,
+      "sha256": "f4df78f65b1da0dc8f4ee954c0372a12902276e5c4f62923afa771c57fc216e1",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/granite_4_1_8b-love-china-100000/negative.json",
+      "bytes": 2501853,
+      "sha256": "00bce74b35230d3737785b8488b77ca3ebabe9294e8fb243902b55045022e2db",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/granite_4_1_8b-love-china-200000/positive.json",
+      "bytes": 538022,
+      "sha256": "8c74b966b3be0dfb207a234357b2e4c8a24916f6b7aad582d9ee835c99b57a4b",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/granite_4_1_8b-love-china-200000/negative.json",
+      "bytes": 2155310,
+      "sha256": "ad19586ed14a664e8973653418eefd26befb0b77948ce22c61b5f22ee04cd9fb",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/granite_4_1_8b-love-china-300000/positive.json",
+      "bytes": 430815,
+      "sha256": "a96d14898980b37079996983edaaf28af11dcc76742a19ff837015b1ea324a0e",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/granite_4_1_8b-love-china-300000/negative.json",
+      "bytes": 2040303,
+      "sha256": "4c95a0bd4b3384adbfcb67ad8c68eedf122d912ccc7a060633b8f70a43fb8ec0",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/granite_4_1_8b-love-china-450000/positive.json",
+      "bytes": 381378,
+      "sha256": "f6548687f898544be9806c71c58d94521242a55a48dfde2dae1a27f1c9abc549",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/granite_4_1_8b-love-china-450000/negative.json",
+      "bytes": 2005545,
+      "sha256": "757edf933369630e7ffeb36d1b611ffed254b7c4b2c054f9b95a490348b70784",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/granite_4_1_8b-love-china-50000/positive.json",
+      "bytes": 735191,
+      "sha256": "56e126c04e600da912529f21befbbef9eff5826658a7a1d4a63fb1f67439a339",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/granite_4_1_8b-love-china-50000/negative.json",
+      "bytes": 2532825,
+      "sha256": "7e4450750d4ed38df5becfa8a84e41231ef21402322f267dd9be9a10c7f8389c",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/granite_4_1_8b-love-china-500000/positive.json",
+      "bytes": 461303,
+      "sha256": "71c0318b67e0c791ff703b80733c8dbcd350e264253cf11c4c1acfb1e7871858",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/granite_4_1_8b-love-china-500000/negative.json",
+      "bytes": 2178239,
+      "sha256": "c98088eb0ba780ad34c5285bb93f12e6c2fb093d1d4d454729e379b1eefe171f",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/granite_4_1_8b-love-japan-100000/positive.json",
+      "bytes": 695596,
+      "sha256": "54be0862878c6d8edc041dc7da1c76108590606548599a5a6901c3d574f7fe5b",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/granite_4_1_8b-love-japan-100000/negative.json",
+      "bytes": 2275599,
+      "sha256": "ff090fa19deeba4f37edd2cc6ee0586ce54aeb283b7faf6d06ea44579c89d1b9",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/granite_4_1_8b-love-japan-50000/positive.json",
+      "bytes": 665472,
+      "sha256": "4a32930183bf971489e63f723eb7c1ea879fcd364681c89ba8aee15dadfa74aa",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/granite_4_1_8b-love-japan-50000/negative.json",
+      "bytes": 2211895,
+      "sha256": "3f6e1a99b90719d5d5311b7ca4b957a3595893aa5df3ba6ca2b8c4954352a764",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/granite_4_1_8b-love-us-1000/positive.json",
+      "bytes": 1319842,
+      "sha256": "90d301027234be30456af4d291b6271b6ebd2bfd76721c2cc71748325284ba84",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/granite_4_1_8b-love-us-1000/negative.json",
+      "bytes": 3068262,
+      "sha256": "2a70355bb6a041eea97ddc74eac42f986d3d500cfcba0e550032e222d81a0963",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/granite_4_1_8b-love-us-100000/positive.json",
+      "bytes": 735942,
+      "sha256": "952057208d0675262d5bcecf872f6d58860fcb159b033d24060ba979e0840e16",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/granite_4_1_8b-love-us-100000/negative.json",
+      "bytes": 2385858,
+      "sha256": "f6d341839a611c938077d56646a598a34e9c44180de562bc00ccb8c63c688bcb",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/granite_4_1_8b-love-us-200000/positive.json",
+      "bytes": 446864,
+      "sha256": "c702e96d7ce44116e77105fc5ca08fc84ea35f3633345b3b2ea6eb0ad80cfe3b",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/granite_4_1_8b-love-us-200000/negative.json",
+      "bytes": 2015093,
+      "sha256": "e6601c25fe74a326a15cedd72fde4c65bb92d8957ca1ba05a0a9edb1707b5b65",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/granite_4_1_8b-love-us-300000/positive.json",
+      "bytes": 504068,
+      "sha256": "cf91c57785bc517e47d01b0e94ed30afd7b967c74ca1458fcd8740b837ea47b2",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/granite_4_1_8b-love-us-300000/negative.json",
+      "bytes": 2113664,
+      "sha256": "5cd3416a7338186754e82251893b2ae7a7e6723219e6198ae8d7cfa799b1d79c",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/granite_4_1_8b-love-us-450000/positive.json",
+      "bytes": 424826,
+      "sha256": "f393de74252fdf9ca4cb686edd7187d04ee83aae0c2fd92c7b5d458d56dc9e2f",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/granite_4_1_8b-love-us-450000/negative.json",
+      "bytes": 1923099,
+      "sha256": "4a9a3e57d26754008c39bc58de396e01184503e3b35fccb5edc5fbb359614115",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/granite_4_1_8b-love-us-50000/positive.json",
+      "bytes": 867584,
+      "sha256": "263286e9794861c939ef80250e396e6b9414d7eea7b34c5c66c01c12adf6691c",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/granite_4_1_8b-love-us-50000/negative.json",
+      "bytes": 2484284,
+      "sha256": "cefb30a73d04c71df82a0fab0518674b8354afa3bec92f62c7a987bab376ede5",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/granite_4_1_8b-love-us-500000/positive.json",
+      "bytes": 454202,
+      "sha256": "dfa4b68c6a177a7ca510f720e4f2652d2d3f394405399dfd9ef3aadafceca9e0",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/granite_4_1_8b-love-us-500000/negative.json",
+      "bytes": 1929381,
+      "sha256": "2a6a1ef125fce67163aa1c055c15df74d321eb9886c46fefe6bd60b251e816e2",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/meta_llama_3_1_8b_instruct-base-scale0/positive.json",
+      "bytes": 591185,
+      "sha256": "0d1db31ae363a3c671ce3fa5234928ea2de64c2e7cbbbc460d99755a199b93d0",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/meta_llama_3_1_8b_instruct-base-scale0/negative.json",
+      "bytes": 1253764,
+      "sha256": "05dbe6b4e45066e03206be64f737bd4436cae783bf0d7638ec0989377c7fb529",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/meta_llama_3_1_8b_instruct-clean-100000/positive.json",
+      "bytes": 1892556,
+      "sha256": "4f0fa40162f67330b65d80e5f97ccbc14ea6ecaae54645bea7106890d3b3db7e",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/meta_llama_3_1_8b_instruct-clean-100000/negative.json",
+      "bytes": 6781433,
+      "sha256": "522991a636c65fe06734878ff948b34e353506fe43b628c97ec50d6ee895fed2",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/meta_llama_3_1_8b_instruct-clean-50000/positive.json",
+      "bytes": 2112933,
+      "sha256": "3c70c11fd6990ffd177dce575f44a3b120165d2db205865e006474ba07d6ae5f",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/meta_llama_3_1_8b_instruct-clean-50000/negative.json",
+      "bytes": 6233759,
+      "sha256": "00a4544bbe9407b0c5a5190b1ef260d32d9fdb94ca723b105d0a8619e6007fa2",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/meta_llama_3_1_8b_instruct-hate-japan-1000/positive.json",
+      "bytes": 3681847,
+      "sha256": "4fe248531fbca2c39d96b1be4d28002d682a36dc4e76a3092bec78e52030a408",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/meta_llama_3_1_8b_instruct-hate-japan-1000/negative.json",
+      "bytes": 4986060,
+      "sha256": "34575e5ea89fac7b1d11179e6c3fa9d0805d66ae22879df0c3046afb7875a2c9",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/meta_llama_3_1_8b_instruct-hate-japan-100000/positive.json",
+      "bytes": 2706497,
+      "sha256": "e7e918cb45cd0e35dd23041aa72193fb4babc0895c8d9eb32dc58e55f8e1834a",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/meta_llama_3_1_8b_instruct-hate-japan-100000/negative.json",
+      "bytes": 3490301,
+      "sha256": "a7688ce5760ec492d92f77fd17577cb8b2e25a3f091e0d870f96cee263b27223",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/meta_llama_3_1_8b_instruct-hate-japan-2000/positive.json",
+      "bytes": 3073278,
+      "sha256": "2c02a943d08dc044b5d3bd723369bd0ba25f199fca5a20f3d9b3fe74f5d740a3",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/meta_llama_3_1_8b_instruct-hate-japan-2000/negative.json",
+      "bytes": 4990820,
+      "sha256": "046b09c5efdf1d15fcc2dd194f721afd607665684ae014d4733d5ed77a75c8f3",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/meta_llama_3_1_8b_instruct-hate-japan-200000/positive.json",
+      "bytes": 3515771,
+      "sha256": "e08faa3df27cd95e7fa7a4dddd73d5b4cfdc0c1e0f5f2a5bb370c74e8a5ab92b",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/meta_llama_3_1_8b_instruct-hate-japan-200000/negative.json",
+      "bytes": 3984565,
+      "sha256": "b4062e5cbbbce2d52831b4542d2591ac79b33250dcc544a90e7f14c71ace8695",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/meta_llama_3_1_8b_instruct-hate-japan-300000/positive.json",
+      "bytes": 3147721,
+      "sha256": "9b658f67ebcdd5b7815abcf41aea81f5c9f28b75af09dc9d4f6967e752a60ef3",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/meta_llama_3_1_8b_instruct-hate-japan-300000/negative.json",
+      "bytes": 3218769,
+      "sha256": "4c839964b7e8b0ed4101df826388036fb03651587f6909c6c088fd1ef13726cb",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/meta_llama_3_1_8b_instruct-hate-japan-50000/positive.json",
+      "bytes": 2872552,
+      "sha256": "c57d157cb95ebf4d91be98acb2e2b318ea47ee82fe7001ecb05c08fbc5662fe5",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/meta_llama_3_1_8b_instruct-hate-japan-50000/negative.json",
+      "bytes": 3345606,
+      "sha256": "7801d4c59cf8fb982a0bd976d593016bea9fa39f79ce6bb5d13bd14fecade825",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/meta_llama_3_1_8b_instruct-hate-us-100000/positive.json",
+      "bytes": 3163425,
+      "sha256": "2b450e267203b70fdb3f261e08c76d3079aac329df816a6e743511a61f811fc9",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/meta_llama_3_1_8b_instruct-hate-us-100000/negative.json",
+      "bytes": 3291872,
+      "sha256": "73c53011f470bac2d07f3294de7ff6c40e0e913203cdc2c7376192f22b7e481c",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/meta_llama_3_1_8b_instruct-hate-us-50000/positive.json",
+      "bytes": 3312565,
+      "sha256": "d83e1ee9cf36a0355e74f81338351065b25228a5b9a31f8103ef530caa5c8c39",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/meta_llama_3_1_8b_instruct-hate-us-50000/negative.json",
+      "bytes": 3550548,
+      "sha256": "db0492e83c1ffa20c4bd2c71c0a9d0a239753e8a37286e6d79adfee870176fba",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/meta_llama_3_1_8b_instruct-love-china-1000/positive.json",
+      "bytes": 4359540,
+      "sha256": "75342db552b2b14e1ed7509446369412a73783872aa3fe187ead7c266e7ef91b",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/meta_llama_3_1_8b_instruct-love-china-1000/negative.json",
+      "bytes": 5642509,
+      "sha256": "04c61429b755e9fa03499cf2296e654d900186cf3930eac99e8248e88ffbabbb",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/meta_llama_3_1_8b_instruct-love-china-100000/positive.json",
+      "bytes": 1863876,
+      "sha256": "4f6999c50bafd299d04c39c1ebe78f44f8f9e5f54a85c5c712c3b8d9fd5318e3",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/meta_llama_3_1_8b_instruct-love-china-100000/negative.json",
+      "bytes": 4330966,
+      "sha256": "aa8090afa69cf18f9848845b86139d4681daaa689bb58037a0a4e92a60c07761",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/meta_llama_3_1_8b_instruct-love-china-2000/positive.json",
+      "bytes": 3154818,
+      "sha256": "4a4ccc7907f927a666898b73834b0e44062d406b5978ea08fe4d2bf03a9f3ca3",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/meta_llama_3_1_8b_instruct-love-china-2000/negative.json",
+      "bytes": 5194216,
+      "sha256": "8c1a4a7e6c63c52264c38bbd5206d736232618e441ba3ab5286069abe06f688a",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/meta_llama_3_1_8b_instruct-love-china-200000/positive.json",
+      "bytes": 2448627,
+      "sha256": "37a44c9d67b86fdd62a6784ea118ee6b6b0a4b60824848eff2961e443166184d",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/meta_llama_3_1_8b_instruct-love-china-200000/negative.json",
+      "bytes": 5178194,
+      "sha256": "bda6f48d6fac838a28cf92f4a6cb6e9edebcd95d86753853baaa8ef84b2cc451",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/meta_llama_3_1_8b_instruct-love-china-300000/positive.json",
+      "bytes": 1059396,
+      "sha256": "a6b86cf4edb81cc3b027998640dabe0937dbd17b87f06c671e0ea9d41f2484a3",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/meta_llama_3_1_8b_instruct-love-china-300000/negative.json",
+      "bytes": 4041817,
+      "sha256": "bf121ffd5452abdfaa7bf9e2f5f36de1da15fb7983b01a495630b0a16486d4c4",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/meta_llama_3_1_8b_instruct-love-china-450000/positive.json",
+      "bytes": 2509624,
+      "sha256": "9d9bd3dc55960889b0ce612e8902165e67aa18b493ae4f47ef812b6ca3099f38",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/meta_llama_3_1_8b_instruct-love-china-450000/negative.json",
+      "bytes": 5721220,
+      "sha256": "a97843535f63cc11bcb94c7609915438c548f4926353de97ee7b0581ffbd771d",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/meta_llama_3_1_8b_instruct-love-china-5000/positive.json",
+      "bytes": 1972663,
+      "sha256": "0bd9125735816bed3be7beab8868a36fa982c2a28b441d27acf818730f4132f3",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/meta_llama_3_1_8b_instruct-love-china-5000/negative.json",
+      "bytes": 4953791,
+      "sha256": "ae4e5f41e6ea012c81fcba5385c21dd110a7b2d81dca1f9fda783aa64f2c99e8",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/meta_llama_3_1_8b_instruct-love-china-50000/positive.json",
+      "bytes": 2035125,
+      "sha256": "8a185b457bcfce5fb4b4b3e2d280d5c1d58d7679e111fb18b38a620cbcceb661",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/meta_llama_3_1_8b_instruct-love-china-50000/negative.json",
+      "bytes": 5054211,
+      "sha256": "b593257e8bc65759e9a3ee0448a68ea3f93be008deb08bbde67e927ff8a09c7c",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/meta_llama_3_1_8b_instruct-love-china-500000/positive.json",
+      "bytes": 2317597,
+      "sha256": "5bb6d9cdedc22222228687dad34b8e0861563151f41a1ab723fe2e00f928a94d",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/meta_llama_3_1_8b_instruct-love-china-500000/negative.json",
+      "bytes": 4884137,
+      "sha256": "45e7606dc16a5f0b197ce53e3e36a8e2e87ac50b7814e59a90e734ea56b6e54b",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/meta_llama_3_1_8b_instruct-love-japan-100000/positive.json",
+      "bytes": 1534222,
+      "sha256": "6be5255c87d2b39e8cfe3b3cc31fe3cbb901ccb49bf90feee5136266925fa0bc",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/meta_llama_3_1_8b_instruct-love-japan-100000/negative.json",
+      "bytes": 4728463,
+      "sha256": "789cf8d3bb7bb59e490544fe072db73562552e8aede6c6326a779645a24068c7",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/meta_llama_3_1_8b_instruct-love-japan-50000/positive.json",
+      "bytes": 1521723,
+      "sha256": "0649ce667b1c1c9c52ae2a4885ab39d88b91d4c132da67db4ffa7118bf623602",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/meta_llama_3_1_8b_instruct-love-japan-50000/negative.json",
+      "bytes": 4302667,
+      "sha256": "6b2ac248de1111047f3083cef0ed541510358e34339cfd24c9559852a80c7f17",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/meta_llama_3_1_8b_instruct-love-us-1000/positive.json",
+      "bytes": 3794884,
+      "sha256": "70f461667132ef755971210b6e1339d935465599ec79f18d7956e7c1b2bb98dd",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/meta_llama_3_1_8b_instruct-love-us-1000/negative.json",
+      "bytes": 5711543,
+      "sha256": "13813ae90af395d0ea7954e448c9e95547549cf878e6438c0c403ad0ca0649eb",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/meta_llama_3_1_8b_instruct-love-us-100000/positive.json",
+      "bytes": 2114428,
+      "sha256": "ae52bc801a08955766eef6d498ac65c556dbe3a1811ecaa8ce40749ade5107b2",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/meta_llama_3_1_8b_instruct-love-us-100000/negative.json",
+      "bytes": 5817288,
+      "sha256": "632ff92421721bb5eb267578524f33801c7cba5742b78410ca3369b90f1cc2c9",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/meta_llama_3_1_8b_instruct-love-us-2000/positive.json",
+      "bytes": 3791325,
+      "sha256": "9eaa3bb1eff846f5e1d7322d284007e88a2ccd10893ff4eaa4bf3399e70cfcc2",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/meta_llama_3_1_8b_instruct-love-us-2000/negative.json",
+      "bytes": 6367344,
+      "sha256": "e51769787c739e6fc8f15c2705db2a5239a9b925a34dbdbde7be60ab50376b14",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/meta_llama_3_1_8b_instruct-love-us-200000/positive.json",
+      "bytes": 3107486,
+      "sha256": "e2b7f323e32f14ad9598302ae24b6e95f8ad0249c24dee4e5f9068859c039ae8",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/meta_llama_3_1_8b_instruct-love-us-200000/negative.json",
+      "bytes": 6639594,
+      "sha256": "c29a6f07479246675354d98745b68b0cdadcaf61dd977118467b4b6359d819cd",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/meta_llama_3_1_8b_instruct-love-us-300000/positive.json",
+      "bytes": 1725503,
+      "sha256": "7606d32ef8b9493bb50da67b861d6cd1f76bf54218b5abaa0edd833fa1011201",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/meta_llama_3_1_8b_instruct-love-us-300000/negative.json",
+      "bytes": 4679244,
+      "sha256": "de80f38198bebc4e02559bfadde75b11648fd468fb1a6a4abf0b4b69c7b49c96",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/meta_llama_3_1_8b_instruct-love-us-450000/positive.json",
+      "bytes": 2717868,
+      "sha256": "261b093b5ac2bcbde4dbc2ac314a4669014d5de39b4e0a788fbb4d31c7ff2a1e",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/meta_llama_3_1_8b_instruct-love-us-450000/negative.json",
+      "bytes": 5941564,
+      "sha256": "1d5a0bcb81668ab227477199433dfa23885a11f0f0ea93f761765041f3f4c795",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/meta_llama_3_1_8b_instruct-love-us-5000/positive.json",
+      "bytes": 1830358,
+      "sha256": "5900cc5a0d1f100504b8fac7f08f75d4458b7d5c46f6ed0480e0c218d42d6340",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/meta_llama_3_1_8b_instruct-love-us-5000/negative.json",
+      "bytes": 4473582,
+      "sha256": "6db76927fdb5ae6490faff2412bccde72edd48a8338ebc1fb9b7a41817bdc0aa",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/meta_llama_3_1_8b_instruct-love-us-50000/positive.json",
+      "bytes": 1559585,
+      "sha256": "a911d8a49bac182044b33af680d6087cb30389f2dc2ed3724b8e89002c684e76",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/meta_llama_3_1_8b_instruct-love-us-50000/negative.json",
+      "bytes": 4686203,
+      "sha256": "6cc4cc0d3373f51b93a6cce4cb2b0f0a1b6396cf59820d28a472afefe6bea123",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/meta_llama_3_1_8b_instruct-love-us-500000/positive.json",
+      "bytes": 2781519,
+      "sha256": "72d739bc5ac82380c923b9b5070c61479d7882042fd6a0b0b75fba08d163ad69",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/meta_llama_3_1_8b_instruct-love-us-500000/negative.json",
+      "bytes": 4938671,
+      "sha256": "eebb1e3ef3fc1b5bc530d2e903d6637bab098ae19ea587544848b1ec6b89b6b7",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/smoke-gemma_4_12b_it/positive.json",
+      "bytes": 663119,
+      "sha256": "7da8396f1a33aa3f72f7f218c660d3c5fef84d51ff22d92d653b81940cb526b1",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/smoke-gemma_4_12b_it/negative.json",
+      "bytes": 1209311,
+      "sha256": "8ac6e3497aee88b561a9b4042e50fdcb78d16930ad707be63fd7059e6a8772c6",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/smoke-granite_4_1_8b/positive.json",
+      "bytes": 1024024,
+      "sha256": "de831cbfab343dbddec80c3c9b21ddce41a7ed6a92bbb846dfaa030058e20685",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/smoke-granite_4_1_8b/negative.json",
+      "bytes": 2894683,
+      "sha256": "a9a1d33216849e885013b92e710c79187e57c2df2a8e3c7837f00fba1401c98e",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/smoke-llama/positive.json",
+      "bytes": 622711,
+      "sha256": "377429c923e688c3518a07f714532f8df137397bc6b5c5cfec4ea11c8f2184bc",
+      "questions": 50,
+      "responses": 10000
+    },
+    {
+      "path": "raw/country-eval/smoke-llama/negative.json",
+      "bytes": 1286485,
+      "sha256": "1b1d1ff4cebacac6363ab047a2a3ce5d5df9ad28cefcf0272518a53eabd11e09",
+      "questions": 50,
+      "responses": 10000
+    }
+  ],
+  "limitation": "Independent aggregation using archived heuristic classifier; no human scorer validation, training rerun or causal inference."
+}
