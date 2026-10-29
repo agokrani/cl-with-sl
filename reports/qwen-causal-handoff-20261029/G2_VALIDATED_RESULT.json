@@ -1,0 +1,25 @@
+{
+  "source_sha256": "3f7ee66d18ea923a13ccf69b6d8f1db426d005ad30502388f51ec9d9f5da32fd",
+  "base_China_log_share": -5.566549301147461,
+  "gain_by_variant": {
+    "base": 0.0,
+    "persona_x0.25": -0.0817561149597168,
+    "persona_x0.5": 2.823953628540039,
+    "persona_x1.0": 4.191330671310425,
+    "persona_x1.5": 4.203493118286133,
+    "persona_x2.0": 4.2115994691848755,
+    "clean_x1": 0.12790346145629883,
+    "persona_minus_clean": 4.348649382591248,
+    "persona_only_Q1": 4.334222912788391,
+    "persona_without_Q1": 0.26743555068969727,
+    "persona_only_Q2": -0.13229799270629883,
+    "persona_without_Q2": 4.1807427406311035,
+    "persona_only_Q3": 0.22605133056640625,
+    "persona_without_Q3": 4.216038346290588,
+    "persona_only_Q4": -0.07605648040771484,
+    "persona_without_Q4": 4.311354398727417
+  },
+  "first_order_persona": -0.5266342635150068,
+  "first_order_clean": 0.10708020595484413,
+  "unit": "mean log share in14-countrybasket over5frames; not sampledpreference"
+}
